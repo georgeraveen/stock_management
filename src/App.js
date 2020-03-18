@@ -7,6 +7,9 @@ import {Navbar} from 'react-bootstrap';
 import {Nav} from 'react-bootstrap';
 import {NavDropdown} from 'react-bootstrap';
 
+
+import AddNewProduct from './components/products/newProduct';
+
 function App() {
   return (
     <Router>
@@ -19,7 +22,7 @@ function App() {
             <Nav.Link href="#features">Home</Nav.Link>
             
             <NavDropdown title="Products" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="#action/3.2">Add new product</NavDropdown.Item>
+              <NavDropdown.Item href="/products/AddNewProduct">Add new product</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.3">Add new batch No</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action/3.4">View products</NavDropdown.Item>
@@ -44,8 +47,9 @@ function App() {
       <br/>
       <h2>Welcome</h2><br/>
       <Switch>
-        {/* <Route exact path='/create' component={Create}/>
-        <Route exact path='/edit/:id' component={Edit}/>
+        {
+         <Route exact path='/products/AddNewProduct' component={AddNewProduct}/>
+        /*<Route exact path='/edit/:id' component={Edit}/>
         <Route exact path='/index' component={Index}/> */}
       </Switch>
     
