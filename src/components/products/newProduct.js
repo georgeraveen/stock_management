@@ -63,7 +63,7 @@ class newProduct extends Component {
                 }]
         }
         axios.post('http://localhost:4000/newProduct/add',obj).then(res=>console.log(res.data));
-        this.state({
+        this.setState({
             productName:'',
             batchNo:'',
             expDate:'',
