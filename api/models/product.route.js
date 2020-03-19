@@ -15,4 +15,17 @@ productRoutes.route('/add').post(function(req,res){
         });
 });
 
+//get products
+productRoutes.route('/view').get(function(req,res){
+    Product.find(function(err,products){
+        if(err){
+            console.log('bye');
+            console.log(err);
+        }
+        else{
+            res.json(products);
+        }
+    });
+});
+
 module.exports=productRoutes;

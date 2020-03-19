@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {BrowserRouter as Router,Switch,Route,Link} from 'react-router-dom';
+import {BrowserRouter as Router,Switch,Route} from 'react-router-dom';
 
 import {Navbar} from 'react-bootstrap';
 import {Nav} from 'react-bootstrap';
@@ -9,6 +9,7 @@ import {NavDropdown} from 'react-bootstrap';
 
 
 import AddNewProduct from './components/products/newProduct';
+import AddNewBatch from './components/products/newBatch';
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
             
             <NavDropdown title="Products" id="collasible-nav-dropdown">
               <NavDropdown.Item href="/products/AddNewProduct">Add new product</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Add new batch No</NavDropdown.Item>
+              <NavDropdown.Item href="/products/AddNewBatch">Add new batch No</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action/3.4">View products</NavDropdown.Item>
             </NavDropdown>
@@ -47,10 +48,12 @@ function App() {
       <br/>
       <h2>Welcome</h2><br/>
       <Switch>
-        {
+        
          <Route exact path='/products/AddNewProduct' component={AddNewProduct}/>
-        /*<Route exact path='/edit/:id' component={Edit}/>
-        <Route exact path='/index' component={Index}/> */}
+         <Route exact path='/products/AddNewBatch' component={AddNewBatch}/>
+        {/* <Route exact path='/edit/:id' component={Edit}/> */}
+        {/* <Route exact path='/index' component={Index}/>  */}
+        
       </Switch>
     
   </Router>
