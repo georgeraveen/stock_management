@@ -13,10 +13,10 @@ let Product= new Schema({
                 type:String
             },
             wholePrice:{
-                type:String
+                type:Number
             },
             retailPrice:{
-                type:String
+                type:Number
             }
     }]
 },
