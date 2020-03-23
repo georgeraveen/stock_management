@@ -8,8 +8,8 @@ import {Nav} from 'react-bootstrap';
 import {NavDropdown} from 'react-bootstrap';
 
 
-import AddNewProduct from './components/products/newProduct';
-import AddNewBatch from './components/products/newBatch';
+import AddNewProduct from './components/products/newProduct/newProduct';
+import AddNewBatch from './components/products/newBatch/newBatch';
 
 function App() {
   return (
