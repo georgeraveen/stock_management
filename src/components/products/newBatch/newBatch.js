@@ -49,7 +49,7 @@ class newBatch extends Component {
                 // console.log(object);
                 return object.batches.map(function(object1,j){
                     // console.log(object1);
-                    return <BatchList selProduct={object['productName']} obj={object1} key={j}/>;
+                    return <BatchList selProduct={object['_id']} obj={object1} key={j}/>;
                 });
             };
         });

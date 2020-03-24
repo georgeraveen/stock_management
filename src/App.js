@@ -27,7 +27,7 @@ function App() {
               <NavDropdown.Item href="/products/AddNewProduct">Add new product</NavDropdown.Item>
               <NavDropdown.Item href="/products/AddNewBatch">Add new batch No</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">View products</NavDropdown.Item>
+              <NavDropdown.Item href="/products/ViewProducts">View products</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Stock management" id="collasible-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">View stock</NavDropdown.Item>
@@ -47,11 +47,14 @@ function App() {
         </Navbar.Collapse>
       </Navbar>
       <br/>
-      <h2>Welcome</h2><br/>
+      <div  className="container">
+      <h2>Welcome</h2>
+      </div><br/>
       <Switch>
         
          <Route exact path='/products/AddNewProduct' component={AddNewProduct}/>
          <Route exact path='/products/AddNewBatch' component={AddNewBatch}/>
+         <Route exact path='/products/ViewProducts' component={ViewProducts}/>
         {/* <Route exact path='/edit/:id' component={Edit}/> */}
         {/* <Route exact path='/index' component={Index}/>  */}
         

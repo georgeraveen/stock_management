@@ -1,7 +1,7 @@
 const express = require('express');
 const productRoutes=express.Router();
 
-let Product = require('./product.model');
+let Product = require('../models/product.model');
 
 //store new product
 productRoutes.route('/add').post(function(req,res){
@@ -27,5 +27,18 @@ productRoutes.route('/view').get(function(req,res){
         }
     });
 });
+
+//delete product
+productRoutes.route('/delete/:id').delete(function(req,res){
+    Product.findByIdAndRemove(req.params.id, function(error,products){
+        if(error){
+            console.log('bye');
+            console.log(error);
+        }
+        else{
+            res.json(products);
+        }
+    })
+  })
 
 module.exports=productRoutes;

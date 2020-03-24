@@ -1,7 +1,7 @@
 const express = require('express');
 const batchRoutes=express.Router();
 
-let Product = require('./product.model')
+let Product = require('../models/product.model')
 
 //store new batch
 batchRoutes.route('/add/:name').post(function(req,res){
@@ -20,7 +20,7 @@ batchRoutes.route('/add/:name').post(function(req,res){
 //delete batch
 batchRoutes.route('/delete/:name/:Bid').post(function(req,res){
     Product.findOneAndUpdate(
-        {"productName":req.params.name},
+        {"_id":req.params.name},
         {$pull:{"batches":{"batchNo":req.params.Bid}}},
         
         function(err,batch){
