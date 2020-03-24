@@ -6,7 +6,8 @@ const cors = require('cors');
 
 const mongoose = require('mongoose');
 const config = require('./DB.js');
-const productRoute= require('./models/product.route');
+const productRoute= require('./routes/product.route');
+const batchRoute= require('./routes/batch.route');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB,{useNewUrlParser:true}).then(
@@ -19,6 +20,8 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
 app.use('/newProduct',productRoute);
+app.use('/Batch',batchRoute);
+app.use('/viewProduct',productRoute);
 
 app.listen(PORT,function(){
     console.log('Server is running on port: ',PORT);
