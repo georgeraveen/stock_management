@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import ProductListDropdown from './productListDropdown';
-import {Button} from 'react-bootstrap';
-import {Form} from 'react-bootstrap';
 import BatchList from './batchList';
+import NewBatchform from './newBatchform';
 
 
 import axios from 'axios';
@@ -50,10 +49,15 @@ class newBatch extends Component {
                 // console.log(object);
                 return object.batches.map(function(object1,j){
                     // console.log(object1);
-                    return <BatchList obj={object1} key={j}/>;
+                    return <BatchList selProduct={object['productName']} obj={object1} key={j}/>;
                 });
             };
         });
+    }
+    displayNewBatchForm(){
+        if(this.state.selectedProduct!=''){
+            return<NewBatchform selProduct={this.state.selectedProduct}/>
+        };
     }
     render() {
         return (
@@ -63,7 +67,7 @@ class newBatch extends Component {
                 <div className="form-group">
                 <label htmlFor="sel1">Select product:</label>
                 <select onChange={this.onSelectProduct} className="form-control" id="sel1">
-                    <option>select</option>
+                    <option value=''>select</option>
                     {this.dropdownProduct()};
                 </select>
                 <br></br>
@@ -93,6 +97,10 @@ class newBatch extends Component {
                             {this.displayBatchList()}
                         </tbody>
                     </table>
+                </div>
+                <br></br><br></br>
+                <div>
+                    {this.displayNewBatchForm()}
                 </div>
             </div>
         );
