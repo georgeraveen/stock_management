@@ -21,7 +21,7 @@ batchRoutes.route('/add/:name').post(function(req,res){
 batchRoutes.route('/delete/:name/:Bid').post(function(req,res){
     Product.findOneAndUpdate(
         {"productName":req.params.name},
-        {$pull:{"batches":{_id:req.params.Bid}}},
+        {$pull:{"batches":{"batchNo":req.params.Bid}}},
         
         function(err,batch){
             if(err){

@@ -10,6 +10,7 @@ import {NavDropdown} from 'react-bootstrap';
 
 import AddNewProduct from './components/products/newProduct/newProduct';
 import AddNewBatch from './components/products/newBatch/newBatch';
+import ViewProducts from './components/products/viewProducts/viewProduct';
 
 function App() {
   return (

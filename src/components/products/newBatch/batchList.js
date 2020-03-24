@@ -10,12 +10,12 @@ class BatchList extends Component {
     }
 
     deleteBatch() {
-        axios.delete('http://localhost:4000/Batch/delete/'+this.props.selProduct+'/' + this.props.obj._id)
+        axios.post('http://localhost:4000/Batch/delete/'+this.props.selProduct+'/' + this.props.obj.batchNo)
             .then((res) => {
-                console.log('Student successfully deleted!')
+                console.log('Batch successfully deleted!')
             }).catch((error) => {
                 console.log(error)
-            })
+            });
     }
 
 
@@ -36,7 +36,7 @@ class BatchList extends Component {
                     {this.props.obj.retailPrice}
                 </td>
                 <td>
-                    <button onClick={this.deleteBatch()} className="btn btn-danger">delete</button>
+                    <button onClick={this.deleteBatch} className="btn btn-danger">delete</button>
                 </td>
             </tr>
         );
