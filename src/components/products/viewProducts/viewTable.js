@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import ViewBatch from './ViewBatch';
 
 import axios from 'axios';
 
-class viewTable extends Component {
+class ViewTable extends Component {
     constructor(props) {
         super(props);
         this.deleteProduct = this.deleteProduct.bind(this);
@@ -23,9 +24,15 @@ class viewTable extends Component {
         
         
     }
+    ViewBatchTableRow(){
+        return this.props.obj.batches.map(function(object1,j){
+            return <ViewBatch obj1={object1} key1={j}/>;
+        });
+    }
 
     render() {
         return (
+            <React.Fragment>
             <tr>
                 <td colSpan='5'>
                     {this.props.obj.productName}
@@ -37,8 +44,13 @@ class viewTable extends Component {
                     <button onClick={this.deleteProduct} className="btn btn-danger">delete</button>
                 </td>
             </tr>
+            
+            
+                {this.ViewBatchTableRow()}
+           
+            </React.Fragment>
         );
     }
 }
 
-export default viewTable;
+export default ViewTable;

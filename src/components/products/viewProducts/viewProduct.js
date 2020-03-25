@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import axios from 'axios';
-import TableRow from './viewTable';
+import ViewTable from './viewTable';
 
 class viewProduct extends Component {
 
@@ -31,7 +31,7 @@ class viewProduct extends Component {
     }
     ViewProductTableRow(){
         return this.state.products.map(function(object,i){
-            return <TableRow obj={object} key={i}/>;
+            return <ViewTable obj={object} key={i}/>;
         });
     }
 
