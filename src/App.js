@@ -11,6 +11,7 @@ import {NavDropdown} from 'react-bootstrap';
 import AddNewProduct from './components/products/newProduct/newProduct';
 import AddNewBatch from './components/products/newBatch/newBatch';
 import ViewProducts from './components/products/viewProducts/viewProduct';
+import AddGRN from './components/stock/addGRN/addGRN';
 
 function App() {
   return (
@@ -32,7 +33,7 @@ function App() {
             <NavDropdown title="Stock management" id="collasible-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">View stock</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.2">Add GRN</NavDropdown.Item>
+              <NavDropdown.Item href="/stock/AddGRN">Add GRN</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.3">Stock return</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action/3.4">Stock adjustment</NavDropdown.Item>
@@ -48,13 +49,14 @@ function App() {
       </Navbar>
       <br/>
       <div  className="container">
-      <h2>Welcome</h2>
+      
       </div><br/>
       <Switch>
         
          <Route exact path='/products/AddNewProduct' component={AddNewProduct}/>
          <Route exact path='/products/AddNewBatch' component={AddNewBatch}/>
          <Route exact path='/products/ViewProducts' component={ViewProducts}/>
+         <Route exact path='/stock/AddGRN' component={AddGRN}/>
         {/* <Route exact path='/edit/:id' component={Edit}/> */}
         {/* <Route exact path='/index' component={Index}/>  */}
         

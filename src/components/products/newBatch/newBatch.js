@@ -16,6 +16,7 @@ class newBatch extends Component {
             batches:[],
             selectedProduct:''
         };
+        
 
     }
 
@@ -26,6 +27,7 @@ class newBatch extends Component {
                 console.log('abc');
                 console.log(this.state.products);
                 console.log('abc');
+                
             })
         .catch(function (error){
             console.log('hi');

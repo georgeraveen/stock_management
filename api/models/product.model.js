@@ -17,6 +17,9 @@ let Product= new Schema({
             },
             retailPrice:{
                 type:Number
+            },
+            currentStock:{
+                type:Number
             }
     }]
 },

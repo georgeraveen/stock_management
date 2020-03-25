@@ -20,7 +20,8 @@ class NewBatchform extends Component {
             batchNo:'',
             expDate:'',
             wholePrice:'',
-            retailPrice:''
+            retailPrice:'',
+            currentStock:0
         };
         // console.log(this.props.selProduct);
     }
@@ -51,7 +52,8 @@ class NewBatchform extends Component {
                 {batchNo:this.state.batchNo,
                 expDate:this.state.expDate,
                 wholePrice:this.state.wholePrice,
-                retailPrice:this.state.retailPrice
+                retailPrice:this.state.retailPrice,
+                currentStock:0
                 
         }
         axios.post('http://localhost:4000/Batch/add/'+this.props.selProduct,obj).then(res=>console.log(res.data));
@@ -59,7 +61,8 @@ class NewBatchform extends Component {
             batchNo:'',
             expDate:'',
             wholePrice:'',
-            retailPrice:''
+            retailPrice:'',
+            currentStock:0
         })
     }
     render() {
