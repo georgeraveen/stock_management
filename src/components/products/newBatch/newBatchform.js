@@ -7,6 +7,8 @@ import {Button} from 'react-bootstrap';
 
 import axios from 'axios';
 
+const backendde= require('./../../../backendde');
+
 class NewBatchform extends Component {
     constructor(props){
         super(props);
@@ -57,7 +59,7 @@ class NewBatchform extends Component {
                 currentStock:0
                 
         }
-        axios.post('http://localhost:4000/Batch/add/'+this.props.selProduct,obj).then(res=>console.log(res.data));
+        axios.post(backendde.backendUrl+'Batch/add/'+this.props.selProduct,obj).then(res=>console.log(res.data));
         this.setState({
             batchNo:'',
             expDate:'',

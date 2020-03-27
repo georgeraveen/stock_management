@@ -9,6 +9,8 @@ import {Row} from 'react-bootstrap';
 
 import axios from 'axios';
 
+const backendde= require('./../../../backendde');
+
 class AddGRN extends Component { 
     constructor(props){
         super(props);
@@ -23,7 +25,7 @@ class AddGRN extends Component {
     }
 
     componentDidMount(){
-        axios.get('http://localhost:4000/viewProduct/view')
+        axios.get(backendde.backendUrl+'viewProduct/view')
             .then(response =>{
                 this.setState({products:response.data});
                 console.log('abc');

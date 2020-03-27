@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import ViewBatch from './ViewBatch';
 
-import axios from 'axios';
 
+import axios from 'axios';
+const backendde= require('./../../../backendde');
 class ViewTable extends Component {
     constructor(props) {
         super(props);
@@ -15,7 +16,7 @@ class ViewTable extends Component {
     }
 
     deleteProduct(){
-        axios.delete('http://localhost:4000/viewProduct/delete/' + this.props.obj._id)
+        axios.delete(backendde.backendUrl+'viewProduct/delete/' + this.props.obj._id)
             .then((res) => {
                 console.log('Product successfully deleted!')
             }).catch((error) => {
