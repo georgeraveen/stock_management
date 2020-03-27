@@ -59,7 +59,9 @@ class NewBatchform extends Component {
                 currentStock:0
                 
         }
+
         axios.post(backendde.backendUrl+'Batch/add/'+this.props.selProduct,obj).then(res=>console.log(res.data));
+
         this.setState({
             batchNo:'',
             expDate:'',

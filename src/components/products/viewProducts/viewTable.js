@@ -16,7 +16,9 @@ class ViewTable extends Component {
     }
 
     deleteProduct(){
+
         axios.delete(backendde.backendUrl+'viewProduct/delete/' + this.props.obj._id)
+
             .then((res) => {
                 console.log('Product successfully deleted!')
             }).catch((error) => {

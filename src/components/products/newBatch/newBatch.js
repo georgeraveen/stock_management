@@ -21,7 +21,9 @@ class newBatch extends Component {
     }
 
     componentDidMount(){
+
         axios.get(backendde.backendUrl+'newProduct/view')
+
             .then(response =>{
                 this.setState({products:response.data});
                 console.log('abc');

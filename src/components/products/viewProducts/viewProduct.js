@@ -19,7 +19,9 @@ class viewProduct extends Component {
     }
 
     componentDidMount(){
+
         axios.get(backendde.backendUrl+'viewProduct/view')
+
             .then(response =>{
                 this.setState({products:response.data});
                 console.log('abc');
