@@ -64,7 +64,7 @@ class newProduct extends Component {
                 currentStock:0
                 }]
         }
-        axios.post('http://localhost:4000/newProduct/add',obj).then(res=>console.log(res.data));
+        axios.post('https://stock-management-server.herokuapp.com/newProduct/add',obj).then(res=>console.log(res.data));
         this.setState({
             productName:'',
             batchNo:'',

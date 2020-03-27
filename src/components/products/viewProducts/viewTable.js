@@ -15,7 +15,7 @@ class ViewTable extends Component {
     }
 
     deleteProduct(){
-        axios.delete('http://localhost:4000/viewProduct/delete/' + this.props.obj._id)
+        axios.delete('https://stock-management-server.herokuapp.com/viewProduct/delete/' + this.props.obj._id)
             .then((res) => {
                 console.log('Product successfully deleted!')
             }).catch((error) => {

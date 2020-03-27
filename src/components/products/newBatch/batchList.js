@@ -10,7 +10,7 @@ class BatchList extends Component {
     }
 
     deleteBatch() {
-        axios.post('http://localhost:4000/Batch/delete/'+this.props.selProduct+'/' + this.props.obj.batchNo)
+        axios.post('https://stock-management-server.herokuapp.com/Batch/delete/'+this.props.selProduct+'/' + this.props.obj.batchNo)
             .then((res) => {
                 console.log('Batch successfully deleted!')
             }).catch((error) => {

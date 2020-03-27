@@ -17,7 +17,7 @@ class viewProduct extends Component {
     }
 
     componentDidMount(){
-        axios.get('http://localhost:4000/viewProduct/view')
+        axios.get('https://stock-management-server.herokuapp.com/viewProduct/view')
             .then(response =>{
                 this.setState({products:response.data});
                 console.log('abc');

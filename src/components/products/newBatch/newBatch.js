@@ -21,7 +21,7 @@ class newBatch extends Component {
     }
 
     componentDidMount(){
-        axios.get('http://localhost:4000/newProduct/view')
+        axios.get('https://stock-management-server.herokuapp.com/newProduct/view')
             .then(response =>{
                 this.setState({products:response.data});
                 console.log('abc');
