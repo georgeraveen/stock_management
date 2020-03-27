@@ -26,6 +26,7 @@ class NewBatchform extends Component {
         // console.log(this.props.selProduct);
     }
     onChangeBatchNo(e){
+        console.log('asasd');
         this.setState({
             batchNo:e.target.value,
         });
