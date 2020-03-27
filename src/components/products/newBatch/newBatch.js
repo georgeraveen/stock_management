@@ -5,7 +5,7 @@ import NewBatchform from './newBatchform';
 
 
 import axios from 'axios';
-
+const backendde= require('./../../../backendde');
 class newBatch extends Component {
     constructor(props){
         super(props);
@@ -21,7 +21,9 @@ class newBatch extends Component {
     }
 
     componentDidMount(){
-        axios.get('https://stock-management-server.herokuapp.com/newProduct/view')
+
+        axios.get(backendde.backendUrl+'newProduct/view')
+
             .then(response =>{
                 this.setState({products:response.data});
                 console.log('abc');

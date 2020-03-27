@@ -5,6 +5,8 @@ import {Button} from 'react-bootstrap';
 
 import axios from 'axios';
 
+const backendde= require('./../../../backendde');
+
 class newProduct extends Component {
 
     constructor(props){
@@ -64,7 +66,9 @@ class newProduct extends Component {
                 currentStock:0
                 }]
         }
-        axios.post('https://stock-management-server.herokuapp.com/newProduct/add',obj).then(res=>console.log(res.data));
+
+        axios.post(backendde.backendUrl+'newProduct/add',obj).then(res=>console.log(res.data));
+
         this.setState({
             productName:'',
             batchNo:'',

@@ -7,6 +7,8 @@ import {Button} from 'react-bootstrap';
 
 import axios from 'axios';
 
+const backendde= require('./../../../backendde');
+
 class NewBatchform extends Component {
     constructor(props){
         super(props);
@@ -26,6 +28,7 @@ class NewBatchform extends Component {
         // console.log(this.props.selProduct);
     }
     onChangeBatchNo(e){
+        console.log('asasd');
         this.setState({
             batchNo:e.target.value,
         });
@@ -56,7 +59,9 @@ class NewBatchform extends Component {
                 currentStock:0
                 
         }
-        axios.post('https://stock-management-server.herokuapp.com/Batch/add/'+this.props.selProduct,obj).then(res=>console.log(res.data));
+
+        axios.post(backendde.backendUrl+'Batch/add/'+this.props.selProduct,obj).then(res=>console.log(res.data));
+
         this.setState({
             batchNo:'',
             expDate:'',

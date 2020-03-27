@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-
+const backendde= require('./../../../backendde');
 class BatchList extends Component {
     constructor(props) {
         super(props);
@@ -10,7 +10,7 @@ class BatchList extends Component {
     }
 
     deleteBatch() {
-        axios.post('https://stock-management-server.herokuapp.com/Batch/delete/'+this.props.selProduct+'/' + this.props.obj.batchNo)
+        axios.post(backendde.backendUrl+'Batch/delete/'+this.props.selProduct+'/' + this.props.obj.batchNo)
             .then((res) => {
                 console.log('Batch successfully deleted!')
             }).catch((error) => {

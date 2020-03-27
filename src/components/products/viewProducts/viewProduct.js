@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 
+
 import axios from 'axios';
 import ViewTable from './viewTable';
 
+const backendde= require('./../../../backendde');
 class viewProduct extends Component {
 
     constructor(props){
@@ -17,7 +19,9 @@ class viewProduct extends Component {
     }
 
     componentDidMount(){
-        axios.get('https://stock-management-server.herokuapp.com/viewProduct/view')
+
+        axios.get(backendde.backendUrl+'viewProduct/view')
+
             .then(response =>{
                 this.setState({products:response.data});
                 console.log('abc');
