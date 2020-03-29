@@ -18,7 +18,6 @@ GRNproductRoutes.route('/addProductGRN').post(function(req,res){
 GRNproductRoutes.route('/viewCart').get(function(req,res){
     CartProduct.find(function(err,products){
         if(err){
-            console.log('bye');
             console.log(err);
         }
         else{
@@ -26,5 +25,16 @@ GRNproductRoutes.route('/viewCart').get(function(req,res){
         }
     });
 });
-
+//delete grn item
+GRNproductRoutes.route('/deleteGRNitem/:id').delete(function(req,res){
+    CartProduct.findOneAndDelete({"_id":req.params.id}, function(error,item){
+        if(error){
+            console.log('a');
+            console.log(error);
+        }
+        else{
+            res.json(item);
+        }
+    })
+  })
 module.exports=GRNproductRoutes;

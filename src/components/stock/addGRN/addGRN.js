@@ -44,7 +44,7 @@ class AddGRN extends Component {
                 this.setState({products:response.data});
             })
         .catch(function (error){
-            console.log('hi');
+            console.log('form data');
             console.log(error);
         });
 
@@ -54,7 +54,7 @@ class AddGRN extends Component {
                 this.setState({cartProducts:response.data});
             })
         .catch(function (error){
-            console.log('hi');
+            console.log('cart table data');
             console.log(error);
         });
     }

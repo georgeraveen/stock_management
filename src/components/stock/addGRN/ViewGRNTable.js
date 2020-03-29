@@ -7,31 +7,34 @@ const backendde= require('./../../../backendde');
 class ViewGRNTable extends Component {
     constructor(props) {
         super(props);
-        
+        this.onDeleteItem=this.onDeleteItem.bind(this);
         this.state={
-            products:[],
-            batches:[],
+            products:'',
+            batchDetails:''
         };
-    }
+    };
+    
     componentDidMount(){
         axios.get(backendde.backendUrl+'viewProduct/viewID/'+this.props.obj.productID)
             .then(response =>{
-                this.setState({products:response.data});
+                this.setState({
+                    products:response.data,
+                    batchDetails:response.data.batches.find(e => e._id === this.props.obj.batchID)
+                });
             })
         .catch(function (error){
-            console.log('hi');
+            console.log('hix');
             console.log(error);
         });
+    }
+    onDeleteItem(){
+        axios.delete(backendde.backendUrl+'addGRN/deleteGRNitem/' + this.props.obj._id)
 
-        axios.get(backendde.backendUrl+'Batch/viewID/'+this.props.obj.productID+'/'+this.props.obj.batchID)
-            .then(response =>{
-                this.setState({batches:response.data});
-                console.log(response);
-            })
-        .catch(function (error){
-            console.log('hi');
-            console.log(error);
-        });
+            .then((res) => {
+                console.log('Product successfully deleted!')
+            }).catch((error) => {
+                console.log(error)
+            });
     }
     render() {
         return (
@@ -40,22 +43,22 @@ class ViewGRNTable extends Component {
                     {this.state.products.productName}
                 </td>
                 <td>
-                    {this.state.batches.batchNo}
+                   {this.state.batchDetails.batchNo}
                 </td>
                 <td>
-                    {this.props.obj.batchID}
+                    {this.state.batchDetails.expDate}
                 </td>
                 <td>
-                    {this.props.obj.batchID}
+                    {this.state.batchDetails.wholePrice}
                 </td>
                 <td>
-                    {this.props.obj.batchID}
+                    {this.state.batchDetails.retailPrice}
                 </td>
                 <td>
                     {this.props.obj.quantity}
                 </td>
                 <td>
-                    <button className="btn btn-danger">delete</button>
+                    <button onClick={this.onDeleteItem} className="btn btn-danger">delete</button>
                 </td>
             </tr>
         );
