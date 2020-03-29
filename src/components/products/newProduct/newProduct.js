@@ -100,7 +100,6 @@ class newProduct extends Component {
                 <Form.Group controlId="formBasicPassword">
                     <Form.Label>Expire date</Form.Label>
                     <Form.Control value={this.expDate} onChange={this.onChangeExpireDate} placeholder="MM/YYYY" />
-                    
                 </Form.Group>
                
                 <Form.Group controlId="formBasicPassword">

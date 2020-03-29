@@ -15,7 +15,7 @@ productRoutes.route('/add').post(function(req,res){
         });
 });
 
-//get products
+//get all products
 productRoutes.route('/view').get(function(req,res){
     Product.find(function(err,products){
         if(err){
@@ -23,6 +23,19 @@ productRoutes.route('/view').get(function(req,res){
             console.log(err);
         }
         else{
+            res.json(products);
+        }
+    });
+});
+//get by id
+productRoutes.route('/viewID/:id').get(function(req,res){
+    Product.findById({"_id":req.params.id},function(err,products){
+        if(err){
+            console.log('bye');
+            console.log(err);
+        }
+        else{
+            // console.log(products)
             res.json(products);
         }
     });

@@ -33,4 +33,17 @@ batchRoutes.route('/delete/:name/:Bid').post(function(req,res){
     
 });
 
+//get by id
+batchRoutes.route('/viewID/:id/:bid').get(function(req,res){
+    Product.find({"batches":{"_id":req.params.bid}},function(err,batches){
+        if(err){
+            console.log('bye');
+            console.log(err);
+        }
+        else{
+            console.log(batches)
+            res.json(batches);
+        }
+    });
+});
 module.exports=batchRoutes;
