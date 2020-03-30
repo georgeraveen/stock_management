@@ -13,6 +13,7 @@ import ViewGRNTable from './ViewGRNTable'
 
 const backendde= require('./../../../backendde');
 const spacePro='   ';
+var GRNtotal=0;
 
 class AddGRN extends Component { 
     constructor(props){
@@ -21,7 +22,9 @@ class AddGRN extends Component {
         this.selectBatch=this.selectBatch.bind(this);
         this.onChangeQty=this.onChangeQty.bind(this);
         this.onAddProduct=this.onAddProduct.bind(this);
-        this.ViewGRNCartTableRow=this.ViewGRNCartTableRow.bind(this)
+        this.ViewGRNCartTableRow=this.ViewGRNCartTableRow.bind(this);
+        this.callbackRowSum=this.callbackRowSum.bind(this);
+        this.onSubmitGRN=this.onSubmitGRN.bind(this);
         
         this.state={
             products:[],
@@ -31,7 +34,7 @@ class AddGRN extends Component {
             batchDetails:[],
             quantity:0,
             batch:'',
-
+            temp:0,   //just to refresh page
             cartProducts:[]
         };
 
@@ -52,6 +55,7 @@ class AddGRN extends Component {
         axios.get(backendde.backendUrl+'addGRN/viewCart')
             .then(response =>{
                 this.setState({cartProducts:response.data});
+                console.log(this.state.cartProducts);
             })
         .catch(function (error){
             console.log('cart table data');
@@ -105,10 +109,19 @@ class AddGRN extends Component {
     }
     ViewGRNCartTableRow(){
         return this.state.cartProducts.map(function(object,i){
-            return <ViewGRNTable obj={object} key={i}/>;
-        });
+            return <ViewGRNTable obj={object} key={i} callbackSum = {this.callbackRowSum} />;
+        }.bind(this));
     }
-    
+    callbackRowSum = (rowsum) => {
+        GRNtotal=GRNtotal+rowsum;
+        this.setState({temp: 0}); //just to refresh page
+    }
+    onSubmitGRN(){
+        this.state.cartProducts.map(function(object,i){
+            // this.state.cartProducts[i].setState({preStock:0}) 
+        }.bind(this))
+        console.log(this.state.cartProducts);
+    }
     render() {
         return (
 
@@ -144,20 +157,25 @@ class AddGRN extends Component {
                     />
                 </Form.Group>
                 <Form.Group as={Col}>
-                    <Form.Label>Retail Price</Form.Label>
+                    <Form.Label>Wholesale Price</Form.Label>
                     <br></br>
-                    <Form.Label>{this.state.batchDetails.retailPrice}</Form.Label>   
+                    <Form.Label>{this.state.batchDetails.wholePrice}</Form.Label>   
                 </Form.Group>
                 <Form.Group controlId="formBasicPassword">
                         <Form.Label>Quantity</Form.Label>
                         <Form.Control value={this.state.quantity} onChange={this.onChangeQty} placeholder="qty" />
                 </Form.Group>
                 </Row>
-                
+                <Row>
                 <Button variant="primary" type="submit">
-                    Add product
+                    Add product to GRN cart
                 </Button>
+                </Row>
                 </Form>
+                <br></br>
+                <Button onClick={this.onSubmitGRN} variant="success">
+                    Submit GRN cart
+                </Button>
                 <br></br>
                 <table className="table table-striped" style={{marginTop:20}}>
                         <thead>
@@ -179,12 +197,19 @@ class AddGRN extends Component {
                                 <th>
                                     Quantity
                                 </th>
+                                <th>
+                                    Sum (Wholesale)
+                                </th>
                                 <th>Action</th>
                                 
                             </tr>
                         </thead>
                         <tbody>
                             {this.ViewGRNCartTableRow()}
+                            <tr>
+                                <td colSpan='6'><b>Total</b></td>
+                                <td align="right"><b>Rs. {GRNtotal}</b></td>
+                            </tr>
                         </tbody>
                     </table>
                 

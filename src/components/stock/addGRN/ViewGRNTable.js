@@ -8,11 +8,24 @@ class ViewGRNTable extends Component {
     constructor(props) {
         super(props);
         this.onDeleteItem=this.onDeleteItem.bind(this);
+        this.sendData=this.sendData.bind(this);
         this.state={
             products:'',
-            batchDetails:''
+            batchDetails:'',
+            tot:0
         };
+        
+        
     };
+    sendData = () => {
+        this.props.callbackSum(this.state.batchDetails.wholePrice * this.props.obj.quantity);
+
+    }
+    cal(){
+        this.setState({
+            tot: this.state.batchDetails.wholePrice * this.props.obj.quantity
+        })
+    }
     
     componentDidMount(){
         axios.get(backendde.backendUrl+'viewProduct/viewID/'+this.props.obj.productID)
@@ -21,6 +34,7 @@ class ViewGRNTable extends Component {
                     products:response.data,
                     batchDetails:response.data.batches.find(e => e._id === this.props.obj.batchID)
                 });
+                this.props.callbackSum(this.state.batchDetails.wholePrice * this.props.obj.quantity);
             })
         .catch(function (error){
             console.log('hix');
@@ -48,18 +62,23 @@ class ViewGRNTable extends Component {
                 <td>
                     {this.state.batchDetails.expDate}
                 </td>
-                <td>
+                <td align="right">
                     {this.state.batchDetails.wholePrice}
                 </td>
-                <td>
+                <td align="right">
                     {this.state.batchDetails.retailPrice}
                 </td>
-                <td>
+                <td align="right">
                     {this.props.obj.quantity}
+                </td>
+                <td align="right"><b>Rs. 
+                    {this.state.batchDetails.wholePrice * this.props.obj.quantity}
+                    </b>
                 </td>
                 <td>
                     <button onClick={this.onDeleteItem} className="btn btn-danger">delete</button>
                 </td>
+                
             </tr>
         );
     }
