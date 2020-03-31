@@ -25,6 +25,7 @@ class AddGRN extends Component {
         this.ViewGRNCartTableRow=this.ViewGRNCartTableRow.bind(this);
         this.callbackRowSum=this.callbackRowSum.bind(this);
         this.onSubmitGRN=this.onSubmitGRN.bind(this);
+        this.onChangeRemarks=this.onChangeRemarks.bind(this);
         
         this.state={
             products:[],
@@ -35,7 +36,8 @@ class AddGRN extends Component {
             quantity:0,
             batch:'',
             temp:0,   //just to refresh page
-            cartProducts:[]
+            cartProducts:[],
+            remarks:''
         };
 
     }
@@ -107,6 +109,11 @@ class AddGRN extends Component {
         })
         
     }
+    onChangeRemarks(e){
+        this.setState({
+            remarks:e.target.value
+        });
+    }
     ViewGRNCartTableRow(){
         return this.state.cartProducts.map(function(object,i){
             return <ViewGRNTable obj={object} key={i} callbackSum = {this.callbackRowSum} />;
@@ -127,7 +134,8 @@ class AddGRN extends Component {
             axios.post(backendde.backendUrl+'Batch/GRNstock/'+object.productID+'/'+object.batchID,qty).then(res=>console.log(res.data));
         }.bind(this));
         const GRNobj={
-            items:cart
+            items:cart,
+            remarks:this.state.remarks
         }
         axios.post(backendde.backendUrl+'addGRN/submitGRN',GRNobj).then(res=>console.log(res.data));
         axios.delete(backendde.backendUrl+'addGRN/deleteGRNcart').then(res=>console.log(res.data));
@@ -185,9 +193,17 @@ class AddGRN extends Component {
                 </Row>
                 </Form>
                 <br></br>
+                <div  className="input-group">
+                    <div className="input-group-prepend">
+                        <span className="input-group-text">Add some Remarks here</span>
+                    </div>
+                    <textarea onChange={this.onChangeRemarks} className="form-control" aria-label="With textarea"></textarea>
+
                 <Button onClick={this.onSubmitGRN} variant="success">
                     Submit GRN cart
                 </Button>
+                </div>
+                
                 <br></br>
                 <table className="table table-striped" style={{marginTop:20}}>
                         <thead>

@@ -24,12 +24,9 @@ class viewProduct extends Component {
 
             .then(response =>{
                 this.setState({products:response.data});
-                console.log('abc');
                 console.log(this.state.products);
-                console.log('abc');
             })
         .catch(function (error){
-            console.log('hi');
             console.log(error);
         });
     }

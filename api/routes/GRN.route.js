@@ -61,4 +61,16 @@ GRNproductRoutes.route('/deleteGRNcart').delete(function(req,res){
         }
     })
   })
+
+  //view grn history
+  GRNproductRoutes.route('/viewGRN').get(function(req,res){
+    GRNrecord.find(function(err,records){
+        if(err){
+            console.log(err);
+        }
+        else{
+            res.json(records);
+        }
+    });
+});
 module.exports=GRNproductRoutes;

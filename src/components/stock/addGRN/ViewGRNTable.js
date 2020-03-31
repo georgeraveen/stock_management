@@ -21,11 +21,6 @@ class ViewGRNTable extends Component {
         this.props.callbackSum(this.state.batchDetails.wholePrice * this.props.obj.quantity);
 
     }
-    cal(){
-        this.setState({
-            tot: this.state.batchDetails.wholePrice * this.props.obj.quantity
-        })
-    }
     
     componentDidMount(){
         axios.get(backendde.backendUrl+'viewProduct/viewID/'+this.props.obj.productID)

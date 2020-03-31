@@ -2,6 +2,9 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 let GRNrecord= new Schema({
+    remarks:{
+        type:String
+    },
     items:[{
         productID:{
             type:String

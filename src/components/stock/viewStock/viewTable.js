@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
 import ViewBatch from './ViewBatch';
 
-
-import axios from 'axios';
-const backendde= require('./../../../backendde');
 class ViewTable extends Component {
-    constructor(props) {
-        super(props);
-    }
+    
     ViewBatchTableRow(){
         return this.props.obj.batches.map(function(object1,j){
             return <ViewBatch obj1={object1} key1={j}/>;

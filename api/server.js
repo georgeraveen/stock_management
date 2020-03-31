@@ -25,6 +25,7 @@ app.use('/newProduct',productRoute);
 app.use('/Batch',batchRoute);
 app.use('/viewProduct',productRoute);
 app.use('/addGRN',GRNRoute);
+app.use('/viewGRN',GRNRoute);
 
 app.listen(PORT,function(){
     console.log('Server is running on port: ',PORT);
