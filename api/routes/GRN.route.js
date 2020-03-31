@@ -2,6 +2,7 @@ const express = require('express');
 const GRNproductRoutes=express.Router();
 
 let CartProduct = require('../models/GRNcart.model');
+let GRNrecord = require('../models/GRNrecord.model');
 
 //add product to grn cart
 GRNproductRoutes.route('/addProductGRN').post(function(req,res){
@@ -37,4 +38,15 @@ GRNproductRoutes.route('/deleteGRNitem/:id').delete(function(req,res){
         }
     })
   })
+  //submit grn cart
+GRNproductRoutes.route('/submitGRN').post(function(req,res){
+    let addGRN = new GRNrecord(req.body);
+    addGRN.save()
+        .then(addGRN=>{
+            res.status(200).json({'product':'product added succes'});
+        })
+        .catch(err=>{
+            res.status(400).send("unable to save database");
+        });
+});
 module.exports=GRNproductRoutes;

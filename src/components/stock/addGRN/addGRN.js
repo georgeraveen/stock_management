@@ -117,10 +117,18 @@ class AddGRN extends Component {
         this.setState({temp: 0}); //just to refresh page
     }
     onSubmitGRN(){
+        var cart=[]; 
         this.state.cartProducts.map(function(object,i){
-            // this.state.cartProducts[i].setState({preStock:0}) 
-        }.bind(this))
-        console.log(this.state.cartProducts);
+            var a=this.state.products.find(e => e._id === object.productID).batches.find(e => e._id === object.batchID);
+            object.preStock=a.currentStock;
+            cart.push(object);
+        }.bind(this));
+        const GRNobj={
+            items:cart
+        }
+        axios.post(backendde.backendUrl+'addGRN/submitGRN',GRNobj).then(res=>console.log(res.data));
+        
+        console.log(GRNobj);
     }
     render() {
         return (
