@@ -55,7 +55,7 @@ class AddGRN extends Component {
         axios.get(backendde.backendUrl+'addGRN/viewCart')
             .then(response =>{
                 this.setState({cartProducts:response.data});
-                console.log(this.state.cartProducts);
+                // console.log(this.state.cartProducts);
             })
         .catch(function (error){
             console.log('cart table data');
@@ -122,13 +122,17 @@ class AddGRN extends Component {
             var a=this.state.products.find(e => e._id === object.productID).batches.find(e => e._id === object.batchID);
             object.preStock=a.currentStock;
             cart.push(object);
+            const qty={
+                quantity: a.currentStock+object.quantity};
+            axios.post(backendde.backendUrl+'Batch/GRNstock/'+object.productID+'/'+object.batchID,qty).then(res=>console.log(res.data));
         }.bind(this));
         const GRNobj={
             items:cart
         }
         axios.post(backendde.backendUrl+'addGRN/submitGRN',GRNobj).then(res=>console.log(res.data));
-        
-        console.log(GRNobj);
+        axios.delete(backendde.backendUrl+'addGRN/deleteGRNcart').then(res=>console.log(res.data));
+
+        // console.log(GRNobj);
     }
     render() {
         return (

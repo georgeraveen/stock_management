@@ -49,4 +49,16 @@ GRNproductRoutes.route('/submitGRN').post(function(req,res){
             res.status(400).send("unable to save database");
         });
 });
+//delete GRN cart after submit
+GRNproductRoutes.route('/deleteGRNcart').delete(function(req,res){
+    CartProduct.remove({},function(error,item){
+        if(error){
+            console.log('a');
+            console.log(error);
+        }
+        else{
+            res.json(item);
+        }
+    })
+  })
 module.exports=GRNproductRoutes;
