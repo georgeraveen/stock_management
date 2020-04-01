@@ -12,6 +12,8 @@ import AddNewProduct from './components/products/newProduct/newProduct';
 import AddNewBatch from './components/products/newBatch/newBatch';
 import ViewProducts from './components/products/viewProducts/viewProduct';
 import AddGRN from './components/stock/addGRN/addGRN';
+import ViewGRN from './components/stock/viewGRNrecords/viewGRNrecords'
+import ViewStock from './components/stock/viewStock/viewStock'
 
 function App() {
   return (
@@ -31,9 +33,11 @@ function App() {
               <NavDropdown.Item href="/products/ViewProducts">View products</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Stock management" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">View stock</NavDropdown.Item>
+              <NavDropdown.Item href="/products/ViewStock">View stock</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="/stock/AddGRN">Add GRN</NavDropdown.Item>
+              <NavDropdown.Item href="/stock/ViewGRN">View GRN</NavDropdown.Item>
+              <NavDropdown.Divider />
               <NavDropdown.Item href="#action/3.3">Stock return</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action/3.4">Stock adjustment</NavDropdown.Item>
@@ -57,6 +61,8 @@ function App() {
          <Route exact path='/products/AddNewBatch' component={AddNewBatch}/>
          <Route exact path='/products/ViewProducts' component={ViewProducts}/>
          <Route exact path='/stock/AddGRN' component={AddGRN}/>
+         <Route exact path='/stock/ViewGRN' component={ViewGRN}/>
+         <Route exact path='/products/ViewStock' component={ViewStock}/>
         {/* <Route exact path='/edit/:id' component={Edit}/> */}
         {/* <Route exact path='/index' component={Index}/>  */}
         

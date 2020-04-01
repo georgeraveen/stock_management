@@ -24,9 +24,12 @@ class viewProduct extends Component {
 
             .then(response =>{
                 this.setState({products:response.data});
+                console.log('abc');
                 console.log(this.state.products);
+                console.log('abc');
             })
         .catch(function (error){
+            console.log('hi');
             console.log(error);
         });
     }
@@ -40,7 +43,7 @@ class viewProduct extends Component {
     render() {
         return (
             <div  className="container">
-                <h1>View all products</h1>
+                <h1>View Stock</h1>
                 <table className="table table-striped" style={{marginTop:20}}>
                         <thead>
                             <tr><th>
@@ -58,7 +61,7 @@ class viewProduct extends Component {
                                 <th>
                                     Retail Price
                                 </th>
-                                <th colSpan="2">Action</th>
+                                <th>Stock</th>
                                 
                             </tr>
                         </thead>

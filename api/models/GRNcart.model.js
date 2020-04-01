@@ -1,33 +1,21 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
-let GRNcart= new Schema({
-    cartName:{
+let CartProduct= new Schema({
+    
+    productID:{
         type:String
     },
-    dateTime:{
-        type:Date
+    batchID:{
+        type:String
     },
-    productList:[{
-            productID:{
-                type:String
-            },
-            productName:{
-                type:String
-            },
-            batchID:{
-                type:String
-            },
-            batchNo:{
-                type:String
-            },
-            stock:{
-                type:Number
-            },
-            quantity:{
-                type:Number
-            }
-    }]
+    preStock:{
+        type:Number
+    },
+    quantity:{
+        type:Number
+    }
+
 },
 {
     collection:'GRNcart'
@@ -36,4 +24,4 @@ let GRNcart= new Schema({
 
 
 
-module.exports=mongoose.model('GRNcart',GRNcart);
+module.exports=mongoose.model('CartProduct',CartProduct);

@@ -10,7 +10,7 @@ class ViewBatch extends Component {
                 <td>{this.props.obj1.expDate}</td>
                 <td>{this.props.obj1.wholePrice}</td>
                 <td>{this.props.obj1.retailPrice}</td>
-                <td colSpan='2'></td>
+                <td >{this.props.obj1.currentStock}</td>
                 
             </tr>
         );
