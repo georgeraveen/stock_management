@@ -1,22 +1,32 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import GRNhistoyRow from './GRNhistoyRow';
-import {Modal,Button} from 'react-bootstrap'
-
-var selectedGRNview='';
+import {Modal,Button} from 'react-bootstrap';
+import GRNRecordTableRow from './GRNRecordTableRow';
 
 const backendde= require('../../../backendde');
+var GRNtotal=0;
 class viewGRNrecords extends Component {
-    
+
     constructor(props){
         super(props);
         this.callbackClickView=this.callbackClickView.bind(this);
-        
+        this.ViewGRNRecordTableRow=this.ViewGRNRecordTableRow.bind(this);
+        this.callbackRowSum=this.callbackRowSum.bind(this);
+        this.modalClose=this.modalClose.bind(this);
+
         this.state={
             GRNhistory:[],
             products:[],
             lgShow:false,
-            viewID:''
+            viewID:'',
+            temp:0,
+            selectedGRNview:{
+                createdAt:'',
+                items:[{
+                    productID:'',
+                }]
+            }
         };
         
 
@@ -43,22 +53,30 @@ class viewGRNrecords extends Component {
     }
     ViewRecordsTableRow(){
         return this.state.GRNhistory.map(function(object,i){
-            return <GRNhistoyRow obj={object}  key={i} clickView={this.callbackClickView}/>;
+            return <GRNhistoyRow obj={object} clickView={this.callbackClickView}/>;
         }.bind(this));
     }
     callbackClickView(ViewMessage){
         
         this.setState({
-            viewID:ViewMessage})
-        console.log(this.state.GRNhistory);
-        console.log(this.state.products);
-        // var a=this.state.products.find(e => e._id === '5e8323383cddb62a20322969')
-        var a=this.state.GRNhistory.find(e => e._id===this.state.viewID);
-        console.log(selectedGRNview);
-        console.log(a);
-
+            viewID:ViewMessage,
+            selectedGRNview:this.state.GRNhistory.find(e => e._id===ViewMessage)
+        })
         this.setState({
             lgShow:true})
+    }
+    ViewGRNRecordTableRow(){
+        return this.state.selectedGRNview.items.map(function(object,i){
+            return <GRNRecordTableRow records={object} products={this.state.products.find(e => e._id===object.productID)} callbackSum = {this.callbackRowSum} />;
+        }.bind(this));
+    }
+    callbackRowSum = (rowsum) => {
+        GRNtotal=GRNtotal+rowsum;
+        this.setState({temp: rowsum}); //just refresh page
+    }
+    modalClose(){
+        this.setState({lgShow:false});
+        GRNtotal=0;
     }
     render() {
         return (
@@ -81,21 +99,43 @@ class viewGRNrecords extends Component {
                             {this.ViewRecordsTableRow()}
                         </tbody>
                 </table>
-                <Button onClick={() => this.setState({lgShow:true})}>Large modal</Button>
+                
                 <Modal
                     size="lg"
                     show={this.state.lgShow}
-                    onHide={() => this.setState({lgShow:false})}
+                    onHide={this.modalClose}
                     aria-labelledby="example-modal-sizes-title-lg"
                 >
                     <Modal.Header closeButton>
                     <Modal.Title id="example-modal-sizes-title-lg">
                         GRN details  <br></br>
-                        GRN id:{this.state.viewID}<br></br>
-                        Date:{selectedGRNview}
+                        GRN id:  {this.state.viewID}<br></br>
+                        Date:  {this.state.selectedGRNview.createdAt}
                     </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
+                    <table className="table table-striped" style={{marginTop:20}}>
+                        <thead>
+                            <tr><th>
+                                    Product
+                                </th>
+                                <th>
+                                    Batch No
+                                </th>
+                                <th>Expire Date</th>
+                                <th>Wholesale Price</th>
+                                <th>Quantity</th>
+                                <th>Sum</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.ViewGRNRecordTableRow()}
+                            <tr>
+                                <td colSpan='5'><b>Total</b></td>
+                                <td align="right"><b>Rs. {GRNtotal}</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
                     </Modal.Body>
                 </Modal>
             </div>

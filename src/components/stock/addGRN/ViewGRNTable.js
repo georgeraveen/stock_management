@@ -8,7 +8,7 @@ class ViewGRNTable extends Component {
     constructor(props) {
         super(props);
         this.onDeleteItem=this.onDeleteItem.bind(this);
-        this.sendData=this.sendData.bind(this);
+        
         this.state={
             products:'',
             batchDetails:'',
@@ -17,11 +17,6 @@ class ViewGRNTable extends Component {
         
         
     };
-    sendData = () => {
-        this.props.callbackSum(this.state.batchDetails.wholePrice * this.props.obj.quantity);
-
-    }
-    
     componentDidMount(){
         axios.get(backendde.backendUrl+'viewProduct/viewID/'+this.props.obj.productID)
             .then(response =>{

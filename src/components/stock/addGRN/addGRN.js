@@ -29,7 +29,7 @@ class AddGRN extends Component {
         
         this.state={
             products:[],
-            batches:[],
+            batches:[{batchNo:'Batch',expDate:'Exp'}],
             selectedProduct:'',
             selectedBatch:'',
             batchDetails:[],
@@ -170,7 +170,7 @@ class AddGRN extends Component {
                         options={this.state.batches}
                         getOptionLabel={option => option.batchNo +spacePro + option.expDate}
                         style={{ width: 300 }}
-                        defaultValue={[this.state.batches[0]]}
+                        defaultValue={this.state.batches[0]}
                         onChange={this.selectBatch}
                         inputValue={this.state.empty}
                         renderInput={params => <TextField {...params} label="Select Batch Number" variant="outlined" />}
