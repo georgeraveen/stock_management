@@ -14,6 +14,7 @@ import ViewProducts from './components/products/viewProducts/viewProduct';
 import AddGRN from './components/stock/addGRN/addGRN';
 import ViewGRN from './components/stock/viewGRNrecords/viewGRNrecords'
 import ViewStock from './components/stock/viewStock/viewStock'
+import StockReturn from './components/stock/stockReturn/StockReturn'
 
 function App() {
   return (
@@ -38,7 +39,7 @@ function App() {
               <NavDropdown.Item href="/stock/AddGRN">Add GRN</NavDropdown.Item>
               <NavDropdown.Item href="/stock/ViewGRN">View GRN</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.3">Stock return</NavDropdown.Item>
+              <NavDropdown.Item href="/stock/addStockReturn">Add Stock return</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action/3.4">Stock adjustment</NavDropdown.Item>
             </NavDropdown>
@@ -63,6 +64,7 @@ function App() {
          <Route exact path='/stock/AddGRN' component={AddGRN}/>
          <Route exact path='/stock/ViewGRN' component={ViewGRN}/>
          <Route exact path='/products/ViewStock' component={ViewStock}/>
+         <Route exact path='/stock/addStockReturn' component={StockReturn}/>
         {/* <Route exact path='/edit/:id' component={Edit}/> */}
         {/* <Route exact path='/index' component={Index}/>  */}
         

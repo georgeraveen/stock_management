@@ -9,13 +9,13 @@ import {Row,Col} from 'react-bootstrap';
 
 import axios from 'axios';
 
-import ViewGRNTable from './ViewGRNTable'
+import ViewRTNTable from './ViewRTNTable'
 
 const backendde= require('./../../../backendde');
 const spacePro='   ';
 var GRNtotal=0;
 
-class AddGRN extends Component { 
+class StockReturn extends Component { 
     constructor(props){
         super(props);
         this.selectProduct=this.selectProduct.bind(this);
@@ -116,7 +116,7 @@ class AddGRN extends Component {
     }
     ViewGRNCartTableRow(){
         return this.state.cartProducts.map(function(object,i){
-            return <ViewGRNTable obj={object} key={i} callbackSum = {this.callbackRowSum} />;
+            return <ViewRTNTable obj={object} key={i} callbackSum = {this.callbackRowSum} />;
         }.bind(this));
     }
     callbackRowSum = (rowsum) => {
@@ -146,7 +146,7 @@ class AddGRN extends Component {
         return (
 
             <div className="container">
-                <h1>Add GRN stock</h1>
+                <h1>Add stock return</h1> 
                 <br></br>
                 
                 <Form onSubmit={this.onAddProduct} >
@@ -182,6 +182,11 @@ class AddGRN extends Component {
                     <Form.Label>{this.state.batchDetails.wholePrice}</Form.Label>   
                 </Form.Group>
                 <Form.Group as={Col}>
+                    <Form.Label>Available Stock</Form.Label>
+                    <br></br>
+                    <Form.Label>{this.state.batchDetails.currentStock}</Form.Label>   
+                </Form.Group>
+                <Form.Group as={Col} >
                         <Form.Label>Quantity</Form.Label>
                         <Form.Control value={this.state.quantity} onChange={this.onChangeQty} placeholder="qty" />
                 </Form.Group>
@@ -250,4 +255,4 @@ class AddGRN extends Component {
     
 }
 
-export default AddGRN;
+export default StockReturn;
