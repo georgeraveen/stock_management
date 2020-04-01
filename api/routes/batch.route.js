@@ -11,9 +11,9 @@ batchRoutes.route('/add/:name').post(function(req,res){
         
         function(err,batch){
             if(err){
-                return res.send(err);
+                return res.json({'status':false});
             }
-            return res.json(batch);
+            return res.json({'status':true});
         });
 });
 

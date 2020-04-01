@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import {Form} from 'react-bootstrap';
-import {Button} from 'react-bootstrap';
+import {Button,Alert} from 'react-bootstrap';
 
 import axios from 'axios';
 
@@ -17,6 +17,7 @@ class newProduct extends Component {
         this.onChangeWholePrice=this.onChangeWholePrice.bind(this);
         this.onChangeRetailPrice=this.onChangeRetailPrice.bind(this);
         this.onSubmit=this.onSubmit.bind(this);
+        this.successAlert=this.successAlert.bind(this);
 
         this.state={
             productName:'',
@@ -24,7 +25,9 @@ class newProduct extends Component {
             expDate:'',
             wholePrice:'',
             retailPrice:'',
-            currentStock:0
+            currentStock:0,
+            successAlt:false,
+            failAlt:false
         }
     }
     onChangeProductName(e){
@@ -67,7 +70,7 @@ class newProduct extends Component {
                 }]
         }
 
-        axios.post(backendde.backendUrl+'newProduct/add',obj).then(res=>console.log(res.data));
+        axios.post(backendde.backendUrl+'newProduct/add',obj).then(res=> res.status ? this.setState({successAlt:true}):this.setState({failAlt:true}));
 
         this.setState({
             productName:'',
@@ -79,18 +82,25 @@ class newProduct extends Component {
         })
     }
 
-    
+    successAlert() {
+        if (this.state.successAlt) {
+          return (
+            <Alert variant="success" onClose={() => this.setState({successAlt:false})} dismissible>
+              <Alert.Heading>Product successfully added</Alert.Heading>
+            </Alert>
+          );
+        }
+        
+      }
     render() {
         return (
             <div className="container">
                 <h1>Add new product to stock</h1><br></br>
+                {this.successAlert()}<br></br>
                 <Form onSubmit={this.onSubmit}>
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Product Name</Form.Label>
                     <Form.Control value={this.state.productName} onChange={this.onChangeProductName} placeholder="New Product Name" />
-                    {/* <Form.Text className="text-muted">
-                    We'll never share your email with anyone else.
-                    </Form.Text> */}
                 </Form.Group>
 
                 <Form.Group controlId="formBasicPassword">
@@ -114,6 +124,7 @@ class newProduct extends Component {
                     Add product
                 </Button>
                 </Form>
+                
             </div>
         );
     }

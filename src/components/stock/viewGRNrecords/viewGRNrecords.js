@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import GRNhistoyRow from './GRNhistoyRow';
-import {Modal,Button} from 'react-bootstrap';
+import {Modal} from 'react-bootstrap';
 import GRNRecordTableRow from './GRNRecordTableRow';
 
 const backendde= require('../../../backendde');

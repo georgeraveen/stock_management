@@ -37,7 +37,8 @@ class StockReturn extends Component {
             batch:'',
             temp:0,   //just to refresh page
             cartProducts:[],
-            remarks:''
+            remarks:'',
+            qtyBoxErrMsg:''
         };
 
     }
@@ -84,9 +85,18 @@ class StockReturn extends Component {
         });
     }
     onChangeQty(e){
-        this.setState({
-            quantity:e.target.value
-        });
+        if(e.target.value<=this.state.batchDetails.currentStock){
+            this.setState({
+                qtyBoxErrMsg:'',
+                quantity:e.target.value
+            });    
+        }
+        else{
+            this.setState({
+                qtyBoxErrMsg:'stock error'
+            }); 
+        }
+        
     }
     onAddProduct(e){
         e.preventDefault();
@@ -189,6 +199,7 @@ class StockReturn extends Component {
                 <Form.Group as={Col} >
                         <Form.Label>Quantity</Form.Label>
                         <Form.Control value={this.state.quantity} onChange={this.onChangeQty} placeholder="qty" />
+                        <Form.Label><font color='red'>{this.state.qtyBoxErrMsg}</font></Form.Label>
                 </Form.Group>
                 </Row>
                 <Row>
