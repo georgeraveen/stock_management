@@ -32,7 +32,7 @@ class ViewRTNTable extends Component {
         });
     }
     onDeleteItem(){
-        axios.delete(backendde.backendUrl+'addGRN/deleteGRNitem/' + this.props.obj._id)
+        axios.delete(backendde.backendUrl+'addRTN/deleteRTNitem/' + this.props.obj._id)
 
             .then((res) => {
                 console.log('Product successfully deleted!')

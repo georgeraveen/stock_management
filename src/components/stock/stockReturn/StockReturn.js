@@ -13,7 +13,7 @@ import ViewRTNTable from './ViewRTNTable'
 
 const backendde= require('./../../../backendde');
 const spacePro='   ';
-var GRNtotal=0;
+var RTNtotal=0;
 
 class StockReturn extends Component { 
     constructor(props){
@@ -22,9 +22,9 @@ class StockReturn extends Component {
         this.selectBatch=this.selectBatch.bind(this);
         this.onChangeQty=this.onChangeQty.bind(this);
         this.onAddProduct=this.onAddProduct.bind(this);
-        this.ViewGRNCartTableRow=this.ViewGRNCartTableRow.bind(this);
+        this.ViewRTNCartTableRow=this.ViewRTNCartTableRow.bind(this);
         this.callbackRowSum=this.callbackRowSum.bind(this);
-        this.onSubmitGRN=this.onSubmitGRN.bind(this);
+        this.onSubmitRTN=this.onSubmitRTN.bind(this);
         this.onChangeRemarks=this.onChangeRemarks.bind(this);
         
         this.state={
@@ -54,7 +54,7 @@ class StockReturn extends Component {
         });
 
         //cart table data
-        axios.get(backendde.backendUrl+'addGRN/viewCart')
+        axios.get(backendde.backendUrl+'addRTN/viewCart')
             .then(response =>{
                 this.setState({cartProducts:response.data});
                 // console.log(this.state.cartProducts);
@@ -97,7 +97,7 @@ class StockReturn extends Component {
             quantity:this.state.quantity
         }
 
-        axios.post(backendde.backendUrl+'addGRN/addProductGRN',obj).then(res=>console.log(res.data));
+        axios.post(backendde.backendUrl+'addRTN/addProductRTN',obj).then(res=>console.log(res.data));
 
         this.setState({
             batches:[],
@@ -114,33 +114,33 @@ class StockReturn extends Component {
             remarks:e.target.value
         });
     }
-    ViewGRNCartTableRow(){
+    ViewRTNCartTableRow(){
         return this.state.cartProducts.map(function(object,i){
             return <ViewRTNTable obj={object} key={i} callbackSum = {this.callbackRowSum} />;
         }.bind(this));
     }
     callbackRowSum = (rowsum) => {
-        GRNtotal=GRNtotal+rowsum;
+        RTNtotal=RTNtotal+rowsum;
         this.setState({temp: 0}); //just to refresh page
     }
-    onSubmitGRN(){
+    onSubmitRTN(){
         var cart=[]; 
         this.state.cartProducts.map(function(object,i){
             var a=this.state.products.find(e => e._id === object.productID).batches.find(e => e._id === object.batchID);
             object.preStock=a.currentStock;
             cart.push(object);
             const qty={
-                quantity: a.currentStock+object.quantity};
-            axios.post(backendde.backendUrl+'Batch/GRNstock/'+object.productID+'/'+object.batchID,qty).then(res=>console.log(res.data));
+                quantity: a.currentStock-object.quantity};
+            axios.post(backendde.backendUrl+'Batch/RTNstock/'+object.productID+'/'+object.batchID,qty).then(res=>console.log(res.data));
         }.bind(this));
-        const GRNobj={
+        const RTNobj={
             items:cart,
             remarks:this.state.remarks
         }
-        axios.post(backendde.backendUrl+'addGRN/submitGRN',GRNobj).then(res=>console.log(res.data));
-        axios.delete(backendde.backendUrl+'addGRN/deleteGRNcart').then(res=>console.log(res.data));
+        axios.post(backendde.backendUrl+'addRTN/submitRTN',RTNobj).then(res=>console.log(res.data));
+        axios.delete(backendde.backendUrl+'addRTN/deleteRTNcart').then(res=>console.log(res.data));
 
-        // console.log(GRNobj);
+        // console.log(RTNobj);
     }
     render() {
         return (
@@ -193,7 +193,7 @@ class StockReturn extends Component {
                 </Row>
                 <Row>
                 <Button variant="primary" type="submit">
-                    Add product to GRN cart
+                    Add product to RTN cart
                 </Button>
                 </Row>
                 </Form>
@@ -204,8 +204,8 @@ class StockReturn extends Component {
                     </div>
                     <textarea onChange={this.onChangeRemarks} className="form-control" aria-label="With textarea"></textarea>
 
-                <Button onClick={this.onSubmitGRN} variant="success">
-                    Submit GRN cart
+                <Button onClick={this.onSubmitRTN} variant="success">
+                    Submit RTN cart
                 </Button>
                 </div>
                 
@@ -238,10 +238,10 @@ class StockReturn extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.ViewGRNCartTableRow()}
+                            {this.ViewRTNCartTableRow()}
                             <tr>
                                 <td colSpan='6'><b>Total</b></td>
-                                <td align="right"><b>Rs. {GRNtotal}</b></td>
+                                <td align="right"><b>Rs. {RTNtotal}</b></td>
                             </tr>
                         </tbody>
                     </table>
