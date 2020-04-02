@@ -10,6 +10,8 @@ const config = require('./DB.js');
 const productRoute= require('./routes/product.route');
 const batchRoute= require('./routes/batch.route');
 const GRNRoute = require('./routes/GRN.route');
+const RTNRoute = require('./routes/RTN.route');
+const INVCRoute = require('./routes/invoice.route');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB,{useNewUrlParser:true}).then(
@@ -26,6 +28,10 @@ app.use('/Batch',batchRoute);
 app.use('/viewProduct',productRoute);
 app.use('/addGRN',GRNRoute);
 app.use('/viewGRN',GRNRoute);
+app.use('/addRTN',RTNRoute);
+app.use('/viewRTN',RTNRoute);
+app.use('/addINVC',INVCRoute);
+app.use('/viewINVC',INVCRoute);
 
 app.listen(PORT,function(){
     console.log('Server is running on port: ',PORT);

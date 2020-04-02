@@ -4,20 +4,19 @@ import BatchList from './batchList';
 import NewBatchform from './newBatchform';
 
 
+
 import axios from 'axios';
 const backendde= require('./../../../backendde');
 class newBatch extends Component {
     constructor(props){
         super(props);
         this.onSelectProduct=this.onSelectProduct.bind(this);
-        
+       
         this.state={
             products:[],
             batches:[],
             selectedProduct:''
         };
-        
-
     }
 
     componentDidMount(){
@@ -26,9 +25,7 @@ class newBatch extends Component {
 
             .then(response =>{
                 this.setState({products:response.data});
-                console.log('abc');
                 console.log(this.state.products);
-                console.log('abc');
                 
             })
         .catch(function (error){
@@ -50,9 +47,7 @@ class newBatch extends Component {
         var a=this.state.selectedProduct;
         return this.state.products.map(function(object,i){
             if(a==(object['productName'])){
-                // console.log(object);
                 return object.batches.map(function(object1,j){
-                    // console.log(object1);
                     return <BatchList selProduct={object['_id']} obj={object1} key={j}/>;
                 });
             };
@@ -63,6 +58,7 @@ class newBatch extends Component {
             return<NewBatchform selProduct={this.state.selectedProduct}/>
         };
     }
+   
     render() {
         return (
             <div className="container">
@@ -102,7 +98,9 @@ class newBatch extends Component {
                         </tbody>
                     </table>
                 </div>
-                <br></br><br></br>
+                <br></br>
+                
+                <br></br>
                 <div>
                     {this.displayNewBatchForm()}
                 </div>

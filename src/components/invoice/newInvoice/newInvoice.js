@@ -9,22 +9,22 @@ import {Row,Col} from 'react-bootstrap';
 
 import axios from 'axios';
 
-import ViewGRNTable from './ViewGRNTable'
+import ViewINVCTable from './ViewInvoiceTable'
 
-const backendde= require('./../../../backendde');
+const backendde= require('../../../backendde');
 const spacePro='   ';
-var GRNtotal=0;
+var INVCtotal=0;
 
-class AddGRN extends Component { 
+class newInvoice extends Component { 
     constructor(props){
         super(props);
         this.selectProduct=this.selectProduct.bind(this);
         this.selectBatch=this.selectBatch.bind(this);
         this.onChangeQty=this.onChangeQty.bind(this);
         this.onAddProduct=this.onAddProduct.bind(this);
-        this.ViewGRNCartTableRow=this.ViewGRNCartTableRow.bind(this);
+        this.ViewINVCCartTableRow=this.ViewINVCCartTableRow.bind(this);
         this.callbackRowSum=this.callbackRowSum.bind(this);
-        this.onSubmitGRN=this.onSubmitGRN.bind(this);
+        this.onSubmitINVC=this.onSubmitINVC.bind(this);
         this.onChangeRemarks=this.onChangeRemarks.bind(this);
         
         this.state={
@@ -37,7 +37,8 @@ class AddGRN extends Component {
             batch:'',
             temp:0,   //just to refresh page
             cartProducts:[],
-            remarks:''
+            remarks:'',
+            qtyBoxErrMsg:''
         };
 
     }
@@ -54,7 +55,7 @@ class AddGRN extends Component {
         });
 
         //cart table data
-        axios.get(backendde.backendUrl+'addGRN/viewCart')
+        axios.get(backendde.backendUrl+'addINVC/viewCart')
             .then(response =>{
                 this.setState({cartProducts:response.data});
                 // console.log(this.state.cartProducts);
@@ -84,9 +85,18 @@ class AddGRN extends Component {
         });
     }
     onChangeQty(e){
-        this.setState({
-            quantity:e.target.value
-        });
+        if(e.target.value<=this.state.batchDetails.currentStock){
+            this.setState({
+                qtyBoxErrMsg:'',
+                quantity:e.target.value
+            });    
+        }
+        else{
+            this.setState({
+                qtyBoxErrMsg:'stock error'
+            }); 
+        }
+        
     }
     onAddProduct(e){
         e.preventDefault();
@@ -97,7 +107,7 @@ class AddGRN extends Component {
             quantity:this.state.quantity
         }
 
-        axios.post(backendde.backendUrl+'addGRN/addProductGRN',obj).then(res=>console.log(res.data));
+        axios.post(backendde.backendUrl+'addINVC/addProductINVC',obj).then(res=>console.log(res.data));
 
         this.setState({
             batches:[],
@@ -114,39 +124,39 @@ class AddGRN extends Component {
             remarks:e.target.value
         });
     }
-    ViewGRNCartTableRow(){
+    ViewINVCCartTableRow(){
         return this.state.cartProducts.map(function(object,i){
-            return <ViewGRNTable obj={object} key={i} callbackSum = {this.callbackRowSum} />;
+            return <ViewINVCTable obj={object} key={i} callbackSum = {this.callbackRowSum} />;
         }.bind(this));
     }
     callbackRowSum = (rowsum) => {
-        GRNtotal=GRNtotal+rowsum;
+        INVCtotal=INVCtotal+rowsum;
         this.setState({temp: 0}); //just to refresh page
     }
-    onSubmitGRN(){
+    onSubmitINVC(){
         var cart=[]; 
         this.state.cartProducts.map(function(object,i){
             var a=this.state.products.find(e => e._id === object.productID).batches.find(e => e._id === object.batchID);
             object.preStock=a.currentStock;
             cart.push(object);
             const qty={
-                quantity: a.currentStock+object.quantity};
-            axios.post(backendde.backendUrl+'Batch/GRNstock/'+object.productID+'/'+object.batchID,qty).then(res=>console.log(res.data));
+                quantity: a.currentStock-object.quantity};
+            axios.post(backendde.backendUrl+'Batch/INVCstock/'+object.productID+'/'+object.batchID,qty).then(res=>console.log(res.data));
         }.bind(this));
-        const GRNobj={
+        const INVCobj={
             items:cart,
             remarks:this.state.remarks
         }
-        axios.post(backendde.backendUrl+'addGRN/submitGRN',GRNobj).then(res=>console.log(res.data));
-        axios.delete(backendde.backendUrl+'addGRN/deleteGRNcart').then(res=>console.log(res.data));
+        axios.post(backendde.backendUrl+'addINVC/submitINVC',INVCobj).then(res=>console.log(res.data));
+        axios.delete(backendde.backendUrl+'addINVC/deleteINVCcart').then(res=>console.log(res.data));
 
-        // console.log(GRNobj);
+        // console.log(INVCobj);
     }
     render() {
         return (
 
             <div className="container">
-                <h1>Add GRN stock</h1>
+                <h1>Create New Invoice</h1>
                 <br></br>
                 
                 <Form onSubmit={this.onAddProduct} >
@@ -177,18 +187,24 @@ class AddGRN extends Component {
                     />
                 </Form.Group>
                 <Form.Group as={Col}>
-                    <Form.Label>Wholesale Price</Form.Label>
+                    <Form.Label>Retail Price</Form.Label>
                     <br></br>
-                    <Form.Label>{this.state.batchDetails.wholePrice}</Form.Label>   
+                    <Form.Label>{this.state.batchDetails.retailPrice}</Form.Label>   
                 </Form.Group>
                 <Form.Group as={Col}>
+                    <Form.Label>Available Stock</Form.Label>
+                    <br></br>
+                    <Form.Label>{this.state.batchDetails.currentStock}</Form.Label>   
+                </Form.Group>
+                <Form.Group as={Col} >
                         <Form.Label>Quantity</Form.Label>
                         <Form.Control value={this.state.quantity} onChange={this.onChangeQty} placeholder="qty" />
+                        <Form.Label><font color='red'>{this.state.qtyBoxErrMsg}</font></Form.Label>
                 </Form.Group>
                 </Row>
                 <Row>
                 <Button variant="primary" type="submit">
-                    Add product to GRN cart
+                    Add product to invoice cart
                 </Button>
                 </Row>
                 </Form>
@@ -199,8 +215,8 @@ class AddGRN extends Component {
                     </div>
                     <textarea onChange={this.onChangeRemarks} className="form-control" aria-label="With textarea"></textarea>
 
-                <Button onClick={this.onSubmitGRN} variant="success">
-                    Submit GRN cart
+                <Button onClick={this.onSubmitINVC} variant="success">
+                    Submit Invoice cart
                 </Button>
                 </div>
                 
@@ -217,26 +233,23 @@ class AddGRN extends Component {
                                     Expire Date
                                 </th>
                                 <th>
-                                    Wholesale Price
-                                </th>
-                                <th>
                                     Retail Price
                                 </th>
                                 <th>
                                     Quantity
                                 </th>
                                 <th>
-                                    Sum (Wholesale)
+                                    Sum
                                 </th>
                                 <th>Action</th>
                                 
                             </tr>
                         </thead>
                         <tbody>
-                            {this.ViewGRNCartTableRow()}
+                            {this.ViewINVCCartTableRow()}
                             <tr>
-                                <td colSpan='6'><b>Total</b></td>
-                                <td align="right"><b>Rs. {GRNtotal}</b></td>
+                                <td colSpan='5'><b>Total</b></td>
+                                <td align="right"><b>Rs. {INVCtotal}</b></td>
                             </tr>
                         </tbody>
                     </table>
@@ -250,4 +263,4 @@ class AddGRN extends Component {
     
 }
 
-export default AddGRN;
+export default newInvoice;

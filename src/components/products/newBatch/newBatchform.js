@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import {Form} from 'react-bootstrap';
 import {Row} from 'react-bootstrap';
 import {Col} from 'react-bootstrap';
-import {Button} from 'react-bootstrap';
+import {Button, Alert} from 'react-bootstrap';
 
 import axios from 'axios';
 
@@ -17,15 +17,17 @@ class NewBatchform extends Component {
         this.onChangeWholePrice=this.onChangeWholePrice.bind(this);
         this.onChangeRetailPrice=this.onChangeRetailPrice.bind(this);
         this.onSubmit=this.onSubmit.bind(this);
+        this.successAlert=this.successAlert.bind(this);
 
         this.state={
             batchNo:'',
             expDate:'',
             wholePrice:'',
             retailPrice:'',
-            currentStock:0
+            currentStock:0,
+            successAlt:false,
+            failAlt:false
         };
-        // console.log(this.props.selProduct);
     }
     onChangeBatchNo(e){
         console.log('asasd');
@@ -60,7 +62,7 @@ class NewBatchform extends Component {
                 
         }
 
-        axios.post(backendde.backendUrl+'Batch/add/'+this.props.selProduct,obj).then(res=>console.log(res.data));
+        axios.post(backendde.backendUrl+'Batch/add/'+this.props.selProduct,obj).then(res=> res.status ? this.setState({successAlt:true}):this.setState({failAlt:true}));
 
         this.setState({
             batchNo:'',
@@ -70,9 +72,21 @@ class NewBatchform extends Component {
             currentStock:0
         })
     }
+    successAlert() {
+        if (this.state.successAlt) {
+          return (
+            <Alert variant="success" onClose={() => this.setState({successAlt:false})} dismissible>
+              <Alert.Heading>New batch successfully added</Alert.Heading>
+            </Alert>
+          );
+        }
+        
+      }
     render() {
         return (
             <div>
+                {this.successAlert()}
+                <br></br>
                 <Form onSubmit={this.onSubmit}>
                 <Row>
                 <Form.Group as={Col}  controlId="formBasicPassword">

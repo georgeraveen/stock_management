@@ -11,9 +11,9 @@ batchRoutes.route('/add/:name').post(function(req,res){
         
         function(err,batch){
             if(err){
-                return res.send(err);
+                return res.json({'status':false});
             }
-            return res.json(batch);
+            return res.json({'status':true});
         });
 });
 
@@ -50,6 +50,32 @@ batchRoutes.route('/delete/:name/:Bid').post(function(req,res){
 
 // GRN stock
 batchRoutes.route('/GRNstock/:id/:bid').post(function(req,res){
+    Product.findOneAndUpdate(
+        // {"_id":req.params.id},
+        {"_id":req.params.id,"batches._id":req.params.bid},
+        {$set:{"batches.$.currentStock":req.body.quantity}},     
+        function(err,qty){
+            if(err){
+                return res.send(err);
+            }
+            return res.json(qty);
+        });
+});
+// RTN stock
+batchRoutes.route('/RTNstock/:id/:bid').post(function(req,res){
+    Product.findOneAndUpdate(
+        // {"_id":req.params.id},
+        {"_id":req.params.id,"batches._id":req.params.bid},
+        {$set:{"batches.$.currentStock":req.body.quantity}},     
+        function(err,qty){
+            if(err){
+                return res.send(err);
+            }
+            return res.json(qty);
+        });
+});
+// invoice stock
+batchRoutes.route('/INVCstock/:id/:bid').post(function(req,res){
     Product.findOneAndUpdate(
         // {"_id":req.params.id},
         {"_id":req.params.id,"batches._id":req.params.bid},
