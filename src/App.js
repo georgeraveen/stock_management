@@ -16,6 +16,9 @@ import ViewGRN from './components/stock/viewGRNrecords/viewGRNrecords';
 import ViewStock from './components/stock/viewStock/viewStock';
 import StockReturn from './components/stock/stockReturn/StockReturn';
 import ViewStockReturn from './components/stock/viewRTNrecords/viewRTNrecords';
+import newInvoice from './components/invoice/newInvoice/newInvoice';
+// import ViewStockReturn from './components/stock/viewRTNrecords/viewRTNrecords';
+
 
 function App() {
   return (
@@ -45,6 +48,12 @@ function App() {
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action/3.4">Stock adjustment</NavDropdown.Item>
             </NavDropdown>
+            <NavDropdown title="Invoice" id="collasible-nav-dropdown">
+              <NavDropdown.Item href="/invoice/newInvoice">New Invoice</NavDropdown.Item>
+              <NavDropdown.Item href="/invoice/ViewInvoice">View Invoices</NavDropdown.Item>
+              <NavDropdown.Divider />
+              
+            </NavDropdown>
           </Nav>
           <Nav>
             <Nav.Link href="#deets">More deets</Nav.Link>
@@ -68,6 +77,8 @@ function App() {
          <Route exact path='/products/ViewStock' component={ViewStock}/>
          <Route exact path='/stock/addStockReturn' component={StockReturn}/>
          <Route exact path='/stock/viewStockReturn' component={ViewStockReturn}/>
+         <Route exact path='/invoice/newInvoice' component={newInvoice}/>
+         <Route exact path='/invoice/ViewInvoice' component={ViewStockReturn}/>
         {/* <Route exact path='/edit/:id' component={Edit}/> */}
         {/* <Route exact path='/index' component={Index}/>  */}
         
