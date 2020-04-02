@@ -6,6 +6,7 @@ import INVCRecordTableRow from './INVCRecordTableRow';
 
 const backendde= require('../../../backendde');
 var INVCtotal=0;
+var NetTotal=0;
 class viewINVCrecords extends Component {
 
     constructor(props){
@@ -23,6 +24,7 @@ class viewINVCrecords extends Component {
             temp:0,
             selectedINVCview:{
                 createdAt:'',
+                discount:0,
                 items:[{
                     productID:'',
                 }]
@@ -72,11 +74,14 @@ class viewINVCrecords extends Component {
     }
     callbackRowSum = (rowsum) => {
         INVCtotal=INVCtotal+rowsum;
+        NetTotal=INVCtotal;
+        NetTotal=INVCtotal*(100-this.state.selectedINVCview.discount)/100;
         this.setState({temp: rowsum}); //just refresh page
     }
     modalClose(){
         this.setState({lgShow:false});
         INVCtotal=0;
+        NetTotal=0;
     }
     render() {
         return (
@@ -133,6 +138,14 @@ class viewINVCrecords extends Component {
                             <tr>
                                 <td colSpan='5'><b>Total</b></td>
                                 <td align="right"><b>Rs. {INVCtotal}</b></td>
+                            </tr>
+                            <tr>
+                                <td colSpan='5'><b>Discount</b></td>
+                                <td align="right"><b>{this.state.selectedINVCview.discount} %</b></td>
+                            </tr>
+                            <tr>
+                                <td colSpan='5'><b>Grand Total</b></td>
+                                <td align="right"><b>Rs. {NetTotal}</b></td>
                             </tr>
                         </tbody>
                     </table>

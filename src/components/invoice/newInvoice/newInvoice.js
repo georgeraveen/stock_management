@@ -5,15 +5,17 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import {Form} from 'react-bootstrap';
 import {Button} from 'react-bootstrap';
-import {Row,Col} from 'react-bootstrap';
+import {Row,Col,InputGroup,FormControl} from 'react-bootstrap';
 
 import axios from 'axios';
 
 import ViewINVCTable from './ViewInvoiceTable'
+import { Container } from '@material-ui/core';
 
 const backendde= require('../../../backendde');
 const spacePro='   ';
 var INVCtotal=0;
+var NetTotal=0;
 
 class newInvoice extends Component { 
     constructor(props){
@@ -22,6 +24,7 @@ class newInvoice extends Component {
         this.selectBatch=this.selectBatch.bind(this);
         this.onChangeQty=this.onChangeQty.bind(this);
         this.onAddProduct=this.onAddProduct.bind(this);
+        this.onChangeDiscount=this.onChangeDiscount.bind(this);
         this.ViewINVCCartTableRow=this.ViewINVCCartTableRow.bind(this);
         this.callbackRowSum=this.callbackRowSum.bind(this);
         this.onSubmitINVC=this.onSubmitINVC.bind(this);
@@ -38,6 +41,7 @@ class newInvoice extends Component {
             temp:0,   //just to refresh page
             cartProducts:[],
             remarks:'',
+            discount:0,
             qtyBoxErrMsg:''
         };
 
@@ -124,6 +128,27 @@ class newInvoice extends Component {
             remarks:e.target.value
         });
     }
+    onChangeDiscount(e){
+        if(e.target.value==''){
+            this.setState({
+                discount:0
+            })
+            NetTotal=INVCtotal;
+            this.setState({
+                temp:0
+            }) 
+        }
+        else{
+            this.setState({
+                discount:e.target.value
+            })
+            NetTotal=INVCtotal*(100-e.target.value)/100;
+            this.setState({
+                temp:0
+            })
+        }
+       
+    }
     ViewINVCCartTableRow(){
         return this.state.cartProducts.map(function(object,i){
             return <ViewINVCTable obj={object} key={i} callbackSum = {this.callbackRowSum} />;
@@ -131,6 +156,7 @@ class newInvoice extends Component {
     }
     callbackRowSum = (rowsum) => {
         INVCtotal=INVCtotal+rowsum;
+        NetTotal=INVCtotal;
         this.setState({temp: 0}); //just to refresh page
     }
     onSubmitINVC(){
@@ -145,6 +171,7 @@ class newInvoice extends Component {
         }.bind(this));
         const INVCobj={
             items:cart,
+            discount:this.state.discount,
             remarks:this.state.remarks
         }
         axios.post(backendde.backendUrl+'addINVC/submitINVC',INVCobj).then(res=>console.log(res.data));
@@ -209,16 +236,33 @@ class newInvoice extends Component {
                 </Row>
                 </Form>
                 <br></br>
-                <div  className="input-group">
-                    <div className="input-group-prepend">
-                        <span className="input-group-text">Add some Remarks here</span>
-                    </div>
-                    <textarea onChange={this.onChangeRemarks} className="form-control" aria-label="With textarea"></textarea>
-
-                <Button onClick={this.onSubmitINVC} variant="success">
+                <Container>
+                    <Row>
+                        <Col xs={3}>
+                <InputGroup  className="mb-3">
+                    <InputGroup.Prepend>
+                    <InputGroup.Text>Discount</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl aria-label="discount" value={this.state.discount} onChange={this.onChangeDiscount} />
+                    <InputGroup.Append>
+                    <InputGroup.Text> % </InputGroup.Text>
+                    </InputGroup.Append>
+                </InputGroup>
+                </Col>
+                <Col >
+                <InputGroup>
+                    <InputGroup.Prepend>
+                    <InputGroup.Text>Add some Remarks here</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl as="textarea" onChange={this.onChangeRemarks} aria-label="With textarea" />
+                </InputGroup>
+                </Col>
+                <Button  onClick={this.onSubmitINVC} variant="success">
                     Submit Invoice cart
                 </Button>
-                </div>
+               
+                </Row>
+                </Container>
                 
                 <br></br>
                 <table className="table table-striped" style={{marginTop:20}}>
@@ -250,6 +294,14 @@ class newInvoice extends Component {
                             <tr>
                                 <td colSpan='5'><b>Total</b></td>
                                 <td align="right"><b>Rs. {INVCtotal}</b></td>
+                            </tr>
+                            <tr>
+                                <td colSpan='5'><b>Discount</b></td>
+                                <td align="right"><b>{this.state.discount} %</b></td>
+                            </tr>
+                            <tr>
+                                <td colSpan='5'><b>Grand Total</b></td>
+                                <td align="right"><b>Rs. {NetTotal}</b></td>
                             </tr>
                         </tbody>
                     </table>
