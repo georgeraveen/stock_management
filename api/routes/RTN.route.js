@@ -71,6 +71,6 @@ RTNproductRoutes.route('/deleteRTNcart').delete(function(req,res){
         else{
             res.json(records);
         }
-    });
+    }).sort('-_id');
 });
 module.exports=RTNproductRoutes;

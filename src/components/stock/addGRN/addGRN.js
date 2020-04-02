@@ -21,6 +21,7 @@ class AddGRN extends Component {
         this.selectProduct=this.selectProduct.bind(this);
         this.selectBatch=this.selectBatch.bind(this);
         this.onChangeQty=this.onChangeQty.bind(this);
+        this.onChangeFreeQty=this.onChangeFreeQty.bind(this);
         this.onAddProduct=this.onAddProduct.bind(this);
         this.ViewGRNCartTableRow=this.ViewGRNCartTableRow.bind(this);
         this.callbackRowSum=this.callbackRowSum.bind(this);
@@ -34,6 +35,7 @@ class AddGRN extends Component {
             selectedBatch:'',
             batchDetails:[],
             quantity:0,
+            FreeQuantity:0,
             batch:'',
             temp:0,   //just to refresh page
             cartProducts:[],
@@ -88,12 +90,17 @@ class AddGRN extends Component {
             quantity:e.target.value
         });
     }
+    onChangeFreeQty(e){
+        this.setState({
+            FreeQuantity:e.target.value
+        });
+    }
     onAddProduct(e){
         e.preventDefault();
-        console.log(`The value are ${this.state.selectedProduct},${this.state.selectedBatch}, ${this.state.quantity}`);
         const obj={
             productID:this.state.selectedProduct,
             batchID:this.state.selectedBatch,
+            FreeQuantity:this.state.FreeQuantity,
             quantity:this.state.quantity
         }
 
@@ -105,6 +112,7 @@ class AddGRN extends Component {
             selectedBatch:'',
             batchDetails:[],
             quantity:0,
+            FreeQuantity:0,
             batch:''
         })
         
@@ -130,7 +138,7 @@ class AddGRN extends Component {
             object.preStock=a.currentStock;
             cart.push(object);
             const qty={
-                quantity: a.currentStock+object.quantity};
+                quantity: a.currentStock+object.quantity+object.FreeQuantity};
             axios.post(backendde.backendUrl+'Batch/GRNstock/'+object.productID+'/'+object.batchID,qty).then(res=>console.log(res.data));
         }.bind(this));
         const GRNobj={
@@ -182,6 +190,10 @@ class AddGRN extends Component {
                     <Form.Label>{this.state.batchDetails.wholePrice}</Form.Label>   
                 </Form.Group>
                 <Form.Group as={Col}>
+                        <Form.Label>Free Quantity</Form.Label>
+                        <Form.Control value={this.state.FreeQuantity} onChange={this.onChangeFreeQty} placeholder="qty" />
+                </Form.Group>
+                <Form.Group as={Col}>
                         <Form.Label>Quantity</Form.Label>
                         <Form.Control value={this.state.quantity} onChange={this.onChangeQty} placeholder="qty" />
                 </Form.Group>
@@ -223,6 +235,9 @@ class AddGRN extends Component {
                                     Retail Price
                                 </th>
                                 <th>
+                                    Free Quantity
+                                </th>
+                                <th>
                                     Quantity
                                 </th>
                                 <th>
@@ -235,7 +250,7 @@ class AddGRN extends Component {
                         <tbody>
                             {this.ViewGRNCartTableRow()}
                             <tr>
-                                <td colSpan='6'><b>Total</b></td>
+                                <td colSpan='7'><b>Total</b></td>
                                 <td align="right"><b>Rs. {GRNtotal}</b></td>
                             </tr>
                         </tbody>
