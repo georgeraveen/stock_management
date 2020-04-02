@@ -12,9 +12,10 @@ import AddNewProduct from './components/products/newProduct/newProduct';
 import AddNewBatch from './components/products/newBatch/newBatch';
 import ViewProducts from './components/products/viewProducts/viewProduct';
 import AddGRN from './components/stock/addGRN/addGRN';
-import ViewGRN from './components/stock/viewGRNrecords/viewGRNrecords'
-import ViewStock from './components/stock/viewStock/viewStock'
-import StockReturn from './components/stock/stockReturn/StockReturn'
+import ViewGRN from './components/stock/viewGRNrecords/viewGRNrecords';
+import ViewStock from './components/stock/viewStock/viewStock';
+import StockReturn from './components/stock/stockReturn/StockReturn';
+import ViewStockReturn from './components/stock/viewRTNrecords/viewRTNrecords';
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
               <NavDropdown.Item href="/stock/ViewGRN">View GRN</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="/stock/addStockReturn">Add Stock return</NavDropdown.Item>
+              <NavDropdown.Item href="/stock/viewStockReturn">View Stock return</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action/3.4">Stock adjustment</NavDropdown.Item>
             </NavDropdown>
@@ -65,6 +67,7 @@ function App() {
          <Route exact path='/stock/ViewGRN' component={ViewGRN}/>
          <Route exact path='/products/ViewStock' component={ViewStock}/>
          <Route exact path='/stock/addStockReturn' component={StockReturn}/>
+         <Route exact path='/stock/viewStockReturn' component={ViewStockReturn}/>
         {/* <Route exact path='/edit/:id' component={Edit}/> */}
         {/* <Route exact path='/index' component={Index}/>  */}
         
