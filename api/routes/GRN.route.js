@@ -71,6 +71,6 @@ GRNproductRoutes.route('/deleteGRNcart').delete(function(req,res){
         else{
             res.json(records);
         }
-    });
+    }).sort('-_id');
 });
 module.exports=GRNproductRoutes;

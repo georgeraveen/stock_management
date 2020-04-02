@@ -1,27 +1,27 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import GRNhistoyRow from './GRNhistoyRow';
+import INVChistoyRow from './INVChistoyRow';
 import {Modal} from 'react-bootstrap';
-import GRNRecordTableRow from './GRNRecordTableRow';
+import INVCRecordTableRow from './INVCRecordTableRow';
 
 const backendde= require('../../../backendde');
-var GRNtotal=0;
-class viewGRNrecords extends Component {
+var INVCtotal=0;
+class viewINVCrecords extends Component {
 
     constructor(props){
         super(props);
         this.callbackClickView=this.callbackClickView.bind(this);
-        this.ViewGRNRecordTableRow=this.ViewGRNRecordTableRow.bind(this);
+        this.ViewINVCRecordTableRow=this.ViewINVCRecordTableRow.bind(this);
         this.callbackRowSum=this.callbackRowSum.bind(this);
         this.modalClose=this.modalClose.bind(this);
 
         this.state={
-            GRNhistory:[],
+            INVChistory:[],
             products:[],
             lgShow:false,
             viewID:'',
             temp:0,
-            selectedGRNview:{
+            selectedINVCview:{
                 createdAt:'',
                 items:[{
                     productID:'',
@@ -32,10 +32,10 @@ class viewGRNrecords extends Component {
 
     }
     componentDidMount(){
-        axios.get(backendde.backendUrl+'viewGRN/viewGRN')
+        axios.get(backendde.backendUrl+'viewINVC/viewINVC')
             .then(response =>{
-                this.setState({GRNhistory:response.data});
-                console.log(this.state.GRNhistory);
+                this.setState({INVChistory:response.data});
+                console.log(this.state.INVChistory);
             })
         .catch(function (error){
             console.log('hi');
@@ -52,40 +52,40 @@ class viewGRNrecords extends Component {
         });
     }
     ViewRecordsTableRow(){
-        return this.state.GRNhistory.map(function(object,i){
-            return <GRNhistoyRow obj={object} clickView={this.callbackClickView}/>;
+        return this.state.INVChistory.map(function(object,i){
+            return <INVChistoyRow obj={object} clickView={this.callbackClickView}/>;
         }.bind(this));
     }
     callbackClickView(ViewMessage){
         
         this.setState({
             viewID:ViewMessage,
-            selectedGRNview:this.state.GRNhistory.find(e => e._id===ViewMessage)
+            selectedINVCview:this.state.INVChistory.find(e => e._id===ViewMessage)
         })
         this.setState({
             lgShow:true})
     }
-    ViewGRNRecordTableRow(){
-        return this.state.selectedGRNview.items.map(function(object,i){
-            return <GRNRecordTableRow records={object} products={this.state.products.find(e => e._id===object.productID)} callbackSum = {this.callbackRowSum} />;
+    ViewINVCRecordTableRow(){
+        return this.state.selectedINVCview.items.map(function(object,i){
+            return <INVCRecordTableRow records={object} products={this.state.products.find(e => e._id===object.productID)} callbackSum = {this.callbackRowSum} />;
         }.bind(this));
     }
     callbackRowSum = (rowsum) => {
-        GRNtotal=GRNtotal+rowsum;
+        INVCtotal=INVCtotal+rowsum;
         this.setState({temp: rowsum}); //just refresh page
     }
     modalClose(){
         this.setState({lgShow:false});
-        GRNtotal=0;
+        INVCtotal=0;
     }
     render() {
         return (
             <div className="container">
-                <h2>View GRN History</h2>
+                <h2>View Invoice History</h2>
                 <table className="table table-striped" style={{marginTop:20}}>
                         <thead>
                             <tr><th>
-                                    GRN ID
+                                    Invoice ID
                                 </th>
                                 <th>
                                     Date and Time
@@ -108,9 +108,9 @@ class viewGRNrecords extends Component {
                 >
                     <Modal.Header closeButton>
                     <Modal.Title id="example-modal-sizes-title-lg">
-                        GRN details  <br></br>
-                        GRN id:  {this.state.viewID}<br></br>
-                        Date:  {this.state.selectedGRNview.createdAt}
+                        Invoice details  <br></br>
+                        Invoice id:  {this.state.viewID}<br></br>
+                        Date:  {this.state.selectedINVCview.createdAt}
                     </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
@@ -123,17 +123,16 @@ class viewGRNrecords extends Component {
                                     Batch No
                                 </th>
                                 <th>Expire Date</th>
-                                <th>Wholesale Price</th>
-                                <th>Free Quantity</th>
+                                <th>Retail Price</th>
                                 <th>Quantity</th>
                                 <th>Sum</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {this.ViewGRNRecordTableRow()}
+                            {this.ViewINVCRecordTableRow()}
                             <tr>
-                                <td colSpan='6'><b>Total</b></td>
-                                <td align="right"><b>Rs. {GRNtotal}</b></td>
+                                <td colSpan='5'><b>Total</b></td>
+                                <td align="right"><b>Rs. {INVCtotal}</b></td>
                             </tr>
                         </tbody>
                     </table>
@@ -144,4 +143,4 @@ class viewGRNrecords extends Component {
     }
 }
 
-export default viewGRNrecords;
+export default viewINVCrecords;

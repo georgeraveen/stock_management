@@ -59,6 +59,9 @@ class ViewGRNTable extends Component {
                     {this.state.batchDetails.retailPrice}
                 </td>
                 <td align="right">
+                    {this.props.obj.FreeQuantity}
+                </td>
+                <td align="right">
                     {this.props.obj.quantity}
                 </td>
                 <td align="right"><b>Rs. 

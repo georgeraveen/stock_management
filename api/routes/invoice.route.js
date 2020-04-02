@@ -71,6 +71,6 @@ INVCproductRoutes.route('/deleteINVCcart').delete(function(req,res){
         else{
             res.json(records);
         }
-    });
+    }).sort('-_id');
 });
 module.exports=INVCproductRoutes;

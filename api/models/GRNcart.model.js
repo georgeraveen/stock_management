@@ -12,6 +12,9 @@ let CartProduct= new Schema({
     preStock:{
         type:Number
     },
+    FreeQuantity:{
+        type:Number
+    },
     quantity:{
         type:Number
     }
