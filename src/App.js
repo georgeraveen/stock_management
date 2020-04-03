@@ -18,6 +18,8 @@ import StockReturn from './components/stock/stockReturn/StockReturn';
 import ViewStockReturn from './components/stock/viewRTNrecords/viewRTNrecords';
 import newInvoice from './components/invoice/newInvoice/newInvoice';
 import ViewInvoice from './components/invoice/viewInvoice/viewINVCrecords';
+import AddcustRTN from './components/invoice/custReturn/addCustRTN';
+import ViewCustRTN from './components/invoice/viewCustRTNrecords/viewCustRTNrecords';
 
 
 function App() {
@@ -52,7 +54,8 @@ function App() {
               <NavDropdown.Item href="/invoice/newInvoice">New Invoice</NavDropdown.Item>
               <NavDropdown.Item href="/invoice/ViewInvoice">View Invoices</NavDropdown.Item>
               <NavDropdown.Divider />
-              
+              <NavDropdown.Item href="/invoice/addcustRTN">Add customer return</NavDropdown.Item>
+              <NavDropdown.Item href="/invoice/ViewCustRTN">View customer returns</NavDropdown.Item>
             </NavDropdown>
           </Nav>
           <Nav>
@@ -79,6 +82,8 @@ function App() {
          <Route exact path='/stock/viewStockReturn' component={ViewStockReturn}/>
          <Route exact path='/invoice/newInvoice' component={newInvoice}/>
          <Route exact path='/invoice/ViewInvoice' component={ViewInvoice}/>
+         <Route exact path='/invoice/addcustRTN' component={AddcustRTN}/>
+         <Route exact path='/invoice/ViewCustRTN' component={ViewCustRTN}/>
         {/* <Route exact path='/edit/:id' component={Edit}/> */}
         {/* <Route exact path='/index' component={Index}/>  */}
         

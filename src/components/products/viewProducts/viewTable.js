@@ -29,7 +29,7 @@ class ViewTable extends Component {
     }
     ViewBatchTableRow(){
         return this.props.obj.batches.map(function(object1,j){
-            return <ViewBatch obj1={object1} key={j}/>;
+            return <ViewBatch obj1={object1} key1={j}/>;
         });
     }
 

@@ -87,4 +87,16 @@ batchRoutes.route('/INVCstock/:id/:bid').post(function(req,res){
             return res.json(qty);
         });
 });
+// cust rtn stock
+batchRoutes.route('/CustRTNstock/:id/:bid').post(function(req,res){
+    Product.findOneAndUpdate(
+        {"_id":req.params.id,"batches._id":req.params.bid},
+        {$set:{"batches.$.currentStock":req.body.quantity}},     
+        function(err,qty){
+            if(err){
+                return res.send(err);
+            }
+            return res.json(qty);
+        });
+});
 module.exports=batchRoutes;
