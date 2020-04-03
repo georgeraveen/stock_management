@@ -34,6 +34,7 @@ app.use('/viewRTN',RTNRoute);
 app.use('/addINVC',INVCRoute);
 app.use('/viewINVC',INVCRoute);
 app.use('/addCustRTN',CustRTNRoute);
+app.use('/viewCustRTN',CustRTNRoute);
 
 app.listen(PORT,function(){
     console.log('Server is running on port: ',PORT);

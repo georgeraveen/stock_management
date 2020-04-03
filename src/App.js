@@ -18,7 +18,8 @@ import StockReturn from './components/stock/stockReturn/StockReturn';
 import ViewStockReturn from './components/stock/viewRTNrecords/viewRTNrecords';
 import newInvoice from './components/invoice/newInvoice/newInvoice';
 import ViewInvoice from './components/invoice/viewInvoice/viewINVCrecords';
-import AddcustRTN from './components/invoice/custReturn/addCustRTN'
+import AddcustRTN from './components/invoice/custReturn/addCustRTN';
+import ViewCustRTN from './components/invoice/viewCustRTNrecords/viewCustRTNrecords';
 
 
 function App() {
@@ -82,7 +83,7 @@ function App() {
          <Route exact path='/invoice/newInvoice' component={newInvoice}/>
          <Route exact path='/invoice/ViewInvoice' component={ViewInvoice}/>
          <Route exact path='/invoice/addcustRTN' component={AddcustRTN}/>
-         {/* <Route exact path='/invoice/ViewCustRTN' component={ViewCustRTN}/> */}
+         <Route exact path='/invoice/ViewCustRTN' component={ViewCustRTN}/>
         {/* <Route exact path='/edit/:id' component={Edit}/> */}
         {/* <Route exact path='/index' component={Index}/>  */}
         
