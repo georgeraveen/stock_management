@@ -32,9 +32,9 @@ class newInvoice extends Component {
         
         this.state={
             products:[],
-            batches:[{batchNo:'Batch',expDate:'Exp'}],
+            batches:[{_id:'default',batchNo:'Batch',expDate:'Exp'}],
             selectedProduct:'',
-            selectedBatch:'',
+            selectedBatch:'default',
             batchDetails:[],
             quantity:0,
             batch:'',
@@ -70,13 +70,17 @@ class newInvoice extends Component {
         });
     }
     selectProduct = (event, values) => {
+        
         this.setState({
           selectedProduct: values._id,
-          batches:values.batches
-        }, () => {
-          console.log(this.state.selectedProduct);
-          console.log(this.state.batches);
+          batches:values.batches,        
         });
+        if(values.batches.filter(e=>e.currentStock>0)[0]!=null){
+            this.setState({
+                selectedBatch:values.batches.filter(e=>e.currentStock>0)[0]._id,   ///select default batch
+                batchDetails: values.batches.filter(e=>e.currentStock>0)[0]         ///select default batch
+            })
+        }
     }
     selectBatch = (event, values) => {
         this.setState({
@@ -192,6 +196,9 @@ class newInvoice extends Component {
                     <Form.Label>Select Product Name</Form.Label>
                     <Autocomplete
                         id="combo-box-demo"
+                        autoHighlight
+                        openOnFocus
+                        autoComplete
                         options={this.state.products}
                         getOptionLabel={option => option.productName}
                         style={{ width: 300 }}
@@ -204,10 +211,13 @@ class newInvoice extends Component {
                     <Form.Label>Select Batch Number</Form.Label>
                     <Autocomplete
                         id="combo-box-demo"
-                        options={this.state.batches}
+                        autoHighlight
+                        openOnFocus
+                        autoComplete
+                        options={this.state.batches.filter(e=>e.currentStock>0)}
                         getOptionLabel={option => option.batchNo +spacePro + option.expDate}
                         style={{ width: 300 }}
-                        defaultValue={this.state.batches[0]}
+                        value={this.state.batches.find(e=> e._id==this.state.selectedBatch)}
                         onChange={this.selectBatch}
                         inputValue={this.state.empty}
                         renderInput={params => <TextField {...params} label="Select Batch Number" variant="outlined" />}
