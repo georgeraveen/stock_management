@@ -21,7 +21,6 @@ class addCustRTN extends Component {
         this.selectProduct=this.selectProduct.bind(this);
         this.selectBatch=this.selectBatch.bind(this);
         this.onChangeQty=this.onChangeQty.bind(this);
-        this.onChangeFreeQty=this.onChangeFreeQty.bind(this);
         this.onAddProduct=this.onAddProduct.bind(this);
         this.ViewCustRTNCartTableRow=this.ViewCustRTNCartTableRow.bind(this);
         this.callbackRowSum=this.callbackRowSum.bind(this);
@@ -35,7 +34,6 @@ class addCustRTN extends Component {
             selectedBatch:'',
             batchDetails:[],
             quantity:0,
-            FreeQuantity:0,
             batch:'',
             temp:0,   //just to refresh page
             cartProducts:[],
@@ -90,17 +88,11 @@ class addCustRTN extends Component {
             quantity:e.target.value
         });
     }
-    onChangeFreeQty(e){
-        this.setState({
-            FreeQuantity:e.target.value
-        });
-    }
     onAddProduct(e){
         e.preventDefault();
         const obj={
             productID:this.state.selectedProduct,
             batchID:this.state.selectedBatch,
-            FreeQuantity:this.state.FreeQuantity,
             quantity:this.state.quantity
         }
 
@@ -112,7 +104,6 @@ class addCustRTN extends Component {
             selectedBatch:'',
             batchDetails:[],
             quantity:0,
-            FreeQuantity:0,
             batch:''
         })
         
@@ -138,7 +129,7 @@ class addCustRTN extends Component {
             object.preStock=a.currentStock;
             cart.push(object);
             const qty={
-                quantity: a.currentStock+object.quantity+object.FreeQuantity};
+                quantity: a.currentStock+object.quantity};
             axios.post(backendde.backendUrl+'Batch/CustRTNstock/'+object.productID+'/'+object.batchID,qty).then(res=>console.log(res.data));
         }.bind(this));
         const CustRTNobj={
@@ -154,7 +145,7 @@ class addCustRTN extends Component {
         return (
 
             <div className="container">
-                <h1>Add CustRTN stock</h1>
+                <h1>Add Customer Return</h1>
                 <br></br>
                 
                 <Form onSubmit={this.onAddProduct} >
@@ -185,13 +176,9 @@ class addCustRTN extends Component {
                     />
                 </Form.Group>
                 <Form.Group as={Col}>
-                    <Form.Label>Wholesale Price</Form.Label>
+                    <Form.Label>Retail Price</Form.Label>
                     <br></br>
-                    <Form.Label>{this.state.batchDetails.wholePrice}</Form.Label>   
-                </Form.Group>
-                <Form.Group as={Col}>
-                        <Form.Label>Free Quantity</Form.Label>
-                        <Form.Control value={this.state.FreeQuantity} onChange={this.onChangeFreeQty} placeholder="qty" />
+                    <Form.Label>{this.state.batchDetails.retailPrice}</Form.Label>   
                 </Form.Group>
                 <Form.Group as={Col}>
                         <Form.Label>Quantity</Form.Label>
@@ -200,7 +187,7 @@ class addCustRTN extends Component {
                 </Row>
                 <Row>
                 <Button variant="primary" type="submit">
-                    Add product to CustRTN cart
+                    Add product to Customer Return cart
                 </Button>
                 </Row>
                 </Form>
@@ -212,7 +199,7 @@ class addCustRTN extends Component {
                     <textarea onChange={this.onChangeRemarks} className="form-control" aria-label="With textarea"></textarea>
 
                 <Button onClick={this.onSubmitCustRTN} variant="success">
-                    Submit CustRTN cart
+                    Submit Customer Return cart
                 </Button>
                 </div>
                 
@@ -235,13 +222,10 @@ class addCustRTN extends Component {
                                     Retail Price
                                 </th>
                                 <th>
-                                    Free Quantity
-                                </th>
-                                <th>
                                     Quantity
                                 </th>
                                 <th>
-                                    Sum (Wholesale)
+                                    Sum (Retail)
                                 </th>
                                 <th>Action</th>
                                 
@@ -250,7 +234,7 @@ class addCustRTN extends Component {
                         <tbody>
                             {this.ViewCustRTNCartTableRow()}
                             <tr>
-                                <td colSpan='7'><b>Total</b></td>
+                                <td colSpan='6'><b>Total</b></td>
                                 <td align="right"><b>Rs. {CustRTNtotal}</b></td>
                             </tr>
                         </tbody>

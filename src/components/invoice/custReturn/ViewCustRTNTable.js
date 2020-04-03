@@ -24,7 +24,7 @@ class ViewCustRTNTable extends Component {
                     products:response.data,
                     batchDetails:response.data.batches.find(e => e._id === this.props.obj.batchID)
                 });
-                this.props.callbackSum(this.state.batchDetails.wholePrice * this.props.obj.quantity);
+                this.props.callbackSum(this.state.batchDetails.retailPrice * this.props.obj.quantity);
             })
         .catch(function (error){
             console.log('hix');
@@ -59,13 +59,10 @@ class ViewCustRTNTable extends Component {
                     {this.state.batchDetails.retailPrice}
                 </td>
                 <td align="right">
-                    {this.props.obj.FreeQuantity}
-                </td>
-                <td align="right">
                     {this.props.obj.quantity}
                 </td>
                 <td align="right"><b>Rs. 
-                    {this.state.batchDetails.wholePrice * this.props.obj.quantity}
+                    {this.state.batchDetails.retailPrice * this.props.obj.quantity}
                     </b>
                 </td>
                 <td>
