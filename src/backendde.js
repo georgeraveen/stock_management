@@ -1,5 +1,5 @@
 
 module.exports={
-    // backendUrl:'https://stock-management-server.herokuapp.com/'
-    backendUrl: 'http://localhost:4000/'
+     backendUrl:'https://stock-management-server.herokuapp.com/'
+   // backendUrl: 'http://localhost:4000/'
 }
