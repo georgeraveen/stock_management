@@ -32,11 +32,14 @@ class ViewInvoiceTable extends Component {
         });
     }
     onDeleteItem(){
+        this.props.callbackSum((-1)*this.state.batchDetails.retailPrice * this.props.obj.quantity);
         axios.delete(backendde.backendUrl+'addINVC/deleteINVCitem/' + this.props.obj._id)
 
             .then((res) => {
                 console.log('Product successfully deleted!');
+                
                 this.props.deleteItem();
+                
             }).catch((error) => {
                 console.log(error)
             });

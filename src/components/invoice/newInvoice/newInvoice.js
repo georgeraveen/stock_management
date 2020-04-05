@@ -164,11 +164,9 @@ class newInvoice extends Component {
        
     }
     ViewINVCCartTableRow(){
-        console.log('row');
         return this.state.cartProducts.map(function(object,i){
             return <ViewINVCTable obj={object} key={i} callbackSum = {this.callbackRowSum} deleteItem={this.onDeleteCartItem} />;
-        }.bind(this));
-        
+        }.bind(this));      
     }
     callbackRowSum = (rowsum) => {
         INVCtotal=INVCtotal+rowsum;
@@ -176,11 +174,11 @@ class newInvoice extends Component {
         this.setState({temp: 0}); //just to refresh page
     }
     onDeleteCartItem(){
-        // if(flag="true"){
-            axios.get(backendde.backendUrl+'addINVC/viewCart').then(response =>{this.setState({cartProducts:response.data});})
+        console.log('hi');
+            axios.get(backendde.backendUrl+'addINVC/viewCart').then(response =>{
+                this.setState({cartProducts:response.data});
+            })
                 .catch(function (error){console.log(error);});
-        // }
-
     }
     onSubmitINVC(){
         var cart=[]; 
