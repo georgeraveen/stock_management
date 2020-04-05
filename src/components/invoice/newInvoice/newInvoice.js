@@ -27,8 +27,10 @@ class newInvoice extends Component {
         this.onChangeDiscount=this.onChangeDiscount.bind(this);
         this.ViewINVCCartTableRow=this.ViewINVCCartTableRow.bind(this);
         this.callbackRowSum=this.callbackRowSum.bind(this);
+        // this.onDeleteCartItem=this.onDeleteCartItem.bind(this);
         this.onSubmitINVC=this.onSubmitINVC.bind(this);
         this.onChangeRemarks=this.onChangeRemarks.bind(this);
+        
         
         this.state={
             products:[],
@@ -69,28 +71,42 @@ class newInvoice extends Component {
             console.log(error);
         });
     }
+    // componentDidUpdate(){
+    //     axios.get(backendde.backendUrl+'addINVC/viewCart')
+    //         .then(response =>{
+    //             this.setState({cartProducts:response.data});
+    //             // console.log(this.state.cartProducts);
+    //         })
+    //     .catch(function (error){
+    //         console.log('cart table data');
+    //         console.log(error);
+    //     });
+    // }
     selectProduct = (event, values) => {
-        
-        this.setState({
-          selectedProduct: values._id,
-          batches:values.batches,        
-        });
-        if(values.batches.filter(e=>e.currentStock>0)[0]!=null){
+        if(values!=null){
             this.setState({
-                selectedBatch:values.batches.filter(e=>e.currentStock>0)[0]._id,   ///select default batch
-                batchDetails: values.batches.filter(e=>e.currentStock>0)[0]         ///select default batch
-            })
+            selectedProduct: values._id,
+            batches:values.batches,        
+            });
+            if(values.batches.filter(e=>e.currentStock>0)[0]!=null){
+                this.setState({
+                    selectedBatch:values.batches.filter(e=>e.currentStock>0)[0]._id,   ///select default batch
+                    batchDetails: values.batches.filter(e=>e.currentStock>0)[0]         ///select default batch
+                })
+            }
         }
     }
     selectBatch = (event, values) => {
-        this.setState({
-          selectedBatch: values._id,
-          batchDetails: values,
-            batch:values.batchNo+'  '+values.expDate
-        }, () => {
-          console.log(this.state.selectedBatch);
-          
-        });
+        if(values!=null){
+            this.setState({
+            selectedBatch: values._id,
+            batchDetails: values,
+                batch:values.batchNo+'  '+values.expDate
+            }, () => {
+            console.log(this.state.selectedBatch);
+            
+            });
+        }
     }
     onChangeQty(e){
         if(e.target.value<=this.state.batchDetails.currentStock){
@@ -115,7 +131,11 @@ class newInvoice extends Component {
             quantity:this.state.quantity
         }
 
-        axios.post(backendde.backendUrl+'addINVC/addProductINVC',obj).then(res=>console.log(res.data));
+        axios.post(backendde.backendUrl+'addINVC/addProductINVC',obj).then(
+            res=>{
+                console.log(res);
+                this.setState({cartProducts:res.data}); //refresh cart
+            });
 
         this.setState({
             batches:[],
@@ -125,8 +145,9 @@ class newInvoice extends Component {
             quantity:0,
             batch:''
         })
-        
+     
     }
+    
     onChangeRemarks(e){
         this.setState({
             remarks:e.target.value
@@ -154,15 +175,24 @@ class newInvoice extends Component {
        
     }
     ViewINVCCartTableRow(){
+        console.log('row');
         return this.state.cartProducts.map(function(object,i){
-            return <ViewINVCTable obj={object} key={i} callbackSum = {this.callbackRowSum} />;
+            return <ViewINVCTable obj={object} key={i} callbackSum = {this.callbackRowSum}  />;
         }.bind(this));
+        
     }
     callbackRowSum = (rowsum) => {
         INVCtotal=INVCtotal+rowsum;
         NetTotal=INVCtotal;
         this.setState({temp: 0}); //just to refresh page
     }
+    // onDeleteCartItem(flag){
+    //     if(flag="true"){
+    //         axios.get(backendde.backendUrl+'addINVC/viewCart').then(response =>{this.setState({cartProducts:response.data});})
+    //             .catch(function (error){console.log(error);});
+    //     }
+
+    // }
     onSubmitINVC(){
         var cart=[]; 
         this.state.cartProducts.map(function(object,i){
@@ -301,6 +331,7 @@ class newInvoice extends Component {
                         </thead>
                         <tbody>
                             {this.ViewINVCCartTableRow()}
+
                             <tr>
                                 <td colSpan='5'><b>Total</b></td>
                                 <td align="right"><b>Rs. {INVCtotal}</b></td>

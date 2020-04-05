@@ -35,10 +35,12 @@ class ViewInvoiceTable extends Component {
         axios.delete(backendde.backendUrl+'addINVC/deleteINVCitem/' + this.props.obj._id)
 
             .then((res) => {
-                console.log('Product successfully deleted!')
+                console.log('Product successfully deleted!');
+                // this.props.deleteItem("true");
             }).catch((error) => {
                 console.log(error)
             });
+        
     }
     render() {
         return (

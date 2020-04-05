@@ -8,8 +8,16 @@ let INVCrecord = require('../models/INVCrecord.model');
 INVCproductRoutes.route('/addProductINVC').post(function(req,res){
     let addProduct = new INVCCartProduct(req.body);
     addProduct.save()
-        .then(addProduct=>{
-            res.status(200).json({'product':'product added succes'});
+        .then(
+            addProduct=>{
+                INVCCartProduct.find(function(err,products){   ///update cart view
+                    if(err){
+                        console.log(err);
+                    }
+                    else{
+                        res.json(products);
+                    }
+                });
         })
         .catch(err=>{
             res.status(400).send("unable to save database");
