@@ -27,7 +27,7 @@ class newInvoice extends Component {
         this.onChangeDiscount=this.onChangeDiscount.bind(this);
         this.ViewINVCCartTableRow=this.ViewINVCCartTableRow.bind(this);
         this.callbackRowSum=this.callbackRowSum.bind(this);
-        // this.onDeleteCartItem=this.onDeleteCartItem.bind(this);
+        this.onDeleteCartItem=this.onDeleteCartItem.bind(this);
         this.onSubmitINVC=this.onSubmitINVC.bind(this);
         this.onChangeRemarks=this.onChangeRemarks.bind(this);
         
@@ -71,17 +71,6 @@ class newInvoice extends Component {
             console.log(error);
         });
     }
-    // componentDidUpdate(){
-    //     axios.get(backendde.backendUrl+'addINVC/viewCart')
-    //         .then(response =>{
-    //             this.setState({cartProducts:response.data});
-    //             // console.log(this.state.cartProducts);
-    //         })
-    //     .catch(function (error){
-    //         console.log('cart table data');
-    //         console.log(error);
-    //     });
-    // }
     selectProduct = (event, values) => {
         if(values!=null){
             this.setState({
@@ -177,7 +166,7 @@ class newInvoice extends Component {
     ViewINVCCartTableRow(){
         console.log('row');
         return this.state.cartProducts.map(function(object,i){
-            return <ViewINVCTable obj={object} key={i} callbackSum = {this.callbackRowSum}  />;
+            return <ViewINVCTable obj={object} key={i} callbackSum = {this.callbackRowSum} deleteItem={this.onDeleteCartItem} />;
         }.bind(this));
         
     }
@@ -186,13 +175,13 @@ class newInvoice extends Component {
         NetTotal=INVCtotal;
         this.setState({temp: 0}); //just to refresh page
     }
-    // onDeleteCartItem(flag){
-    //     if(flag="true"){
-    //         axios.get(backendde.backendUrl+'addINVC/viewCart').then(response =>{this.setState({cartProducts:response.data});})
-    //             .catch(function (error){console.log(error);});
-    //     }
+    onDeleteCartItem(){
+        // if(flag="true"){
+            axios.get(backendde.backendUrl+'addINVC/viewCart').then(response =>{this.setState({cartProducts:response.data});})
+                .catch(function (error){console.log(error);});
+        // }
 
-    // }
+    }
     onSubmitINVC(){
         var cart=[]; 
         this.state.cartProducts.map(function(object,i){

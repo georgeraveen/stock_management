@@ -36,7 +36,7 @@ class ViewInvoiceTable extends Component {
 
             .then((res) => {
                 console.log('Product successfully deleted!');
-                // this.props.deleteItem("true");
+                this.props.deleteItem();
             }).catch((error) => {
                 console.log(error)
             });
