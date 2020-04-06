@@ -164,11 +164,12 @@ class newInvoice extends Component {
        
     }
     ViewINVCCartTableRow(){
-        // console.log('trow');
-        // console.log(this.state.cartProducts);
         return this.state.cartProducts.map(function(object,i){
-            // console.log(object);
-            return  <ViewINVCTable obj={object} key={object._id} callbackSum = {this.callbackRowSum} deleteItem={this.onDeleteCartItem} />;
+            const details={
+                productName:this.state.products.find(e=> e._id===object.productID).productName,
+                batchDetails:this.state.products.find(e=> e._id===object.productID).batches.find(f=> f._id===object.batchID)
+            }
+            return  <ViewINVCTable obj={object} batch={details} key={i} callbackSum = {this.callbackRowSum} deleteItem={this.onDeleteCartItem} />;
         }.bind(this));      
     }
     callbackRowSum = (rowsum) => {
