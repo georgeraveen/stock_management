@@ -8,58 +8,48 @@ class ViewInvoiceTable extends Component {
     constructor(props) {
         super(props);
         this.onDeleteItem=this.onDeleteItem.bind(this);
-        
         this.state={
             products:'',
             batchDetails:'',
             tot:0
         };
-        
+        this.props.callbackSum(this.props.batch.batchDetails.retailPrice * this.props.obj.quantity);
         
     };
-    componentDidMount(){
-        axios.get(backendde.backendUrl+'viewProduct/viewID/'+this.props.obj.productID)
-            .then(response =>{
-                this.setState({
-                    products:response.data,
-                    batchDetails:response.data.batches.find(e => e._id === this.props.obj.batchID)
-                });
-                this.props.callbackSum(this.state.batchDetails.retailPrice * this.props.obj.quantity);
-            })
-        .catch(function (error){
-            console.log('hix');
-            console.log(error);
-        });
-    }
     onDeleteItem(){
+        this.props.callbackSum((-1)*this.props.batch.batchDetails.retailPrice * this.props.obj.quantity);
         axios.delete(backendde.backendUrl+'addINVC/deleteINVCitem/' + this.props.obj._id)
 
             .then((res) => {
-                console.log('Product successfully deleted!')
+                console.log('Product successfully deleted!');
+                // console.log(res.data)
+                this.props.deleteItem(res.data); // return new cart
+                
             }).catch((error) => {
                 console.log(error)
             });
+        
     }
     render() {
         return (
             <tr>
                 <td>
-                    {this.state.products.productName}
+                    {this.props.batch.productName}
                 </td>
                 <td>
-                   {this.state.batchDetails.batchNo}
+                   {this.props.batch.batchDetails.batchNo}
                 </td>
                 <td>
-                    {this.state.batchDetails.expDate}
+                    {this.props.batch.batchDetails.expDate}
                 </td>
                 <td align="right">
-                    {this.state.batchDetails.retailPrice}
+                    {this.props.batch.batchDetails.retailPrice}
                 </td>
                 <td align="right">
                     {this.props.obj.quantity}
                 </td>
                 <td align="right"><b>Rs. 
-                    {this.state.batchDetails.retailPrice * this.props.obj.quantity}
+                    {this.props.batch.batchDetails.retailPrice * this.props.obj.quantity}
                     </b>
                 </td>
                 <td>

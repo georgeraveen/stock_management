@@ -24,14 +24,15 @@ class StockReturn extends Component {
         this.onAddProduct=this.onAddProduct.bind(this);
         this.ViewRTNCartTableRow=this.ViewRTNCartTableRow.bind(this);
         this.callbackRowSum=this.callbackRowSum.bind(this);
+        this.onDeleteCartItem=this.onDeleteCartItem.bind(this);
         this.onSubmitRTN=this.onSubmitRTN.bind(this);
         this.onChangeRemarks=this.onChangeRemarks.bind(this);
         
         this.state={
             products:[],
-            batches:[{batchNo:'Batch',expDate:'Exp'}],
+            batches:[{_id:'default',batchNo:'Batch',expDate:'Exp'}],
             selectedProduct:'',
-            selectedBatch:'',
+            selectedBatch:'default',
             batchDetails:[],
             quantity:0,
             batch:'',
@@ -66,23 +67,30 @@ class StockReturn extends Component {
         });
     }
     selectProduct = (event, values) => {
-        this.setState({
-          selectedProduct: values._id,
-          batches:values.batches
-        }, () => {
-          console.log(this.state.selectedProduct);
-          console.log(this.state.batches);
-        });
+        if(values!=null){
+            this.setState({
+            selectedProduct: values._id,
+            batches:values.batches,        
+            });
+            if(values.batches.filter(e=>e.currentStock>0)[0]!=null){
+                this.setState({
+                    selectedBatch:values.batches.filter(e=>e.currentStock>0)[0]._id,   ///select default batch
+                    batchDetails: values.batches.filter(e=>e.currentStock>0)[0]         ///select default batch
+                })
+            }
+        }
     }
     selectBatch = (event, values) => {
-        this.setState({
-          selectedBatch: values._id,
-          batchDetails: values,
-            batch:values.batchNo+'  '+values.expDate
-        }, () => {
-          console.log(this.state.selectedBatch);
-          
-        });
+        if(values!=null){
+            this.setState({
+            selectedBatch: values._id,
+            batchDetails: values,
+                batch:values.batchNo+'  '+values.expDate
+            }, () => {
+            console.log(this.state.selectedBatch);
+            
+            });
+        }
     }
     onChangeQty(e){
         if(e.target.value<=this.state.batchDetails.currentStock){
@@ -107,7 +115,11 @@ class StockReturn extends Component {
             quantity:this.state.quantity
         }
 
-        axios.post(backendde.backendUrl+'addRTN/addProductRTN',obj).then(res=>console.log(res.data));
+        axios.post(backendde.backendUrl+'addRTN/addProductRTN',obj).then(
+            res=>{
+                console.log(res);
+                this.setState({cartProducts:res.data}); //refresh cart
+            });
 
         this.setState({
             batches:[],
@@ -126,12 +138,19 @@ class StockReturn extends Component {
     }
     ViewRTNCartTableRow(){
         return this.state.cartProducts.map(function(object,i){
-            return <ViewRTNTable obj={object} key={i} callbackSum = {this.callbackRowSum} />;
+            const details={
+                productName:this.state.products.find(e=> e._id===object.productID).productName,
+                batchDetails:this.state.products.find(e=> e._id===object.productID).batches.find(f=> f._id===object.batchID)
+            }
+            return <ViewRTNTable obj={object} batch={details} key={i} callbackSum = {this.callbackRowSum} deleteItem={this.onDeleteCartItem}  />;
         }.bind(this));
     }
     callbackRowSum = (rowsum) => {
         RTNtotal=RTNtotal+rowsum;
         this.setState({temp: 0}); //just to refresh page
+    }
+    onDeleteCartItem(newCart){
+        this.setState({cartProducts:newCart});
     }
     onSubmitRTN(){
         var cart=[]; 
@@ -148,7 +167,10 @@ class StockReturn extends Component {
             remarks:this.state.remarks
         }
         axios.post(backendde.backendUrl+'addRTN/submitRTN',RTNobj).then(res=>console.log(res.data));
-        axios.delete(backendde.backendUrl+'addRTN/deleteRTNcart').then(res=>console.log(res.data));
+        axios.delete(backendde.backendUrl+'addRTN/deleteRTNcart')
+            .then(res=>{RTNtotal=0;
+                this.setState({cartProducts:res.data});
+                console.log(res.data)});
 
         // console.log(RTNobj);
     }
@@ -165,6 +187,9 @@ class StockReturn extends Component {
                     <Form.Label>Select Product Name</Form.Label>
                     <Autocomplete
                         id="combo-box-demo"
+                        autoHighlight
+                        openOnFocus
+                        autoComplete
                         options={this.state.products}
                         getOptionLabel={option => option.productName}
                         style={{ width: 300 }}
@@ -177,10 +202,13 @@ class StockReturn extends Component {
                     <Form.Label>Select Batch Number</Form.Label>
                     <Autocomplete
                         id="combo-box-demo"
-                        options={this.state.batches}
+                        autoHighlight
+                        openOnFocus
+                        autoComplete
+                        options={this.state.batches.filter(e=>e.currentStock>0)}
                         getOptionLabel={option => option.batchNo +spacePro + option.expDate}
                         style={{ width: 300 }}
-                        defaultValue={this.state.batches[0]}
+                        value={this.state.batches.find(e=> e._id==this.state.selectedBatch)}
                         onChange={this.selectBatch}
                         inputValue={this.state.empty}
                         renderInput={params => <TextField {...params} label="Select Batch Number" variant="outlined" />}

@@ -25,14 +25,15 @@ class AddGRN extends Component {
         this.onAddProduct=this.onAddProduct.bind(this);
         this.ViewGRNCartTableRow=this.ViewGRNCartTableRow.bind(this);
         this.callbackRowSum=this.callbackRowSum.bind(this);
+        this.onDeleteCartItem=this.onDeleteCartItem.bind(this);
         this.onSubmitGRN=this.onSubmitGRN.bind(this);
         this.onChangeRemarks=this.onChangeRemarks.bind(this);
         
         this.state={
             products:[],
-            batches:[{batchNo:'Batch',expDate:'Exp'}],
+            batches:[{_id:'default',batchNo:'Batch',expDate:'Exp'}],
             selectedProduct:'',
-            selectedBatch:'',
+            selectedBatch:'default',
             batchDetails:[],
             quantity:0,
             FreeQuantity:0,
@@ -69,21 +70,25 @@ class AddGRN extends Component {
     selectProduct = (event, values) => {
         this.setState({
           selectedProduct: values._id,
-          batches:values.batches
+          batches:values.batches,
+          selectedBatch:values.batches[0]._id,
+          batchDetails:values.batches[0]
         }, () => {
           console.log(this.state.selectedProduct);
           console.log(this.state.batches);
         });
     }
     selectBatch = (event, values) => {
-        this.setState({
-          selectedBatch: values._id,
-          batchDetails: values,
-            batch:values.batchNo+'  '+values.expDate
-        }, () => {
-          console.log(this.state.selectedBatch);
-          
-        });
+        if(values!=null){
+            this.setState({
+            selectedBatch: values._id,
+            batchDetails: values,
+                batch:values.batchNo+'  '+values.expDate
+            }, () => {
+            console.log(this.state.selectedBatch);
+            
+            });
+        }
     }
     onChangeQty(e){
         this.setState({
@@ -104,7 +109,11 @@ class AddGRN extends Component {
             quantity:this.state.quantity
         }
 
-        axios.post(backendde.backendUrl+'addGRN/addProductGRN',obj).then(res=>console.log(res.data));
+        axios.post(backendde.backendUrl+'addGRN/addProductGRN',obj).then(
+            res=>{
+                console.log(res);
+                this.setState({cartProducts:res.data}); //refresh cart
+            });
 
         this.setState({
             batches:[],
@@ -124,12 +133,19 @@ class AddGRN extends Component {
     }
     ViewGRNCartTableRow(){
         return this.state.cartProducts.map(function(object,i){
-            return <ViewGRNTable obj={object} key={i} callbackSum = {this.callbackRowSum} />;
+            const details={
+                productName:this.state.products.find(e=> e._id===object.productID).productName,
+                batchDetails:this.state.products.find(e=> e._id===object.productID).batches.find(f=> f._id===object.batchID)
+            }
+            return <ViewGRNTable obj={object} batch={details} key={i} callbackSum = {this.callbackRowSum} deleteItem={this.onDeleteCartItem}/>;
         }.bind(this));
     }
     callbackRowSum = (rowsum) => {
         GRNtotal=GRNtotal+rowsum;
         this.setState({temp: 0}); //just to refresh page
+    }
+    onDeleteCartItem(newCart){
+        this.setState({cartProducts:newCart});
     }
     onSubmitGRN(){
         var cart=[]; 
@@ -146,7 +162,10 @@ class AddGRN extends Component {
             remarks:this.state.remarks
         }
         axios.post(backendde.backendUrl+'addGRN/submitGRN',GRNobj).then(res=>console.log(res.data));
-        axios.delete(backendde.backendUrl+'addGRN/deleteGRNcart').then(res=>console.log(res.data));
+        axios.delete(backendde.backendUrl+'addGRN/deleteGRNcart')
+            .then(res=>{GRNtotal=0;
+                this.setState({cartProducts:res.data});
+                console.log(res.data)});
 
         // console.log(GRNobj);
     }
@@ -163,6 +182,9 @@ class AddGRN extends Component {
                     <Form.Label>Select Product Name</Form.Label>
                     <Autocomplete
                         id="combo-box-demo"
+                        autoHighlight
+                        openOnFocus
+                        autoComplete
                         options={this.state.products}
                         getOptionLabel={option => option.productName}
                         style={{ width: 300 }}
@@ -175,10 +197,13 @@ class AddGRN extends Component {
                     <Form.Label>Select Batch Number</Form.Label>
                     <Autocomplete
                         id="combo-box-demo"
+                        autoHighlight
+                        openOnFocus
+                        autoComplete
                         options={this.state.batches}
                         getOptionLabel={option => option.batchNo +spacePro + option.expDate}
                         style={{ width: 300 }}
-                        defaultValue={this.state.batches[0]}
+                        value={this.state.batches.find(e=> e._id==this.state.selectedBatch)}
                         onChange={this.selectBatch}
                         inputValue={this.state.empty}
                         renderInput={params => <TextField {...params} label="Select Batch Number" variant="outlined" />}

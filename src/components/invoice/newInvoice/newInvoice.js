@@ -27,14 +27,16 @@ class newInvoice extends Component {
         this.onChangeDiscount=this.onChangeDiscount.bind(this);
         this.ViewINVCCartTableRow=this.ViewINVCCartTableRow.bind(this);
         this.callbackRowSum=this.callbackRowSum.bind(this);
+        this.onDeleteCartItem=this.onDeleteCartItem.bind(this);
         this.onSubmitINVC=this.onSubmitINVC.bind(this);
         this.onChangeRemarks=this.onChangeRemarks.bind(this);
         
+        
         this.state={
             products:[],
-            batches:[{batchNo:'Batch',expDate:'Exp'}],
+            batches:[{_id:'default',batchNo:'Batch',expDate:'Exp'}],
             selectedProduct:'',
-            selectedBatch:'',
+            selectedBatch:'default',
             batchDetails:[],
             quantity:0,
             batch:'',
@@ -70,23 +72,30 @@ class newInvoice extends Component {
         });
     }
     selectProduct = (event, values) => {
-        this.setState({
-          selectedProduct: values._id,
-          batches:values.batches
-        }, () => {
-          console.log(this.state.selectedProduct);
-          console.log(this.state.batches);
-        });
+        if(values!=null){
+            this.setState({
+            selectedProduct: values._id,
+            batches:values.batches,        
+            });
+            if(values.batches.filter(e=>e.currentStock>0)[0]!=null){
+                this.setState({
+                    selectedBatch:values.batches.filter(e=>e.currentStock>0)[0]._id,   ///select default batch
+                    batchDetails: values.batches.filter(e=>e.currentStock>0)[0]         ///select default batch
+                })
+            }
+        }
     }
     selectBatch = (event, values) => {
-        this.setState({
-          selectedBatch: values._id,
-          batchDetails: values,
-            batch:values.batchNo+'  '+values.expDate
-        }, () => {
-          console.log(this.state.selectedBatch);
-          
-        });
+        if(values!=null){
+            this.setState({
+            selectedBatch: values._id,
+            batchDetails: values,
+                batch:values.batchNo+'  '+values.expDate
+            }, () => {
+            console.log(this.state.selectedBatch);
+            
+            });
+        }
     }
     onChangeQty(e){
         if(e.target.value<=this.state.batchDetails.currentStock){
@@ -111,7 +120,11 @@ class newInvoice extends Component {
             quantity:this.state.quantity
         }
 
-        axios.post(backendde.backendUrl+'addINVC/addProductINVC',obj).then(res=>console.log(res.data));
+        axios.post(backendde.backendUrl+'addINVC/addProductINVC',obj).then(
+            res=>{
+                console.log(res);
+                this.setState({cartProducts:res.data}); //refresh cart
+            });
 
         this.setState({
             batches:[],
@@ -121,8 +134,9 @@ class newInvoice extends Component {
             quantity:0,
             batch:''
         })
-        
+     
     }
+    
     onChangeRemarks(e){
         this.setState({
             remarks:e.target.value
@@ -151,13 +165,20 @@ class newInvoice extends Component {
     }
     ViewINVCCartTableRow(){
         return this.state.cartProducts.map(function(object,i){
-            return <ViewINVCTable obj={object} key={i} callbackSum = {this.callbackRowSum} />;
-        }.bind(this));
+            const details={
+                productName:this.state.products.find(e=> e._id===object.productID).productName,
+                batchDetails:this.state.products.find(e=> e._id===object.productID).batches.find(f=> f._id===object.batchID)
+            }
+            return  <ViewINVCTable obj={object} batch={details} key={i} callbackSum = {this.callbackRowSum} deleteItem={this.onDeleteCartItem} />;
+        }.bind(this));      
     }
     callbackRowSum = (rowsum) => {
         INVCtotal=INVCtotal+rowsum;
         NetTotal=INVCtotal;
         this.setState({temp: 0}); //just to refresh page
+    }
+    onDeleteCartItem(newCart){
+        this.setState({cartProducts:newCart});
     }
     onSubmitINVC(){
         var cart=[]; 
@@ -175,8 +196,11 @@ class newInvoice extends Component {
             remarks:this.state.remarks
         }
         axios.post(backendde.backendUrl+'addINVC/submitINVC',INVCobj).then(res=>console.log(res.data));
-        axios.delete(backendde.backendUrl+'addINVC/deleteINVCcart').then(res=>console.log(res.data));
-
+        axios.delete(backendde.backendUrl+'addINVC/deleteINVCcart')
+            .then(res=>{INVCtotal=0;NetTotal=0;
+                        this.setState({cartProducts:res.data});
+                        console.log(res.data)});
+        
         // console.log(INVCobj);
     }
     render() {
@@ -192,6 +216,9 @@ class newInvoice extends Component {
                     <Form.Label>Select Product Name</Form.Label>
                     <Autocomplete
                         id="combo-box-demo"
+                        autoHighlight
+                        openOnFocus
+                        autoComplete
                         options={this.state.products}
                         getOptionLabel={option => option.productName}
                         style={{ width: 300 }}
@@ -204,10 +231,13 @@ class newInvoice extends Component {
                     <Form.Label>Select Batch Number</Form.Label>
                     <Autocomplete
                         id="combo-box-demo"
-                        options={this.state.batches}
+                        autoHighlight
+                        openOnFocus
+                        autoComplete
+                        options={this.state.batches.filter(e=>e.currentStock>0)}
                         getOptionLabel={option => option.batchNo +spacePro + option.expDate}
                         style={{ width: 300 }}
-                        defaultValue={this.state.batches[0]}
+                        value={this.state.batches.find(e=> e._id==this.state.selectedBatch)}
                         onChange={this.selectBatch}
                         inputValue={this.state.empty}
                         renderInput={params => <TextField {...params} label="Select Batch Number" variant="outlined" />}
@@ -291,6 +321,7 @@ class newInvoice extends Component {
                         </thead>
                         <tbody>
                             {this.ViewINVCCartTableRow()}
+
                             <tr>
                                 <td colSpan='5'><b>Total</b></td>
                                 <td align="right"><b>Rs. {INVCtotal}</b></td>

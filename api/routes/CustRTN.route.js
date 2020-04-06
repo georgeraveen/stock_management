@@ -9,7 +9,14 @@ CustRTNproductRoutes.route('/addProductCustRTN').post(function(req,res){
     let addProduct = new CustRTNCartProduct(req.body);
     addProduct.save()
         .then(addProduct=>{
-            res.status(200).json({'product':'product added succes'});
+            CustRTNCartProduct.find(function(err,products){
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    res.json(products);
+                }
+            });
         })
         .catch(err=>{
             res.status(400).send("unable to save database");
@@ -34,7 +41,14 @@ CustRTNproductRoutes.route('/deleteCustRTNitem/:id').delete(function(req,res){
             console.log(error);
         }
         else{
-            res.json(item);
+            CustRTNCartProduct.find(function(err,products){
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    res.json(products);
+                }
+            });
         }
     })
   })
@@ -57,7 +71,14 @@ CustRTNproductRoutes.route('/deleteCustRTNcart').delete(function(req,res){
             console.log(error);
         }
         else{
-            res.json(item);
+            CustRTNCartProduct.find(function(err,products){
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    res.json(products);
+                }
+            });
         }
     })
   })
