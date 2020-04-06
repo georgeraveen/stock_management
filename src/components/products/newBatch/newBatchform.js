@@ -17,7 +17,7 @@ class NewBatchform extends Component {
         this.onChangeWholePrice=this.onChangeWholePrice.bind(this);
         this.onChangeRetailPrice=this.onChangeRetailPrice.bind(this);
         this.onSubmit=this.onSubmit.bind(this);
-        this.successAlert=this.successAlert.bind(this);
+        // this.successAlert=this.successAlert.bind(this);
 
         this.state={
             batchNo:'',
@@ -26,7 +26,8 @@ class NewBatchform extends Component {
             retailPrice:'',
             currentStock:0,
             successAlt:false,
-            failAlt:false
+            failAlt:false,
+            newProducts:''
         };
     }
     onChangeBatchNo(e){
@@ -62,7 +63,9 @@ class NewBatchform extends Component {
                 
         }
 
-        axios.post(backendde.backendUrl+'Batch/add/'+this.props.selProduct,obj).then(res=> res.status ? this.setState({successAlt:true}):this.setState({failAlt:true}));
+        axios.post(backendde.backendUrl+'Batch/add/'+this.props.selProduct,obj)
+            .then(res=> {this.props.newProducts(res.data);}
+            );
 
         this.setState({
             batchNo:'',
@@ -72,20 +75,13 @@ class NewBatchform extends Component {
             currentStock:0
         })
     }
-    successAlert() {
-        if (this.state.successAlt) {
-          return (
-            <Alert variant="success" onClose={() => this.setState({successAlt:false})} dismissible>
-              <Alert.Heading>New batch successfully added</Alert.Heading>
-            </Alert>
-          );
-        }
-        
-      }
+    
     render() {
         return (
             <div>
-                {this.successAlert()}
+                {/* <Alert variant="success" isOpen={this.state.successAlt} onClose={() => this.setState({successAlt:false})} dismissible>
+                    <Alert.Heading>New batch successfully added</Alert.Heading>
+                </Alert> */}
                 <br></br>
                 <Form onSubmit={this.onSubmit}>
                 <Row>

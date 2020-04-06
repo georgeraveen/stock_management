@@ -4,16 +4,23 @@ const batchRoutes=express.Router();
 let Product = require('../models/product.model')
 
 //store new batch
-batchRoutes.route('/add/:name').post(function(req,res){
+batchRoutes.route('/add/:id').post(function(req,res){
     Product.findOneAndUpdate(
-        {"productName":req.params.name},
+        {"_id":req.params.id},
         {$push:{"batches":req.body}},
         
         function(err,batch){
             if(err){
                 return res.json({'status':false});
             }
-            return res.json({'status':true});
+            Product.find(function(err,products){
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    res.json(products);
+                }
+            });
         });
 });
 
@@ -28,7 +35,16 @@ batchRoutes.route('/delete/:name/:Bid').post(function(req,res){
                 console.log('asd');
                 return res.send(err);
             }
-            return res.json(batch);
+            else{
+                Product.find(function(err,products){
+                    if(err){
+                        console.log(err);
+                    }
+                    else{
+                        res.json(products);
+                    }
+                });
+            }
         });
     
 });
