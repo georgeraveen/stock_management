@@ -18,6 +18,7 @@ class ViewInvoiceTable extends Component {
         
     };
     componentDidMount(){
+        console.log(this.props.key);
         axios.get(backendde.backendUrl+'viewProduct/viewID/'+this.props.obj.productID)
             .then(response =>{
                 this.setState({
@@ -37,8 +38,8 @@ class ViewInvoiceTable extends Component {
 
             .then((res) => {
                 console.log('Product successfully deleted!');
-                
-                this.props.deleteItem();
+                console.log(res.data)
+                this.props.deleteItem(res.data);
                 
             }).catch((error) => {
                 console.log(error)
