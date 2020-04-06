@@ -21,6 +21,7 @@ class StockReturn extends Component {
         this.selectProduct=this.selectProduct.bind(this);
         this.selectBatch=this.selectBatch.bind(this);
         this.onChangeQty=this.onChangeQty.bind(this);
+        this.onChangeFreeQty=this.onChangeFreeQty.bind(this);
         this.onAddProduct=this.onAddProduct.bind(this);
         this.ViewRTNCartTableRow=this.ViewRTNCartTableRow.bind(this);
         this.callbackRowSum=this.callbackRowSum.bind(this);
@@ -35,6 +36,7 @@ class StockReturn extends Component {
             selectedBatch:'default',
             batchDetails:[],
             quantity:0,
+            FreeQuantity:0,
             batch:'',
             temp:0,   //just to refresh page
             cartProducts:[],
@@ -106,13 +108,19 @@ class StockReturn extends Component {
         }
         
     }
+    onChangeFreeQty(e){
+        this.setState({
+            FreeQuantity:e.target.value
+        });
+    }
     onAddProduct(e){
         e.preventDefault();
         console.log(`The value are ${this.state.selectedProduct},${this.state.selectedBatch}, ${this.state.quantity}`);
         const obj={
             productID:this.state.selectedProduct,
             batchID:this.state.selectedBatch,
-            quantity:this.state.quantity
+            quantity:this.state.quantity,
+            FreeQuantity:this.state.FreeQuantity,
         }
 
         axios.post(backendde.backendUrl+'addRTN/addProductRTN',obj).then(
@@ -127,6 +135,7 @@ class StockReturn extends Component {
             selectedBatch:'',
             batchDetails:[],
             quantity:0,
+            FreeQuantity:0,
             batch:''
         })
         
@@ -159,7 +168,7 @@ class StockReturn extends Component {
             object.preStock=a.currentStock;
             cart.push(object);
             const qty={
-                quantity: a.currentStock-object.quantity};
+                quantity: a.currentStock-object.quantity-object.FreeQuantity};
             axios.post(backendde.backendUrl+'Batch/RTNstock/'+object.productID+'/'+object.batchID,qty).then(res=>console.log(res.data));
         }.bind(this));
         const RTNobj={
@@ -224,6 +233,10 @@ class StockReturn extends Component {
                     <br></br>
                     <Form.Label>{this.state.batchDetails.currentStock}</Form.Label>   
                 </Form.Group>
+                <Form.Group as={Col}>
+                        <Form.Label>Free Quantity</Form.Label>
+                        <Form.Control value={this.state.FreeQuantity} onChange={this.onChangeFreeQty} placeholder="qty" />
+                </Form.Group>
                 <Form.Group as={Col} >
                         <Form.Label>Quantity</Form.Label>
                         <Form.Control value={this.state.quantity} onChange={this.onChangeQty} placeholder="qty" />
@@ -267,6 +280,9 @@ class StockReturn extends Component {
                                     Retail Price
                                 </th>
                                 <th>
+                                    Free Quantity
+                                </th>
+                                <th>
                                     Quantity
                                 </th>
                                 <th>
@@ -279,7 +295,7 @@ class StockReturn extends Component {
                         <tbody>
                             {this.ViewRTNCartTableRow()}
                             <tr>
-                                <td colSpan='6'><b>Total</b></td>
+                                <td colSpan='7'><b>Total</b></td>
                                 <td align="right"><b>Rs. {RTNtotal}</b></td>
                             </tr>
                         </tbody>

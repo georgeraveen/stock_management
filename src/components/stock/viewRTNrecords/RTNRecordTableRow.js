@@ -18,8 +18,9 @@ class RTNRecordTableRow extends Component {
                 <td>{this.state.batchDetail.batchNo}</td>
                 <td>{this.state.batchDetail.expDate}</td>
                 <td  align="right">Rs. {this.state.batchDetail.wholePrice}</td>
+                <td  align="right">{this.props.records.FreeQuantity}</td>
                 <td  align="right">{this.props.records.quantity}</td>
-                <td align="right">{this.state.batchDetail.wholePrice*this.props.records.quantity}</td>
+                <td align="right">Rs. {this.state.batchDetail.wholePrice*this.props.records.quantity}</td>
                 
             </tr>
         );
