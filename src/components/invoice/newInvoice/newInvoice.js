@@ -196,8 +196,11 @@ class newInvoice extends Component {
             remarks:this.state.remarks
         }
         axios.post(backendde.backendUrl+'addINVC/submitINVC',INVCobj).then(res=>console.log(res.data));
-        axios.delete(backendde.backendUrl+'addINVC/deleteINVCcart').then(res=>console.log(res.data));
-
+        axios.delete(backendde.backendUrl+'addINVC/deleteINVCcart')
+            .then(res=>{INVCtotal=0;NetTotal=0;
+                        this.setState({cartProducts:res.data});
+                        console.log(res.data)});
+        
         // console.log(INVCobj);
     }
     render() {
