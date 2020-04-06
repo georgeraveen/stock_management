@@ -24,14 +24,15 @@ class addCustRTN extends Component {
         this.onAddProduct=this.onAddProduct.bind(this);
         this.ViewCustRTNCartTableRow=this.ViewCustRTNCartTableRow.bind(this);
         this.callbackRowSum=this.callbackRowSum.bind(this);
+        this.onDeleteCartItem=this.onDeleteCartItem.bind(this);
         this.onSubmitCustRTN=this.onSubmitCustRTN.bind(this);
         this.onChangeRemarks=this.onChangeRemarks.bind(this);
         
         this.state={
             products:[],
-            batches:[{batchNo:'Batch',expDate:'Exp'}],
+            batches:[{_id:'default',batchNo:'Batch',expDate:'Exp'}],
             selectedProduct:'',
-            selectedBatch:'',
+            selectedBatch:'default',
             batchDetails:[],
             quantity:0,
             batch:'',
@@ -66,22 +67,26 @@ class addCustRTN extends Component {
     }
     selectProduct = (event, values) => {
         this.setState({
-          selectedProduct: values._id,
-          batches:values.batches
-        }, () => {
-          console.log(this.state.selectedProduct);
-          console.log(this.state.batches);
-        });
+            selectedProduct: values._id,
+            batches:values.batches,
+            selectedBatch:values.batches[0]._id,
+            batchDetails:values.batches[0]
+          }, () => {
+            console.log(this.state.selectedProduct);
+            console.log(this.state.batches);
+          });
     }
     selectBatch = (event, values) => {
-        this.setState({
-          selectedBatch: values._id,
-          batchDetails: values,
-            batch:values.batchNo+'  '+values.expDate
-        }, () => {
-          console.log(this.state.selectedBatch);
-          
-        });
+        if(values!=null){
+            this.setState({
+            selectedBatch: values._id,
+            batchDetails: values,
+                batch:values.batchNo+'  '+values.expDate
+            }, () => {
+            console.log(this.state.selectedBatch);
+            
+            });
+        }
     }
     onChangeQty(e){
         this.setState({
@@ -96,7 +101,11 @@ class addCustRTN extends Component {
             quantity:this.state.quantity
         }
 
-        axios.post(backendde.backendUrl+'addCustRTN/addProductCustRTN',obj).then(res=>console.log(res.data));
+        axios.post(backendde.backendUrl+'addCustRTN/addProductCustRTN',obj).then(
+            res=>{
+                console.log(res);
+                this.setState({cartProducts:res.data}); //refresh cart
+            });
 
         this.setState({
             batches:[],
@@ -115,12 +124,19 @@ class addCustRTN extends Component {
     }
     ViewCustRTNCartTableRow(){
         return this.state.cartProducts.map(function(object,i){
-            return <ViewCustRTNTable obj={object} key={i} callbackSum = {this.callbackRowSum} />;
+            const details={
+                productName:this.state.products.find(e=> e._id===object.productID).productName,
+                batchDetails:this.state.products.find(e=> e._id===object.productID).batches.find(f=> f._id===object.batchID)
+            }
+            return <ViewCustRTNTable obj={object} batch={details} key={i} callbackSum = {this.callbackRowSum}  deleteItem={this.onDeleteCartItem}/>;
         }.bind(this));
     }
     callbackRowSum = (rowsum) => {
         CustRTNtotal=CustRTNtotal+rowsum;
         this.setState({temp: 0}); //just to refresh page
+    }
+    onDeleteCartItem(newCart){
+        this.setState({cartProducts:newCart});
     }
     onSubmitCustRTN(){
         var cart=[]; 
@@ -137,9 +153,11 @@ class addCustRTN extends Component {
             remarks:this.state.remarks
         }
         axios.post(backendde.backendUrl+'addCustRTN/submitCustRTN',CustRTNobj).then(res=>console.log(res.data));
-        axios.delete(backendde.backendUrl+'addCustRTN/deleteCustRTNcart').then(res=>console.log(res.data));
+        axios.delete(backendde.backendUrl+'addCustRTN/deleteCustRTNcart')
+            .then(res=>{CustRTNtotal=0;
+                this.setState({cartProducts:res.data});
+                console.log(res.data)});
 
-        // console.log(CustRTNobj);
     }
     render() {
         return (
@@ -154,6 +172,9 @@ class addCustRTN extends Component {
                     <Form.Label>Select Product Name</Form.Label>
                     <Autocomplete
                         id="combo-box-demo"
+                        autoHighlight
+                        openOnFocus
+                        autoComplete
                         options={this.state.products}
                         getOptionLabel={option => option.productName}
                         style={{ width: 300 }}
@@ -166,10 +187,13 @@ class addCustRTN extends Component {
                     <Form.Label>Select Batch Number</Form.Label>
                     <Autocomplete
                         id="combo-box-demo"
+                        autoHighlight
+                        openOnFocus
+                        autoComplete
                         options={this.state.batches}
                         getOptionLabel={option => option.batchNo +spacePro + option.expDate}
                         style={{ width: 300 }}
-                        defaultValue={this.state.batches[0]}
+                        value={this.state.batches.find(e=> e._id==this.state.selectedBatch)}
                         onChange={this.selectBatch}
                         inputValue={this.state.empty}
                         renderInput={params => <TextField {...params} label="Select Batch Number" variant="outlined" />}
