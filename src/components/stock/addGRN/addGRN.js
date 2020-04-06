@@ -31,7 +31,7 @@ class AddGRN extends Component {
         
         this.state={
             products:[],
-            batches:[{batchNo:'Batch',expDate:'Exp'}],
+            batches:[{_id:'default',batchNo:'Batch',expDate:'Exp'}],
             selectedProduct:'',
             selectedBatch:'default',
             batchDetails:[],

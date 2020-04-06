@@ -9,7 +9,14 @@ RTNproductRoutes.route('/addProductRTN').post(function(req,res){
     let addProduct = new RTNCartProduct(req.body);
     addProduct.save()
         .then(addProduct=>{
-            res.status(200).json({'product':'product added succes'});
+            RTNCartProduct.find(function(err,products){
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    res.json(products);
+                }
+            });
         })
         .catch(err=>{
             res.status(400).send("unable to save database");
@@ -34,7 +41,14 @@ RTNproductRoutes.route('/deleteRTNitem/:id').delete(function(req,res){
             console.log(error);
         }
         else{
-            res.json(item);
+            RTNCartProduct.find(function(err,products){
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    res.json(products);
+                }
+            });
         }
     })
   })
@@ -57,7 +71,14 @@ RTNproductRoutes.route('/deleteRTNcart').delete(function(req,res){
             console.log(error);
         }
         else{
-            res.json(item);
+            RTNCartProduct.find(function(err,products){
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    res.json(products);
+                }
+            });
         }
     })
   })
