@@ -8,11 +8,11 @@ class ViewTable extends Component {
     constructor(props) {
         super(props);
         this.deleteProduct = this.deleteProduct.bind(this);
-        
+        this.editProduct=this.editProduct.bind(this);
     }
 
     editProduct(){
-
+        this.props.editName(this.props.obj)
     }
 
     deleteProduct(){
@@ -29,7 +29,7 @@ class ViewTable extends Component {
     }
     ViewBatchTableRow(){
         return this.props.obj.batches.map(function(object1,j){
-            return <ViewBatch obj1={object1} key1={j}/>;
+            return <ViewBatch obj1={object1} key={j}/>;
         });
     }
 

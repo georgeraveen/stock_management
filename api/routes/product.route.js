@@ -41,6 +41,28 @@ productRoutes.route('/viewID/:id').get(function(req,res){
         }
     });
 });
+//edit product name
+productRoutes.route('/editName/:id/:newName').post(function(req,res){
+    Product.findOneAndUpdate(
+        {"_id":req.params.id},
+        {$set:{"productName":req.params.newName}},     
+        function(err,p){
+            console.log('hi');
+            if(err){
+                return res.send(err);
+            }
+            else{
+                Product.find(function(errr,products){
+                    if(errr){
+                        console.log(errr);
+                    }
+                    else{
+                        res.json(products);
+                    }
+                });
+            }
+        });
+});
 
 //delete product
 productRoutes.route('/delete/:id').delete(function(req,res){
