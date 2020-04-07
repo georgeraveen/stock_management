@@ -48,7 +48,31 @@ batchRoutes.route('/delete/:name/:Bid').post(function(req,res){
         });
     
 });
-
+//edit batch details
+batchRoutes.route('/editBatch/:id/:bid').post(function(req,res){
+    console.log('dsd');
+    Product.findOneAndUpdate(
+        {"_id":req.params.id,"batches._id":req.params.bid},
+        {$set:{"batches.$.batchNo":req.body.newbatchNo,
+                "batches.$.expDate":req.body.newexpDate,
+                "batches.$.wholePrice":req.body.newwholePrice,
+                "batches.$.retailPrice":req.body.newretailPrice}},     
+        function(err,qty){
+            if(err){
+                return res.send(err);
+            }
+            else{
+                Product.find(function(err,products){
+                    if(err){
+                        console.log(err);
+                    }
+                    else{
+                        res.json(products);
+                    }
+                });
+            }
+        });
+});
 //get by id--------------no need
 // batchRoutes.route('/viewID/:id/:bid').get(function(req,res){
 //     Product.findOne({"_id":req.params.id,"batches._id":req.params.bid},function(err,prs){

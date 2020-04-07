@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import {Form} from 'react-bootstrap';
 import {Row} from 'react-bootstrap';
 import {Col} from 'react-bootstrap';
-import {Button, Alert} from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 
 import axios from 'axios';
 
