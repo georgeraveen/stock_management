@@ -16,7 +16,7 @@ const backendde= require('../../../backendde');
 const spacePro='   ';
 var INVCtotal=0;
 var NetTotal=0;
-
+let inputRef;
 class newInvoice extends Component { 
     constructor(props){
         super(props);
@@ -46,7 +46,7 @@ class newInvoice extends Component {
             discount:0,
             qtyBoxErrMsg:''
         };
-
+        
     }
 
     componentDidMount(){
@@ -54,6 +54,7 @@ class newInvoice extends Component {
         axios.get(backendde.backendUrl+'viewProduct/view')
             .then(response =>{
                 this.setState({products:response.data});
+                inputRef.focus();
             })
         .catch(function (error){
             console.log('form data');
@@ -134,7 +135,7 @@ class newInvoice extends Component {
             quantity:0,
             batch:''
         })
-     
+        inputRef.focus();
     }
     
     onChangeRemarks(e){
@@ -200,10 +201,13 @@ class newInvoice extends Component {
             .then(res=>{INVCtotal=0;NetTotal=0;
                         this.setState({cartProducts:res.data});
                         console.log(res.data)});
-        
+        this.setState({discount:0,
+                        remarks:''});
         // console.log(INVCobj);
     }
     render() {
+        
+
         return (
 
             <div className="container">
@@ -223,7 +227,7 @@ class newInvoice extends Component {
                         getOptionLabel={option => option.productName}
                         style={{ width: 300 }}
                         onChange={this.selectProduct}
-                        renderInput={params => <TextField {...params} label="Select Product Name" variant="outlined" />}
+                        renderInput={params => <TextField {...params} inputRef={input => {inputRef = input;}} label="Select Product Name" variant="outlined" />}
                     />
                 </Form.Group>
 

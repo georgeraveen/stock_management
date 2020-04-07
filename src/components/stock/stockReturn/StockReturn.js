@@ -14,7 +14,7 @@ import ViewRTNTable from './ViewRTNTable'
 const backendde= require('./../../../backendde');
 const spacePro='   ';
 var RTNtotal=0;
-
+let inputRef;
 class StockReturn extends Component { 
     constructor(props){
         super(props);
@@ -51,6 +51,7 @@ class StockReturn extends Component {
         axios.get(backendde.backendUrl+'viewProduct/view')
             .then(response =>{
                 this.setState({products:response.data});
+                inputRef.focus();
             })
         .catch(function (error){
             console.log('form data');
@@ -138,7 +139,7 @@ class StockReturn extends Component {
             FreeQuantity:0,
             batch:''
         })
-        
+        inputRef.focus();
     }
     onChangeRemarks(e){
         this.setState({
@@ -180,7 +181,7 @@ class StockReturn extends Component {
             .then(res=>{RTNtotal=0;
                 this.setState({cartProducts:res.data});
                 console.log(res.data)});
-
+        this.setState({remarks:''});
         // console.log(RTNobj);
     }
     render() {
@@ -203,7 +204,7 @@ class StockReturn extends Component {
                         getOptionLabel={option => option.productName}
                         style={{ width: 300 }}
                         onChange={this.selectProduct}
-                        renderInput={params => <TextField {...params} label="Select Product Name" variant="outlined" />}
+                        renderInput={params => <TextField {...params} inputRef={input => {inputRef = input;}} label="Select Product Name" variant="outlined" />}
                     />
                 </Form.Group>
 
