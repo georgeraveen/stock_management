@@ -18,6 +18,7 @@ class ViewTable extends Component {
     }
     componentDidMount(){
         this.setState({temp: 0});
+        this.props.callbackSum(this.productTotal);
     }
     ViewBatchTableRow(){
         return this.props.obj.batches.map(function(object1,j){
@@ -31,7 +32,7 @@ class ViewTable extends Component {
     render() {
         return (
             <React.Fragment>
-                
+          
             <tr>
                 <td colSpan='5'>
                     {this.props.obj.productName}
@@ -39,11 +40,10 @@ class ViewTable extends Component {
                 <td>
                   {this.stockTotal}
                 </td>
-                <td>
+                <td align="right">
                   Rs. {this.productTotal}
                 </td>
             </tr>
-            
             
                 {this.ViewBatchTableRow()}
            

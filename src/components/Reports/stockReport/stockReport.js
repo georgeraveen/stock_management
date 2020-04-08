@@ -9,13 +9,13 @@ class stockReport extends Component {
 
     constructor(props){
         super(props);
-        
+        this.callbackRowSum=this.callbackRowSum.bind(this);
         
         this.state={
             products:[],
             batches:[],
         };
-
+        this.grandtotal=0
     }
 
     componentDidMount(){
@@ -36,16 +36,19 @@ class stockReport extends Component {
     }
     viewProductTableRow(){
         return this.state.products.map(function(object,i){
-            return <ViewTable obj={object} key={i}/>;
-        });
+            return <ViewTable obj={object} key={i} callbackSum={this.callbackRowSum}/>;
+        }.bind(this));
     }
-
+    callbackRowSum = (rowsum) => {
+        this.grandtotal=this.grandtotal+rowsum;
+        this.setState({temp: 0}); //just to refresh page
+    }
 
     render() {
         return (
             <div  className="container">
                 <h1>Stock Balence Report</h1>
-                <table className="table table-striped" style={{marginTop:20}}>
+                <table className="table table-striped table-bordered table-hover" style={{marginTop:20}}>
                         <thead>
                             <tr><th>
                                     Product Name
@@ -68,6 +71,10 @@ class stockReport extends Component {
                         </thead>
                         <tbody>
                             {this.viewProductTableRow()}
+                            <tr>
+                                <td colSpan='6'>Grand Total</td>
+                                <td align="right">Rs. {this.grandtotal}</td>
+                            </tr>
                         </tbody>
                     </table>
  
