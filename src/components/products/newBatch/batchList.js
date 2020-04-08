@@ -6,13 +6,17 @@ class BatchList extends Component {
     constructor(props) {
         super(props);
         this.deleteBatch = this.deleteBatch.bind(this);
+        
         console.log(this.props.selProduct);
+        
+        
     }
 
     deleteBatch() {
         axios.post(backendde.backendUrl+'Batch/delete/'+this.props.selProduct+'/' + this.props.obj.batchNo)
             .then((res) => {
                 console.log('Batch successfully deleted!')
+                this.props.newProducts(res.data);
             }).catch((error) => {
                 console.log(error)
             });

@@ -14,7 +14,7 @@ import ViewCustRTNTable from './ViewCustRTNTable'
 const backendde= require('../../../backendde');
 const spacePro='   ';
 var CustRTNtotal=0;
-
+let inputRef;
 class addCustRTN extends Component { 
     constructor(props){
         super(props);
@@ -48,6 +48,7 @@ class addCustRTN extends Component {
         axios.get(backendde.backendUrl+'viewProduct/view')
             .then(response =>{
                 this.setState({products:response.data});
+                inputRef.focus();
             })
         .catch(function (error){
             console.log('form data');
@@ -115,7 +116,7 @@ class addCustRTN extends Component {
             quantity:0,
             batch:''
         })
-        
+        inputRef.focus();
     }
     onChangeRemarks(e){
         this.setState({
@@ -157,7 +158,7 @@ class addCustRTN extends Component {
             .then(res=>{CustRTNtotal=0;
                 this.setState({cartProducts:res.data});
                 console.log(res.data)});
-
+        this.setState({remarks:''});
     }
     render() {
         return (
@@ -179,7 +180,7 @@ class addCustRTN extends Component {
                         getOptionLabel={option => option.productName}
                         style={{ width: 300 }}
                         onChange={this.selectProduct}
-                        renderInput={params => <TextField {...params} label="Select Product Name" variant="outlined" />}
+                        renderInput={params => <TextField {...params} inputRef={input => {inputRef = input;}} label="Select Product Name" variant="outlined" />}
                     />
                 </Form.Group>
 

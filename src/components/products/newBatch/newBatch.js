@@ -11,7 +11,7 @@ class newBatch extends Component {
     constructor(props){
         super(props);
         this.onSelectProduct=this.onSelectProduct.bind(this);
-       
+        this.updateProducts=this.updateProducts.bind(this);
         this.state={
             products:[],
             batches:[],
@@ -46,19 +46,21 @@ class newBatch extends Component {
     displayBatchList(){
         var a=this.state.selectedProduct;
         return this.state.products.map(function(object,i){
-            if(a==(object['productName'])){
+            if(a==(object._id)){
                 return object.batches.map(function(object1,j){
-                    return <BatchList selProduct={object['_id']} obj={object1} key={j}/>;
-                });
+                    return <BatchList selProduct={object['_id']} obj={object1} key={j} newProducts={this.updateProducts}/>;
+                }.bind(this));
             };
-        });
+        }.bind(this));
     }
     displayNewBatchForm(){
         if(this.state.selectedProduct!=''){
-            return<NewBatchform selProduct={this.state.selectedProduct}/>
+            return<NewBatchform selProduct={this.state.selectedProduct} newProducts={this.updateProducts}/>
         };
     }
-   
+    updateProducts(newProducts){
+        this.setState({products:newProducts});
+    }
     render() {
         return (
             <div className="container">

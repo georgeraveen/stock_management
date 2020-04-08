@@ -15,6 +15,9 @@ let RTNrecord= new Schema({
         preStock:{
             type:Number
         },
+        FreeQuantity:{
+            type:Number
+        },
         quantity:{
             type:Number
         }

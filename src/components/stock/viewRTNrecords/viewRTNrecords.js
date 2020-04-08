@@ -124,6 +124,7 @@ class viewRTNrecords extends Component {
                                 </th>
                                 <th>Expire Date</th>
                                 <th>Wholesale Price</th>
+                                <th>Free Quantity</th>
                                 <th>Quantity</th>
                                 <th>Sum</th>
                             </tr>
@@ -131,7 +132,7 @@ class viewRTNrecords extends Component {
                         <tbody>
                             {this.ViewRTNRecordTableRow()}
                             <tr>
-                                <td colSpan='5'><b>Total</b></td>
+                                <td colSpan='6'><b>Total</b></td>
                                 <td align="right"><b>Rs. {RTNtotal}</b></td>
                             </tr>
                         </tbody>

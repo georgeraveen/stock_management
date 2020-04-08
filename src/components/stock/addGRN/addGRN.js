@@ -14,7 +14,7 @@ import ViewGRNTable from './ViewGRNTable'
 const backendde= require('./../../../backendde');
 const spacePro='   ';
 var GRNtotal=0;
-
+let inputRef;
 class AddGRN extends Component { 
     constructor(props){
         super(props);
@@ -50,6 +50,7 @@ class AddGRN extends Component {
         axios.get(backendde.backendUrl+'viewProduct/view')
             .then(response =>{
                 this.setState({products:response.data});
+                inputRef.focus();
             })
         .catch(function (error){
             console.log('form data');
@@ -124,7 +125,7 @@ class AddGRN extends Component {
             FreeQuantity:0,
             batch:''
         })
-        
+        inputRef.focus();
     }
     onChangeRemarks(e){
         this.setState({
@@ -166,7 +167,7 @@ class AddGRN extends Component {
             .then(res=>{GRNtotal=0;
                 this.setState({cartProducts:res.data});
                 console.log(res.data)});
-
+        this.setState({remarks:''});
         // console.log(GRNobj);
     }
     render() {
@@ -189,7 +190,7 @@ class AddGRN extends Component {
                         getOptionLabel={option => option.productName}
                         style={{ width: 300 }}
                         onChange={this.selectProduct}
-                        renderInput={params => <TextField {...params} label="Select Product Name" variant="outlined" />}
+                        renderInput={params => <TextField {...params} inputRef={input => {inputRef = input;}} label="Select Product Name" variant="outlined" />}
                     />
                 </Form.Group>
 

@@ -35,7 +35,7 @@ function App() {
             
             <NavDropdown title="Products" id="collasible-nav-dropdown">
               <NavDropdown.Item href="/products/AddNewProduct">Add new product</NavDropdown.Item>
-              <NavDropdown.Item href="/products/AddNewBatch">Add new batch No</NavDropdown.Item>
+              <NavDropdown.Item href="/products/AddNewBatch">Add new/Edit batch No</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="/products/ViewProducts">View products</NavDropdown.Item>
             </NavDropdown>

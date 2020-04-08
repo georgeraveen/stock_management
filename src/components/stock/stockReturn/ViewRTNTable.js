@@ -48,6 +48,9 @@ class ViewRTNTable extends Component {
                     {this.props.batch.batchDetails.retailPrice}
                 </td>
                 <td align="right">
+                    {this.props.obj.FreeQuantity}
+                </td>
+                <td align="right">
                     {this.props.obj.quantity}
                 </td>
                 <td align="right"><b>Rs. 

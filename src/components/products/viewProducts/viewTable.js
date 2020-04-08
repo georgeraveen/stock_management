@@ -8,13 +8,13 @@ class ViewTable extends Component {
     constructor(props) {
         super(props);
         this.deleteProduct = this.deleteProduct.bind(this);
-        
+        this.editProduct=this.editProduct.bind(this);
+        this.callbackEditBatch=this.callbackEditBatch.bind(this);
     }
 
     editProduct(){
-
+        this.props.editName(this.props.obj)
     }
-
     deleteProduct(){
 
         axios.delete(backendde.backendUrl+'viewProduct/delete/' + this.props.obj._id)
@@ -29,10 +29,17 @@ class ViewTable extends Component {
     }
     ViewBatchTableRow(){
         return this.props.obj.batches.map(function(object1,j){
-            return <ViewBatch obj1={object1} key1={j}/>;
-        });
+            return <ViewBatch obj1={object1} key1={j} key={j} editbatch={this.callbackEditBatch}/>;
+        }.bind(this));
     }
-
+    callbackEditBatch(batchid){
+        const editBatchInfo={
+            pID:this.props.obj._id,
+            bID:batchid
+        };
+        this.props.editBatchinfo(editBatchInfo);
+    }
+    
     render() {
         return (
             <React.Fragment>

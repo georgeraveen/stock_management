@@ -14,13 +14,14 @@ import ViewRTNTable from './ViewRTNTable'
 const backendde= require('./../../../backendde');
 const spacePro='   ';
 var RTNtotal=0;
-
+let inputRef;
 class StockReturn extends Component { 
     constructor(props){
         super(props);
         this.selectProduct=this.selectProduct.bind(this);
         this.selectBatch=this.selectBatch.bind(this);
         this.onChangeQty=this.onChangeQty.bind(this);
+        this.onChangeFreeQty=this.onChangeFreeQty.bind(this);
         this.onAddProduct=this.onAddProduct.bind(this);
         this.ViewRTNCartTableRow=this.ViewRTNCartTableRow.bind(this);
         this.callbackRowSum=this.callbackRowSum.bind(this);
@@ -35,6 +36,7 @@ class StockReturn extends Component {
             selectedBatch:'default',
             batchDetails:[],
             quantity:0,
+            FreeQuantity:0,
             batch:'',
             temp:0,   //just to refresh page
             cartProducts:[],
@@ -49,6 +51,7 @@ class StockReturn extends Component {
         axios.get(backendde.backendUrl+'viewProduct/view')
             .then(response =>{
                 this.setState({products:response.data});
+                inputRef.focus();
             })
         .catch(function (error){
             console.log('form data');
@@ -106,13 +109,19 @@ class StockReturn extends Component {
         }
         
     }
+    onChangeFreeQty(e){
+        this.setState({
+            FreeQuantity:e.target.value
+        });
+    }
     onAddProduct(e){
         e.preventDefault();
         console.log(`The value are ${this.state.selectedProduct},${this.state.selectedBatch}, ${this.state.quantity}`);
         const obj={
             productID:this.state.selectedProduct,
             batchID:this.state.selectedBatch,
-            quantity:this.state.quantity
+            quantity:this.state.quantity,
+            FreeQuantity:this.state.FreeQuantity,
         }
 
         axios.post(backendde.backendUrl+'addRTN/addProductRTN',obj).then(
@@ -127,9 +136,10 @@ class StockReturn extends Component {
             selectedBatch:'',
             batchDetails:[],
             quantity:0,
+            FreeQuantity:0,
             batch:''
         })
-        
+        inputRef.focus();
     }
     onChangeRemarks(e){
         this.setState({
@@ -159,7 +169,7 @@ class StockReturn extends Component {
             object.preStock=a.currentStock;
             cart.push(object);
             const qty={
-                quantity: a.currentStock-object.quantity};
+                quantity: a.currentStock-object.quantity-object.FreeQuantity};
             axios.post(backendde.backendUrl+'Batch/RTNstock/'+object.productID+'/'+object.batchID,qty).then(res=>console.log(res.data));
         }.bind(this));
         const RTNobj={
@@ -171,7 +181,7 @@ class StockReturn extends Component {
             .then(res=>{RTNtotal=0;
                 this.setState({cartProducts:res.data});
                 console.log(res.data)});
-
+        this.setState({remarks:''});
         // console.log(RTNobj);
     }
     render() {
@@ -194,7 +204,7 @@ class StockReturn extends Component {
                         getOptionLabel={option => option.productName}
                         style={{ width: 300 }}
                         onChange={this.selectProduct}
-                        renderInput={params => <TextField {...params} label="Select Product Name" variant="outlined" />}
+                        renderInput={params => <TextField {...params} inputRef={input => {inputRef = input;}} label="Select Product Name" variant="outlined" />}
                     />
                 </Form.Group>
 
@@ -223,6 +233,10 @@ class StockReturn extends Component {
                     <Form.Label>Available Stock</Form.Label>
                     <br></br>
                     <Form.Label>{this.state.batchDetails.currentStock}</Form.Label>   
+                </Form.Group>
+                <Form.Group as={Col}>
+                        <Form.Label>Free Quantity</Form.Label>
+                        <Form.Control value={this.state.FreeQuantity} onChange={this.onChangeFreeQty} placeholder="qty" />
                 </Form.Group>
                 <Form.Group as={Col} >
                         <Form.Label>Quantity</Form.Label>
@@ -267,6 +281,9 @@ class StockReturn extends Component {
                                     Retail Price
                                 </th>
                                 <th>
+                                    Free Quantity
+                                </th>
+                                <th>
                                     Quantity
                                 </th>
                                 <th>
@@ -279,7 +296,7 @@ class StockReturn extends Component {
                         <tbody>
                             {this.ViewRTNCartTableRow()}
                             <tr>
-                                <td colSpan='6'><b>Total</b></td>
+                                <td colSpan='7'><b>Total</b></td>
                                 <td align="right"><b>Rs. {RTNtotal}</b></td>
                             </tr>
                         </tbody>
