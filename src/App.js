@@ -20,7 +20,7 @@ import newInvoice from './components/invoice/newInvoice/newInvoice';
 import ViewInvoice from './components/invoice/viewInvoice/viewINVCrecords';
 import AddcustRTN from './components/invoice/custReturn/addCustRTN';
 import ViewCustRTN from './components/invoice/viewCustRTNrecords/viewCustRTNrecords';
-
+import StockBalenceReport from './components/Reports/stockReport/stockReport';
 
 function App() {
   return (
@@ -57,6 +57,9 @@ function App() {
               <NavDropdown.Item href="/invoice/addcustRTN">Add customer return</NavDropdown.Item>
               <NavDropdown.Item href="/invoice/ViewCustRTN">View customer returns</NavDropdown.Item>
             </NavDropdown>
+            <NavDropdown title="Reports" id="collasible-nav-dropdown">
+              <NavDropdown.Item href="/reports/stockBalence">Stock Balence Report</NavDropdown.Item>
+            </NavDropdown>
           </Nav>
           <Nav>
             <Nav.Link href="#deets">More deets</Nav.Link>
@@ -84,6 +87,7 @@ function App() {
          <Route exact path='/invoice/ViewInvoice' component={ViewInvoice}/>
          <Route exact path='/invoice/addcustRTN' component={AddcustRTN}/>
          <Route exact path='/invoice/ViewCustRTN' component={ViewCustRTN}/>
+         <Route exact path='/reports/stockBalence' component={StockBalenceReport}/>
         {/* <Route exact path='/edit/:id' component={Edit}/> */}
         {/* <Route exact path='/index' component={Index}/>  */}
         
