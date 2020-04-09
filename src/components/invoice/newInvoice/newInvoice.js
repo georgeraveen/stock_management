@@ -44,7 +44,10 @@ class newInvoice extends Component {
             cartProducts:[],
             remarks:'',
             discount:0,
-            qtyBoxErrMsg:''
+            qtyBoxErrMsg:'',
+
+            validated:false, 
+            setValidated:false
         };
         
     }
@@ -113,29 +116,37 @@ class newInvoice extends Component {
         
     }
     onAddProduct(e){
-        e.preventDefault();
-        console.log(`The value are ${this.state.selectedProduct},${this.state.selectedBatch}, ${this.state.quantity}`);
-        const obj={
-            productID:this.state.selectedProduct,
-            batchID:this.state.selectedBatch,
-            quantity:this.state.quantity
+        const form=e.currentTarget;
+        if(form.checkValidity()==false || this.state.selectedProduct==''){
+            e.preventDefault();
+            e.stopPropagation();
         }
+        else{
+            e.preventDefault();
+            console.log(`The value are ${this.state.selectedProduct},${this.state.selectedBatch}, ${this.state.quantity}`);
+            const obj={
+                productID:this.state.selectedProduct,
+                batchID:this.state.selectedBatch,
+                quantity:this.state.quantity
+            }
 
-        axios.post(backendde.backendUrl+'addINVC/addProductINVC',obj).then(
-            res=>{
-                console.log(res);
-                this.setState({cartProducts:res.data}); //refresh cart
-            });
+            axios.post(backendde.backendUrl+'addINVC/addProductINVC',obj).then(
+                res=>{
+                    console.log(res);
+                    this.setState({cartProducts:res.data}); //refresh cart
+                });
 
-        this.setState({
-            batches:[],
-            selectedProduct:'',
-            selectedBatch:'',
-            batchDetails:[],
-            quantity:0,
-            batch:''
-        })
-        inputRef.focus();
+            this.setState({
+                batches:[],
+                selectedProduct:'',
+                selectedBatch:'',
+                batchDetails:[],
+                quantity:0,
+                batch:''
+            })
+            inputRef.focus();
+        }
+        this.setState({setValidated:true,validated:true})
     }
     
     onChangeRemarks(e){
@@ -214,7 +225,7 @@ class newInvoice extends Component {
                 <h1>Create New Invoice</h1>
                 <br></br>
                 
-                <Form onSubmit={this.onAddProduct} >
+                <Form noValidate validated={this.state.validated} onSubmit={this.onAddProduct} >
                     <Row>
                 <Form.Group as={Col}>
                     <Form.Label>Select Product Name</Form.Label>
@@ -227,7 +238,7 @@ class newInvoice extends Component {
                         getOptionLabel={option => option.productName}
                         style={{ width: 300 }}
                         onChange={this.selectProduct}
-                        renderInput={params => <TextField {...params} inputRef={input => {inputRef = input;}} label="Select Product Name" variant="outlined" />}
+                        renderInput={params => <TextField required {...params} inputRef={input => {inputRef = input;}} label="Select Product Name" variant="outlined" />}
                     />
                 </Form.Group>
 
@@ -244,7 +255,7 @@ class newInvoice extends Component {
                         value={this.state.batches.find(e=> e._id==this.state.selectedBatch)}
                         onChange={this.selectBatch}
                         inputValue={this.state.empty}
-                        renderInput={params => <TextField {...params} label="Select Batch Number" variant="outlined" />}
+                        renderInput={params => <TextField required {...params} label="Select Batch Number" variant="outlined" />}
                     />
                 </Form.Group>
                 <Form.Group as={Col}>
@@ -259,7 +270,8 @@ class newInvoice extends Component {
                 </Form.Group>
                 <Form.Group as={Col} >
                         <Form.Label>Quantity</Form.Label>
-                        <Form.Control value={this.state.quantity} onChange={this.onChangeQty} placeholder="qty" />
+                        <Form.Control required type="number" value={this.state.quantity} onChange={this.onChangeQty} placeholder="qty" />
+                        <Form.Control.Feedback type="invalid">Enter valid number.</Form.Control.Feedback>
                         <Form.Label><font color='red'>{this.state.qtyBoxErrMsg}</font></Form.Label>
                 </Form.Group>
                 </Row>
@@ -277,7 +289,7 @@ class newInvoice extends Component {
                     <InputGroup.Prepend>
                     <InputGroup.Text>Discount</InputGroup.Text>
                     </InputGroup.Prepend>
-                    <FormControl aria-label="discount" value={this.state.discount} onChange={this.onChangeDiscount} />
+                    <FormControl aria-label="discount"  required type="number"  value={this.state.discount} onChange={this.onChangeDiscount} />
                     <InputGroup.Append>
                     <InputGroup.Text> % </InputGroup.Text>
                     </InputGroup.Append>

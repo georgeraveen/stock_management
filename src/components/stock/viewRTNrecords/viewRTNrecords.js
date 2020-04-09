@@ -81,11 +81,11 @@ class viewRTNrecords extends Component {
     render() {
         return (
             <div className="container">
-                <h2>View RTN History</h2>
+                <h2>View Return History</h2>
                 <table className="table table-striped" style={{marginTop:20}}>
                         <thead>
                             <tr><th>
-                                    RTN ID
+                                    Return ID
                                 </th>
                                 <th>
                                     Date and Time
@@ -108,8 +108,8 @@ class viewRTNrecords extends Component {
                 >
                     <Modal.Header closeButton>
                     <Modal.Title id="example-modal-sizes-title-lg">
-                        RTN details  <br></br>
-                        RTN id:  {this.state.viewID}<br></br>
+                        Return details  <br></br>
+                        Return id:  {this.state.viewID}<br></br>
                         Date:  {this.state.selectedRTNview.createdAt}
                     </Modal.Title>
                     </Modal.Header>
