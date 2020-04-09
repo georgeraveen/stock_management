@@ -41,7 +41,10 @@ class StockReturn extends Component {
             temp:0,   //just to refresh page
             cartProducts:[],
             remarks:'',
-            qtyBoxErrMsg:''
+            qtyBoxErrMsg:'',
+            
+            validated:false, 
+            setValidated:false
         };
 
     }
@@ -110,36 +113,52 @@ class StockReturn extends Component {
         
     }
     onChangeFreeQty(e){
-        this.setState({
-            FreeQuantity:e.target.value
-        });
+        if(e.target.value<=this.state.batchDetails.currentStock){
+            this.setState({
+                qtyBoxErrMsg:'',
+                FreeQuantity:e.target.value
+            });
+        }
+        else{
+            this.setState({
+                qtyBoxErrMsg:'stock error'
+            }); 
+        }
     }
     onAddProduct(e){
-        e.preventDefault();
-        console.log(`The value are ${this.state.selectedProduct},${this.state.selectedBatch}, ${this.state.quantity}`);
-        const obj={
-            productID:this.state.selectedProduct,
-            batchID:this.state.selectedBatch,
-            quantity:this.state.quantity,
-            FreeQuantity:this.state.FreeQuantity,
+        const form=e.currentTarget;
+        if(form.checkValidity()==false || this.state.selectedProduct==''){
+            e.preventDefault();
+            e.stopPropagation();
         }
+        else{
+            e.preventDefault();
+            console.log(`The value are ${this.state.selectedProduct},${this.state.selectedBatch}, ${this.state.quantity}`);
+            const obj={
+                productID:this.state.selectedProduct,
+                batchID:this.state.selectedBatch,
+                quantity:this.state.quantity,
+                FreeQuantity:this.state.FreeQuantity,
+            }
 
-        axios.post(backendde.backendUrl+'addRTN/addProductRTN',obj).then(
-            res=>{
-                console.log(res);
-                this.setState({cartProducts:res.data}); //refresh cart
-            });
+            axios.post(backendde.backendUrl+'addRTN/addProductRTN',obj).then(
+                res=>{
+                    console.log(res);
+                    this.setState({cartProducts:res.data}); //refresh cart
+                });
 
-        this.setState({
-            batches:[],
-            selectedProduct:'',
-            selectedBatch:'',
-            batchDetails:[],
-            quantity:0,
-            FreeQuantity:0,
-            batch:''
-        })
-        inputRef.focus();
+            this.setState({
+                batches:[],
+                selectedProduct:'',
+                selectedBatch:'',
+                batchDetails:[],
+                quantity:0,
+                FreeQuantity:0,
+                batch:''
+            })
+            inputRef.focus();
+        }
+        this.setState({setValidated:true,validated:true})
     }
     onChangeRemarks(e){
         this.setState({
@@ -191,7 +210,7 @@ class StockReturn extends Component {
                 <h1>Add stock return</h1> 
                 <br></br>
                 
-                <Form onSubmit={this.onAddProduct} >
+                <Form noValidate validated={this.state.validated} onSubmit={this.onAddProduct} >
                     <Row>
                 <Form.Group as={Col}>
                     <Form.Label>Select Product Name</Form.Label>
@@ -204,7 +223,7 @@ class StockReturn extends Component {
                         getOptionLabel={option => option.productName}
                         style={{ width: 300 }}
                         onChange={this.selectProduct}
-                        renderInput={params => <TextField {...params} inputRef={input => {inputRef = input;}} label="Select Product Name" variant="outlined" />}
+                        renderInput={params => <TextField required {...params} inputRef={input => {inputRef = input;}} label="Select Product Name" variant="outlined" />}
                     />
                 </Form.Group>
 
@@ -236,11 +255,14 @@ class StockReturn extends Component {
                 </Form.Group>
                 <Form.Group as={Col}>
                         <Form.Label>Free Quantity</Form.Label>
-                        <Form.Control value={this.state.FreeQuantity} onChange={this.onChangeFreeQty} placeholder="qty" />
+                        <Form.Control required type="number" value={this.state.FreeQuantity} onChange={this.onChangeFreeQty} placeholder="qty" />
+                        <Form.Control.Feedback type="invalid">Enter valid number.</Form.Control.Feedback>
+                        <Form.Label><font color='red'>{this.state.qtyBoxErrMsg}</font></Form.Label>
                 </Form.Group>
                 <Form.Group as={Col} >
                         <Form.Label>Quantity</Form.Label>
-                        <Form.Control value={this.state.quantity} onChange={this.onChangeQty} placeholder="qty" />
+                        <Form.Control required type="number" value={this.state.quantity} onChange={this.onChangeQty} placeholder="qty" />
+                        <Form.Control.Feedback type="invalid">Enter valid number.</Form.Control.Feedback>
                         <Form.Label><font color='red'>{this.state.qtyBoxErrMsg}</font></Form.Label>
                 </Form.Group>
                 </Row>

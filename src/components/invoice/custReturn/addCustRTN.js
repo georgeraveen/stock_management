@@ -38,7 +38,10 @@ class addCustRTN extends Component {
             batch:'',
             temp:0,   //just to refresh page
             cartProducts:[],
-            remarks:''
+            remarks:'',
+
+            validated:false, 
+            setValidated:false
         };
 
     }
@@ -67,15 +70,17 @@ class addCustRTN extends Component {
         });
     }
     selectProduct = (event, values) => {
-        this.setState({
-            selectedProduct: values._id,
-            batches:values.batches,
-            selectedBatch:values.batches[0]._id,
-            batchDetails:values.batches[0]
-          }, () => {
-            console.log(this.state.selectedProduct);
-            console.log(this.state.batches);
-          });
+        if(values!=null){
+            this.setState({
+                selectedProduct: values._id,
+                batches:values.batches,
+                selectedBatch:values.batches[0]._id,
+                batchDetails:values.batches[0]
+            }, () => {
+                console.log(this.state.selectedProduct);
+                console.log(this.state.batches);
+            });
+        }
     }
     selectBatch = (event, values) => {
         if(values!=null){
@@ -95,28 +100,36 @@ class addCustRTN extends Component {
         });
     }
     onAddProduct(e){
-        e.preventDefault();
-        const obj={
-            productID:this.state.selectedProduct,
-            batchID:this.state.selectedBatch,
-            quantity:this.state.quantity
+        const form=e.currentTarget;
+        if(form.checkValidity()==false || this.state.selectedProduct==''){
+            e.preventDefault();
+            e.stopPropagation();
         }
+        else{
+            e.preventDefault();
+            const obj={
+                productID:this.state.selectedProduct,
+                batchID:this.state.selectedBatch,
+                quantity:this.state.quantity
+            }
 
-        axios.post(backendde.backendUrl+'addCustRTN/addProductCustRTN',obj).then(
-            res=>{
-                console.log(res);
-                this.setState({cartProducts:res.data}); //refresh cart
-            });
+            axios.post(backendde.backendUrl+'addCustRTN/addProductCustRTN',obj).then(
+                res=>{
+                    console.log(res);
+                    this.setState({cartProducts:res.data}); //refresh cart
+                });
 
-        this.setState({
-            batches:[],
-            selectedProduct:'',
-            selectedBatch:'',
-            batchDetails:[],
-            quantity:0,
-            batch:''
-        })
-        inputRef.focus();
+            this.setState({
+                batches:[],
+                selectedProduct:'',
+                selectedBatch:'',
+                batchDetails:[],
+                quantity:0,
+                batch:''
+            })
+            inputRef.focus();
+        }
+        this.setState({setValidated:true,validated:true})    
     }
     onChangeRemarks(e){
         this.setState({
@@ -167,7 +180,7 @@ class addCustRTN extends Component {
                 <h1>Add Customer Return</h1>
                 <br></br>
                 
-                <Form onSubmit={this.onAddProduct} >
+                <Form noValidate validated={this.state.validated} onSubmit={this.onAddProduct} >
                     <Row>
                 <Form.Group as={Col}>
                     <Form.Label>Select Product Name</Form.Label>
@@ -180,7 +193,7 @@ class addCustRTN extends Component {
                         getOptionLabel={option => option.productName}
                         style={{ width: 300 }}
                         onChange={this.selectProduct}
-                        renderInput={params => <TextField {...params} inputRef={input => {inputRef = input;}} label="Select Product Name" variant="outlined" />}
+                        renderInput={params => <TextField required {...params} inputRef={input => {inputRef = input;}} label="Select Product Name" variant="outlined" />}
                     />
                 </Form.Group>
 
@@ -197,7 +210,7 @@ class addCustRTN extends Component {
                         value={this.state.batches.find(e=> e._id==this.state.selectedBatch)}
                         onChange={this.selectBatch}
                         inputValue={this.state.empty}
-                        renderInput={params => <TextField {...params} label="Select Batch Number" variant="outlined" />}
+                        renderInput={params => <TextField required {...params} label="Select Batch Number" variant="outlined" />}
                     />
                 </Form.Group>
                 <Form.Group as={Col}>
@@ -207,7 +220,8 @@ class addCustRTN extends Component {
                 </Form.Group>
                 <Form.Group as={Col}>
                         <Form.Label>Quantity</Form.Label>
-                        <Form.Control value={this.state.quantity} onChange={this.onChangeQty} placeholder="qty" />
+                        <Form.Control required type="number" value={this.state.quantity} onChange={this.onChangeQty} placeholder="qty" />
+                        <Form.Control.Feedback type="invalid">Enter valid number.</Form.Control.Feedback>
                 </Form.Group>
                 </Row>
                 <Row>
