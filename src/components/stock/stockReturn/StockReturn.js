@@ -127,7 +127,7 @@ class StockReturn extends Component {
     }
     onAddProduct(e){
         const form=e.currentTarget;
-        if(form.checkValidity()==false || this.state.selectedProduct==''){
+        if(form.checkValidity()===false || this.state.selectedProduct===''){
             e.preventDefault();
             e.stopPropagation();
         }
@@ -237,7 +237,7 @@ class StockReturn extends Component {
                         options={this.state.batches.filter(e=>e.currentStock>0)}
                         getOptionLabel={option => option.batchNo +spacePro + option.expDate}
                         style={{ width: 300 }}
-                        value={this.state.batches.find(e=> e._id==this.state.selectedBatch)}
+                        value={this.state.batches.find(e=> e._id===this.state.selectedBatch)}
                         onChange={this.selectBatch}
                         inputValue={this.state.empty}
                         renderInput={params => <TextField {...params} label="Select Batch Number" variant="outlined" />}

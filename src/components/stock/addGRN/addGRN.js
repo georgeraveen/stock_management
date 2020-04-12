@@ -108,7 +108,7 @@ class AddGRN extends Component {
     }
     onAddProduct(e){
         const form=e.currentTarget;
-        if(form.checkValidity()==false || this.state.selectedProduct==''){
+        if(form.checkValidity()===false || this.state.selectedProduct===''){
             e.preventDefault();
             e.stopPropagation();
         }
@@ -218,7 +218,7 @@ class AddGRN extends Component {
                         options={this.state.batches}
                         getOptionLabel={option => option.batchNo +spacePro + option.expDate}
                         style={{ width: 300 }}
-                        value={this.state.batches.find(e=> e._id==this.state.selectedBatch)}
+                        value={this.state.batches.find(e=> e._id===this.state.selectedBatch)}
                         onChange={this.selectBatch}
                         inputValue={this.state.empty}
                         renderInput={params => <TextField required {...params} label="Select Batch Number" variant="outlined" />}

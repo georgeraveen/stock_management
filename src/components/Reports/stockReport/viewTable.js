@@ -35,7 +35,7 @@ class ViewTable extends Component {
         return (
             <React.Fragment>
           
-            <tr class="table-primary">
+            <tr className="table-primary">
                 <th colSpan='5'>
                     {this.props.obj.productName}
                 </th>

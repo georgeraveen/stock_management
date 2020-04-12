@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 
 class ViewBatch extends Component {
-    constructor(props) {
-        super(props);
-        
-    };
+    
     render() {
         return (
             <tr>

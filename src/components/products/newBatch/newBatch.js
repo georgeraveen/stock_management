@@ -46,7 +46,7 @@ class newBatch extends Component {
     displayBatchList(){
         var a=this.state.selectedProduct;
         return this.state.products.map(function(object,i){
-            if(a==(object._id)){
+            if(a===(object._id)){
                 return object.batches.map(function(object1,j){
                     return <BatchList selProduct={object['_id']} obj={object1} key={j} newProducts={this.updateProducts}/>;
                 }.bind(this));
@@ -54,7 +54,7 @@ class newBatch extends Component {
         }.bind(this));
     }
     displayNewBatchForm(){
-        if(this.state.selectedProduct!=''){
+        if(this.state.selectedProduct!==''){
             return<NewBatchform selProduct={this.state.selectedProduct} newProducts={this.updateProducts}/>
         };
     }
