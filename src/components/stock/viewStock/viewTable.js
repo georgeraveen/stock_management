@@ -12,10 +12,10 @@ class ViewTable extends Component {
     render() {
         return (
             <React.Fragment>
-            <tr>
-                <td colSpan='5'>
+            <tr class="table-primary">
+                <th colSpan='5'>
                     {this.props.obj.productName}
-                </td>
+                </th>
                 <td>
                   
                 </td>

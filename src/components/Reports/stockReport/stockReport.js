@@ -10,10 +10,12 @@ class stockReport extends Component {
     constructor(props){
         super(props);
         this.callbackRowSum=this.callbackRowSum.bind(this);
+        this.filterTable=this.filterTable.bind(this);
         
         this.state={
             products:[],
             batches:[],
+            filterProducts:[]
         };
         this.grandtotal=0
     }
@@ -24,7 +26,8 @@ class stockReport extends Component {
 
             .then(response =>{
                 console.log('abc');
-                this.setState({products:response.data});
+                this.setState({products:response.data,
+                                filterProducts:response.data});
                 
                 console.log(this.state.products);
                 console.log('abc');
@@ -35,7 +38,7 @@ class stockReport extends Component {
         });
     }
     viewProductTableRow(){
-        return this.state.products.map(function(object,i){
+        return this.state.filterProducts.map(function(object,i){
             return <ViewTable obj={object} key={i} callbackSum={this.callbackRowSum}/>;
         }.bind(this));
     }
@@ -43,11 +46,21 @@ class stockReport extends Component {
         this.grandtotal=this.grandtotal+rowsum;
         this.setState({temp: 0}); //just to refresh page
     }
-
+    filterTable(e){
+        this.grandtotal=0;
+        this.setState({
+            filterProducts:this.state.products.filter(x=> x.productName.includes(e.target.value))
+        })
+        
+        
+    }
     render() {
         return (
             <div  className="container">
                 <h1>Stock Balence Report</h1>
+                <br></br>
+                <input type="text" id="filterInput" onChange={this.filterTable}  placeholder="Search for Product names.."></input>
+                <br></br>
                 <table className="table table-striped table-bordered table-hover" style={{marginTop:20}}>
                         <thead className="thead-dark">
                             <tr><th>
@@ -71,7 +84,7 @@ class stockReport extends Component {
                         </thead>
                         <tbody>
                             {this.viewProductTableRow()}
-                            <tr>
+                            <tr class="table-success">
                                 <td colSpan='6'>Grand Total</td>
                                 <td align="right">Rs. {this.grandtotal}</td>
                             </tr>
