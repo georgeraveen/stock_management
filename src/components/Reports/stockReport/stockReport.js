@@ -49,7 +49,7 @@ class stockReport extends Component {
             <div  className="container">
                 <h1>Stock Balence Report</h1>
                 <table className="table table-striped table-bordered table-hover" style={{marginTop:20}}>
-                        <thead>
+                        <thead className="thead-dark">
                             <tr><th>
                                     Product Name
                                 </th>

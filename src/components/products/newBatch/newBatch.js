@@ -78,7 +78,7 @@ class newBatch extends Component {
                       
                 <div>
                     <table className="table table-striped" style={{marginTop:20}}>
-                        <thead>
+                        <thead className="thead-dark">
                             <tr>
                                 <th>
                                     Batch No

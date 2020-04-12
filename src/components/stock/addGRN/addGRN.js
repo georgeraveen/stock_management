@@ -260,7 +260,7 @@ class AddGRN extends Component {
                 
                 <br></br>
                 <table className="table table-striped" style={{marginTop:20}}>
-                        <thead>
+                        <thead className="thead-dark">
                             <tr><th>
                                     Product Name
                                 </th>

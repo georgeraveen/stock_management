@@ -83,7 +83,7 @@ class viewRTNrecords extends Component {
             <div className="container">
                 <h2>View Return History</h2>
                 <table className="table table-striped" style={{marginTop:20}}>
-                        <thead>
+                        <thead className="thead-dark">
                             <tr><th>
                                     Return ID
                                 </th>

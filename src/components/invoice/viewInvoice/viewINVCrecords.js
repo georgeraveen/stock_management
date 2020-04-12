@@ -88,7 +88,7 @@ class viewINVCrecords extends Component {
             <div className="container">
                 <h2>View Invoice History</h2>
                 <table className="table table-striped" style={{marginTop:20}}>
-                        <thead>
+                        <thead className="thead-dark">
                             <tr><th>
                                     Invoice ID
                                 </th>
@@ -120,7 +120,7 @@ class viewINVCrecords extends Component {
                     </Modal.Header>
                     <Modal.Body>
                     <table className="table table-striped" style={{marginTop:20}}>
-                        <thead>
+                        <thead className="thead-dark">
                             <tr><th>
                                     Product
                                 </th>

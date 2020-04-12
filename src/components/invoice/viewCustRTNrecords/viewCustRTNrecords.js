@@ -83,7 +83,7 @@ class viewCustRTNrecords extends Component {
             <div className="container">
                 <h2>View Customer Return History</h2>
                 <table className="table table-striped" style={{marginTop:20}}>
-                        <thead>
+                        <thead className="thead-dark">
                             <tr><th>
                                     Customer Return ID
                                 </th>
@@ -115,7 +115,7 @@ class viewCustRTNrecords extends Component {
                     </Modal.Header>
                     <Modal.Body>
                     <table className="table table-striped" style={{marginTop:20}}>
-                        <thead>
+                        <thead className="thead-dark">
                             <tr><th>
                                     Product
                                 </th>
