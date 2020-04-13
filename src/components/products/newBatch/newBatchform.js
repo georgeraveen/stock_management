@@ -31,7 +31,6 @@ class NewBatchform extends Component {
         };
     }
     onChangeBatchNo(e){
-        console.log('asasd');
         this.setState({
             batchNo:e.target.value,
         });
@@ -87,21 +86,21 @@ class NewBatchform extends Component {
                 <Row>
                 <Form.Group as={Col}  controlId="formBasicPassword">
                     <Form.Label>Batch Number</Form.Label>
-                    <Form.Control value={this.state.batchNo} onChange={this.onChangeBatchNo} placeholder="batch number" />
+                    <Form.Control type='text' required value={this.state.batchNo} onChange={this.onChangeBatchNo} placeholder="batch number" />
                 </Form.Group>
                 <Form.Group as={Col} controlId="formBasicPassword">
                     <Form.Label>Expire date</Form.Label>
-                    <Form.Control value={this.state.expDate} onChange={this.onChangeExpireDate} placeholder="MM/YYYY" />
+                    <Form.Control type='date' required value={this.state.expDate} onChange={this.onChangeExpireDate} />
                     
                 </Form.Group>
                
                 <Form.Group as={Col} controlId="formBasicPassword">
                     <Form.Label>Wholesale price per unit</Form.Label>
-                    <Form.Control value={this.state.wholePrice} onChange={this.onChangeWholePrice} placeholder="Wholesale price" />
+                    <Form.Control type='number' step=".01" required value={this.state.wholePrice} onChange={this.onChangeWholePrice} placeholder="Wholesale price" />
                 </Form.Group>
                 <Form.Group as={Col} controlId="formBasicPassword">
                     <Form.Label>Retail price per unit</Form.Label>
-                    <Form.Control value={this.state.retailPrice} onChange={this.onChangeRetailPrice} placeholder="Retail price" />
+                    <Form.Control type='number' step=".01" required value={this.state.retailPrice} onChange={this.onChangeRetailPrice} placeholder="Retail price" />
                 </Form.Group>
                 </Row>
                 <Button variant="primary" type="submit">

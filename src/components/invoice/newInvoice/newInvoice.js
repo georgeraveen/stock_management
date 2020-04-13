@@ -288,7 +288,7 @@ class newInvoice extends Component {
                     <InputGroup.Prepend>
                     <InputGroup.Text>Discount</InputGroup.Text>
                     </InputGroup.Prepend>
-                    <FormControl aria-label="discount"  required type="number"  value={this.state.discount} onChange={this.onChangeDiscount} />
+                    <FormControl aria-label="discount"  required type="number"  step=".01" value={this.state.discount} onChange={this.onChangeDiscount} />
                     <InputGroup.Append>
                     <InputGroup.Text> % </InputGroup.Text>
                     </InputGroup.Append>

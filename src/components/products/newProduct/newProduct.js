@@ -100,25 +100,25 @@ class newProduct extends Component {
                 <Form onSubmit={this.onSubmit}>
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Product Name</Form.Label>
-                    <Form.Control value={this.state.productName} onChange={this.onChangeProductName} placeholder="New Product Name" />
+                    <Form.Control type='text' required value={this.state.productName} onChange={this.onChangeProductName} placeholder="New Product Name" />
                 </Form.Group>
 
                 <Form.Group controlId="formBasicPassword">
                     <Form.Label>First Batch Number</Form.Label>
-                    <Form.Control value={this.state.batchNo} onChange={this.onChangeBatchNo} placeholder="batch number" />
+                    <Form.Control type='text' required value={this.state.batchNo} onChange={this.onChangeBatchNo} placeholder="batch number" />
                 </Form.Group>
                 <Form.Group controlId="formBasicPassword">
                     <Form.Label>Expire date</Form.Label>
-                    <Form.Control value={this.state.expDate} onChange={this.onChangeExpireDate} placeholder="MM/YYYY" />
+                    <Form.Control type='date' required value={this.state.expDate} onChange={this.onChangeExpireDate} />
                 </Form.Group>
                
                 <Form.Group controlId="formBasicPassword">
                     <Form.Label>Wholesale price per unit</Form.Label>
-                    <Form.Control value={this.state.wholePrice} onChange={this.onChangeWholePrice} placeholder="Wholesale price" />
+                    <Form.Control type='number' step=".01" required value={this.state.wholePrice} onChange={this.onChangeWholePrice} placeholder="Wholesale price" />
                 </Form.Group>
                 <Form.Group controlId="formBasicPassword">
                     <Form.Label>Retail price per unit</Form.Label>
-                    <Form.Control value={this.state.retailPrice} onChange={this.onChangeRetailPrice} placeholder="Retail price" />
+                    <Form.Control type='number' step=".01" required value={this.state.retailPrice} onChange={this.onChangeRetailPrice} placeholder="Retail price" />
                 </Form.Group>
                 <Button variant="primary" type="submit">
                     Add product
