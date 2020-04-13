@@ -13,6 +13,7 @@ const GRNRoute = require('./routes/GRN.route');
 const RTNRoute = require('./routes/RTN.route');
 const INVCRoute = require('./routes/invoice.route');
 const CustRTNRoute = require('./routes/CustRTN.route');
+const StockMovementRoute = require('./routes/stockMovement.route');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB,{useNewUrlParser:true}).then(
@@ -35,6 +36,7 @@ app.use('/addINVC',INVCRoute);
 app.use('/viewINVC',INVCRoute);
 app.use('/addCustRTN',CustRTNRoute);
 app.use('/viewCustRTN',CustRTNRoute);
+app.use('/stockMove',StockMovementRoute);
 
 app.listen(PORT,function(){
     console.log('Server is running on port: ',PORT);

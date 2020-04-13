@@ -33,6 +33,7 @@ class newProduct extends Component {
     onChangeProductName(e){
         this.setState({
             productName:e.target.value,
+            successAlt:false
             
         });
     }
@@ -70,7 +71,24 @@ class newProduct extends Component {
                 }]
         }
 
-        axios.post(backendde.backendUrl+'newProduct/add',obj).then(res=> res.status ? this.setState({successAlt:true}):this.setState({failAlt:true}));
+        axios.post(backendde.backendUrl+'newProduct/add',obj)
+            .then(res=> {
+                res.status ? this.setState({successAlt:true}):this.setState({failAlt:true});
+                // console.log(res.data.newProduct)
+                const movementObj={
+                    productID:res.data.newProduct._id,
+                    batchID:res.data.newProduct.batches[0]._id,
+                    movement:{
+                        recordDate: new Date(),
+                        moveType: 'Add New Product',
+                        moveID: 'Initial',
+                        preStock:0,
+                        quantity:0
+                    }
+                }
+                axios.post(backendde.backendUrl+'stockMove/newRecord',movementObj).then(res=>console.log(res));
+                
+            });
 
         this.setState({
             productName:'',
