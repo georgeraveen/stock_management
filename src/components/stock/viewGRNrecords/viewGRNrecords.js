@@ -26,10 +26,10 @@ class viewGRNrecords extends Component {
                 items:[{
                     productID:'',
                 }]
-            }
+            },
+            onlyDateCreate:''
         };
-        
-
+        this.createDate= '';
     }
     componentDidMount(){
         axios.get(backendde.backendUrl+'viewGRN/viewGRN')
@@ -53,21 +53,24 @@ class viewGRNrecords extends Component {
     }
     ViewRecordsTableRow(){
         return this.state.GRNhistory.map(function(object,i){
-            return <GRNhistoyRow obj={object} clickView={this.callbackClickView}/>;
+            return <GRNhistoyRow key={i} obj={object} clickView={this.callbackClickView}/>;
         }.bind(this));
     }
     callbackClickView(ViewMessage){
         
         this.setState({
             viewID:ViewMessage,
-            selectedGRNview:this.state.GRNhistory.find(e => e._id===ViewMessage)
+            selectedGRNview:this.state.GRNhistory.find(e => e._id===ViewMessage),
+        },()=>{this.createDate= new Date(this.state.selectedGRNview.createdAt);
+                this.setState({
+                    onlyDateCreate:this.createDate.getFullYear()+'-'+(this.createDate.getMonth()+1)+'-'+this.createDate.getDate()+'  '+this.createDate.getHours()+':'+this.createDate.getMinutes(),
+                    lgShow:true});
         })
-        this.setState({
-            lgShow:true})
+            
     }
     ViewGRNRecordTableRow(){
         return this.state.selectedGRNview.items.map(function(object,i){
-            return <GRNRecordTableRow records={object} products={this.state.products.find(e => e._id===object.productID)} callbackSum = {this.callbackRowSum} />;
+            return <GRNRecordTableRow key={i} records={object} products={this.state.products.find(e => e._id===object.productID)} callbackSum = {this.callbackRowSum} />;
         }.bind(this));
     }
     callbackRowSum = (rowsum) => {
@@ -110,7 +113,7 @@ class viewGRNrecords extends Component {
                     <Modal.Title id="example-modal-sizes-title-lg">
                         GRN details  <br></br>
                         GRN id:  {this.state.viewID}<br></br>
-                        Date:  {this.state.selectedGRNview.createdAt}
+                        Date:  {this.state.onlyDateCreate}
                     </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
