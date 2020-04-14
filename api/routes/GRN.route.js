@@ -57,7 +57,7 @@ GRNproductRoutes.route('/submitGRN').post(function(req,res){
     let addGRN = new GRNrecord(req.body);
     addGRN.save()
         .then(addGRN=>{
-            res.status(200).json({'product':'product added succes'});
+            res.status(200).json({'record':addGRN});
         })
         .catch(err=>{
             res.status(400).send("unable to save database");

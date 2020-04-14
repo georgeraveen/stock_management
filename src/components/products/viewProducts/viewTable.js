@@ -43,10 +43,10 @@ class ViewTable extends Component {
     render() {
         return (
             <React.Fragment>
-            <tr>
-                <td colSpan='5'>
+            <tr className="table-primary">
+                <th colSpan='5'>
                     {this.props.obj.productName}
-                </td>
+                </th>
                 <td>
                     <button onClick={this.editProduct} className="btn btn-primary">edit</button>
                 </td>

@@ -26,10 +26,10 @@ class viewCustRTNrecords extends Component {
                 items:[{
                     productID:'',
                 }]
-            }
+            },
+            onlyDateCreate:''
         };
-        
-
+        this.createDate= '';
     }
     componentDidMount(){
         axios.get(backendde.backendUrl+'viewCustRTN/viewCustRTN')
@@ -53,7 +53,7 @@ class viewCustRTNrecords extends Component {
     }
     ViewRecordsTableRow(){
         return this.state.CustRTNhistory.map(function(object,i){
-            return <CustRTNhistoyRow obj={object} clickView={this.callbackClickView}/>;
+            return <CustRTNhistoyRow key={i} obj={object} clickView={this.callbackClickView}/>;
         }.bind(this));
     }
     callbackClickView(ViewMessage){
@@ -61,13 +61,16 @@ class viewCustRTNrecords extends Component {
         this.setState({
             viewID:ViewMessage,
             selectedCustRTNview:this.state.CustRTNhistory.find(e => e._id===ViewMessage)
+        },()=>{this.createDate= new Date(this.state.selectedCustRTNview.createdAt);
+            this.setState({
+                onlyDateCreate:this.createDate.getFullYear()+'-'+(this.createDate.getMonth()+1)+'-'+this.createDate.getDate()+'  '+this.createDate.getHours()+':'+this.createDate.getMinutes(),
+                lgShow:true});
         })
-        this.setState({
-            lgShow:true})
+        
     }
     ViewCustRTNRecordTableRow(){
         return this.state.selectedCustRTNview.items.map(function(object,i){
-            return <CustRTNRecordTableRow records={object} products={this.state.products.find(e => e._id===object.productID)} callbackSum = {this.callbackRowSum} />;
+            return <CustRTNRecordTableRow key={i} records={object} products={this.state.products.find(e => e._id===object.productID)} callbackSum = {this.callbackRowSum} />;
         }.bind(this));
     }
     callbackRowSum = (rowsum) => {
@@ -83,7 +86,7 @@ class viewCustRTNrecords extends Component {
             <div className="container">
                 <h2>View Customer Return History</h2>
                 <table className="table table-striped" style={{marginTop:20}}>
-                        <thead>
+                        <thead className="thead-dark">
                             <tr><th>
                                     Customer Return ID
                                 </th>
@@ -110,12 +113,12 @@ class viewCustRTNrecords extends Component {
                     <Modal.Title id="example-modal-sizes-title-lg">
                         Customer Return details  <br></br>
                         Customer Return id:  {this.state.viewID}<br></br>
-                        Date:  {this.state.selectedCustRTNview.createdAt}
+                        Date:  {this.state.onlyDateCreate}
                     </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                     <table className="table table-striped" style={{marginTop:20}}>
-                        <thead>
+                        <thead className="thead-dark">
                             <tr><th>
                                     Product
                                 </th>

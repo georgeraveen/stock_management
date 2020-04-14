@@ -28,10 +28,10 @@ class viewINVCrecords extends Component {
                 items:[{
                     productID:'',
                 }]
-            }
+            },
+            onlyDateCreate:''
         };
-        
-
+        this.createDate= '';
     }
     componentDidMount(){
         axios.get(backendde.backendUrl+'viewINVC/viewINVC')
@@ -55,21 +55,24 @@ class viewINVCrecords extends Component {
     }
     ViewRecordsTableRow(){
         return this.state.INVChistory.map(function(object,i){
-            return <INVChistoyRow obj={object} clickView={this.callbackClickView}/>;
+            return <INVChistoyRow key={i} obj={object} clickView={this.callbackClickView}/>;
         }.bind(this));
     }
     callbackClickView(ViewMessage){
         
         this.setState({
             viewID:ViewMessage,
-            selectedINVCview:this.state.INVChistory.find(e => e._id===ViewMessage)
+            selectedINVCview:this.state.INVChistory.find(e => e._id===ViewMessage),
+        },()=>{this.createDate= new Date(this.state.selectedINVCview.createdAt);
+                this.setState({
+                    onlyDateCreate:this.createDate.getFullYear()+'-'+(this.createDate.getMonth()+1)+'-'+this.createDate.getDate()+'  '+this.createDate.getHours()+':'+this.createDate.getMinutes(),
+                    lgShow:true});
         })
-        this.setState({
-            lgShow:true})
+        
     }
     ViewINVCRecordTableRow(){
         return this.state.selectedINVCview.items.map(function(object,i){
-            return <INVCRecordTableRow records={object} products={this.state.products.find(e => e._id===object.productID)} callbackSum = {this.callbackRowSum} />;
+            return <INVCRecordTableRow key={i} records={object} products={this.state.products.find(e => e._id===object.productID)} callbackSum = {this.callbackRowSum} />;
         }.bind(this));
     }
     callbackRowSum = (rowsum) => {
@@ -88,7 +91,7 @@ class viewINVCrecords extends Component {
             <div className="container">
                 <h2>View Invoice History</h2>
                 <table className="table table-striped" style={{marginTop:20}}>
-                        <thead>
+                        <thead className="thead-dark">
                             <tr><th>
                                     Invoice ID
                                 </th>
@@ -115,12 +118,12 @@ class viewINVCrecords extends Component {
                     <Modal.Title id="example-modal-sizes-title-lg">
                         Invoice details  <br></br>
                         Invoice id:  {this.state.viewID}<br></br>
-                        Date:  {this.state.selectedINVCview.createdAt}
+                        Date:  {this.state.onlyDateCreate}
                     </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                     <table className="table table-striped" style={{marginTop:20}}>
-                        <thead>
+                        <thead className="thead-dark">
                             <tr><th>
                                     Product
                                 </th>

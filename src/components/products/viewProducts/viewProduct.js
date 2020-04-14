@@ -122,7 +122,7 @@ class viewProduct extends Component {
             <div  className="container">
                 <h1>View all products</h1>
                 <table className="table table-striped" style={{marginTop:20}}>
-                        <thead>
+                        <thead className="thead-dark">
                             <tr><th>
                                     Product Name
                                 </th>

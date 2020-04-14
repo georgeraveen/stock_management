@@ -10,7 +10,7 @@ let Product= new Schema({
                 type:String
             },
             expDate:{
-                type:String
+                type:Date
             },
             wholePrice:{
                 type:Number

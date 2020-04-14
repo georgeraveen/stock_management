@@ -26,10 +26,10 @@ class viewRTNrecords extends Component {
                 items:[{
                     productID:'',
                 }]
-            }
+            },
+            onlyDateCreate:''
         };
-        
-
+        this.createDate= '';
     }
     componentDidMount(){
         axios.get(backendde.backendUrl+'viewRTN/viewRTN')
@@ -53,7 +53,7 @@ class viewRTNrecords extends Component {
     }
     ViewRecordsTableRow(){
         return this.state.RTNhistory.map(function(object,i){
-            return <RTNhistoyRow obj={object} clickView={this.callbackClickView}/>;
+            return <RTNhistoyRow key={i} obj={object} clickView={this.callbackClickView}/>;
         }.bind(this));
     }
     callbackClickView(ViewMessage){
@@ -61,13 +61,15 @@ class viewRTNrecords extends Component {
         this.setState({
             viewID:ViewMessage,
             selectedRTNview:this.state.RTNhistory.find(e => e._id===ViewMessage)
-        })
-        this.setState({
-            lgShow:true})
+        },()=>{this.createDate= new Date(this.state.selectedRTNview.createdAt);
+            this.setState({
+                onlyDateCreate:this.createDate.getFullYear()+'-'+(this.createDate.getMonth()+1)+'-'+this.createDate.getDate()+'  '+this.createDate.getHours()+':'+this.createDate.getMinutes(),
+                lgShow:true});
+    })
     }
     ViewRTNRecordTableRow(){
         return this.state.selectedRTNview.items.map(function(object,i){
-            return <RTNRecordTableRow records={object} products={this.state.products.find(e => e._id===object.productID)} callbackSum = {this.callbackRowSum} />;
+            return <RTNRecordTableRow key={i} records={object} products={this.state.products.find(e => e._id===object.productID)} callbackSum = {this.callbackRowSum} />;
         }.bind(this));
     }
     callbackRowSum = (rowsum) => {
@@ -83,7 +85,7 @@ class viewRTNrecords extends Component {
             <div className="container">
                 <h2>View Return History</h2>
                 <table className="table table-striped" style={{marginTop:20}}>
-                        <thead>
+                        <thead className="thead-dark">
                             <tr><th>
                                     Return ID
                                 </th>
@@ -110,7 +112,7 @@ class viewRTNrecords extends Component {
                     <Modal.Title id="example-modal-sizes-title-lg">
                         Return details  <br></br>
                         Return id:  {this.state.viewID}<br></br>
-                        Date:  {this.state.selectedRTNview.createdAt}
+                        Date:  {this.state.onlyDateCreate}
                     </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>

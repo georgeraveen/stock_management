@@ -58,7 +58,7 @@ INVCproductRoutes.route('/submitINVC').post(function(req,res){
     let addINVC = new INVCrecord(req.body);
     addINVC.save()
         .then(addINVC=>{
-            res.status(200).json({'product':'product added succes'});
+            res.status(200).json({'record':addINVC});
         })
         .catch(err=>{
             res.status(400).send("unable to save database");

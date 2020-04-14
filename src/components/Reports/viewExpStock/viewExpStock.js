@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 
 
 import axios from 'axios';
-import ViewTable from './viewTable';
+import ViewTable from './ViewExpBatch';
 
 const backendde= require('../../../backendde');
-class viewProduct extends Component {
+class viewExpStock extends Component {
 
     constructor(props){
         super(props);
@@ -14,8 +14,10 @@ class viewProduct extends Component {
         this.state={
             products:[],
             batches:[],
+            temp:0,
+            productList:[]
         };
-
+        this.tempproductList=[]
     }
 
     componentDidMount(){
@@ -23,10 +25,23 @@ class viewProduct extends Component {
         axios.get(backendde.backendUrl+'viewProduct/view')
 
             .then(response =>{
-                this.setState({products:response.data});
-                console.log('abc');
-                console.log(this.state.products);
-                console.log('abc');
+                this.setState({products:response.data},
+                    ()=>{
+                        this.state.products.map(function(productObj,i){
+                            productObj.batches.map(function(batchObj,j){
+                                if(batchObj.currentStock>0){
+                                    let proItem=batchObj;
+                                    proItem.productName=productObj.productName;
+                                    this.tempproductList.push(proItem);
+                                }
+                            }.bind(this));
+                        }.bind(this));
+                        this.setState({productList:this.tempproductList.sort((a,b)=> new Date(a.expDate)- new Date(b.expDate))});
+                        
+                    }
+                    );
+                // console.log(this.tempproductList);
+                
             })
         .catch(function (error){
             console.log('hi');
@@ -34,8 +49,8 @@ class viewProduct extends Component {
         });
     }
     ViewProductTableRow(){
-        return this.state.products.map(function(object,i){
-            return <ViewTable obj={object} key={i}/>;
+        return this.state.productList.map(function(object,i){
+            return <ViewTable obj1={object} key={i}/>;
         });
     }
 
@@ -43,7 +58,7 @@ class viewProduct extends Component {
     render() {
         return (
             <div  className="container">
-                <h1>View Stock</h1>
+                <h1>View Expire Stock</h1>
                 <table className="table table-striped" style={{marginTop:20}}>
                         <thead className="thead-dark">
                             <tr><th>
@@ -75,4 +90,4 @@ class viewProduct extends Component {
     }
 }
 
-export default viewProduct;
+export default viewExpStock;
