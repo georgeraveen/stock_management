@@ -154,6 +154,7 @@ class addCustRTN extends Component {
     }
     onSubmitCustRTN(){
         var cart=[]; 
+        //update stock
         this.state.cartProducts.map(function(object,i){
             var a=this.state.products.find(e => e._id === object.productID).batches.find(e => e._id === object.batchID);
             object.preStock=a.currentStock;
@@ -166,12 +167,30 @@ class addCustRTN extends Component {
             items:cart,
             remarks:this.state.remarks
         }
-        axios.post(backendde.backendUrl+'addCustRTN/submitCustRTN',CustRTNobj).then(res=>console.log(res.data));
-        axios.delete(backendde.backendUrl+'addCustRTN/deleteCustRTNcart')
-            .then(res=>{CustRTNtotal=0;
-                this.setState({cartProducts:res.data});
-                console.log(res.data)});
-        this.setState({remarks:''});
+        axios.post(backendde.backendUrl+'addCustRTN/submitCustRTN',CustRTNobj)
+            .then(res=>{
+                console.log(res.data);
+                //update stock movement
+                this.state.cartProducts.map(function(object,i){
+                    var a=this.state.products.find(e => e._id === object.productID).batches.find(e => e._id === object.batchID);
+                    const movement={
+                        recordDate: res.data.record.createdAt,
+                        moveType: 'Customer Return',
+                        moveID: res.data.record._id,
+                        preStock:a.currentStock,
+                        quantity:object.quantity+object.FreeQuantity
+                    }
+                    console.log(movement);
+                    axios.post(backendde.backendUrl+'stockMove/addRecord/'+object.batchID,movement)
+                            .then(res=>{console.log(res)}).catch(err=>console.log(err));
+                }.bind(this));
+            }).then(e=>{
+                axios.delete(backendde.backendUrl+'addCustRTN/deleteCustRTNcart')
+                    .then(res=>{CustRTNtotal=0;
+                        this.setState({cartProducts:res.data});
+                        console.log(res.data)});
+                this.setState({remarks:''});
+            });
     }
     render() {
         return (

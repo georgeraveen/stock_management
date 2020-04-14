@@ -8,7 +8,8 @@ productRoutes.route('/add').post(function(req,res){
     let newProduct = new Product(req.body);
     newProduct.save()
         .then(newProduct=>{
-            res.status(200).json({'product':'product added succes',
+            // res.json(newProduct);
+            res.status(200).json({'newProduct':newProduct,
                                     'status':true});
         })
         .catch(err=>{

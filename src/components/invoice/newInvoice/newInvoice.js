@@ -193,6 +193,7 @@ class newInvoice extends Component {
     }
     onSubmitINVC(){
         var cart=[]; 
+        //update stock
         this.state.cartProducts.map(function(object,i){
             var a=this.state.products.find(e => e._id === object.productID).batches.find(e => e._id === object.batchID);
             object.preStock=a.currentStock;
@@ -206,13 +207,31 @@ class newInvoice extends Component {
             discount:this.state.discount,
             remarks:this.state.remarks
         }
-        axios.post(backendde.backendUrl+'addINVC/submitINVC',INVCobj).then(res=>console.log(res.data));
-        axios.delete(backendde.backendUrl+'addINVC/deleteINVCcart')
-            .then(res=>{INVCtotal=0;NetTotal=0;
-                        this.setState({cartProducts:res.data});
-                        console.log(res.data)});
-        this.setState({discount:0,
-                        remarks:''});
+        axios.post(backendde.backendUrl+'addINVC/submitINVC',INVCobj)
+            .then(res=>{
+                console.log(res.data)
+                //update stock movement
+                this.state.cartProducts.map(function(object,i){
+                    var a=this.state.products.find(e => e._id === object.productID).batches.find(e => e._id === object.batchID);
+                    const movement={
+                        recordDate: res.data.record.createdAt,
+                        moveType: 'Invoice',
+                        moveID: res.data.record._id,
+                        preStock:a.currentStock,
+                        quantity:object.quantity
+                    }
+                    console.log(movement);
+                    axios.post(backendde.backendUrl+'stockMove/addRecord/'+object.batchID,movement)
+                            .then(res=>{console.log(res)}).catch(err=>console.log(err));
+                }.bind(this));
+            }).then(e=>{
+                axios.delete(backendde.backendUrl+'addINVC/deleteINVCcart')
+                    .then(res=>{INVCtotal=0;NetTotal=0;
+                                this.setState({cartProducts:res.data});
+                                console.log(res.data)});
+                this.setState({discount:0,
+                                remarks:''});
+            });
         // console.log(INVCobj);
     }
     render() {
@@ -288,7 +307,7 @@ class newInvoice extends Component {
                     <InputGroup.Prepend>
                     <InputGroup.Text>Discount</InputGroup.Text>
                     </InputGroup.Prepend>
-                    <FormControl aria-label="discount"  required type="number"  value={this.state.discount} onChange={this.onChangeDiscount} />
+                    <FormControl aria-label="discount"  required type="number"  step=".01" value={this.state.discount} onChange={this.onChangeDiscount} />
                     <InputGroup.Append>
                     <InputGroup.Text> % </InputGroup.Text>
                     </InputGroup.Append>

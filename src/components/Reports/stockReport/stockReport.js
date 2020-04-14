@@ -25,15 +25,12 @@ class stockReport extends Component {
         axios.get(backendde.backendUrl+'viewProduct/view')
 
             .then(response =>{
-                console.log('abc');
                 this.setState({products:response.data,
                                 filterProducts:response.data});
                 
-                console.log(this.state.products);
-                console.log('abc');
+                // console.log(this.state.products);
             })
         .catch(function (error){
-            console.log('hi');
             console.log(error);
         });
     }

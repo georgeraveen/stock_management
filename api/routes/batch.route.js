@@ -18,7 +18,9 @@ batchRoutes.route('/add/:id').post(function(req,res){
                     console.log(err);
                 }
                 else{
-                    res.json(products);
+                    res.json({
+                        'batch':batch,
+                        'products':products});
                 }
             });
         });
