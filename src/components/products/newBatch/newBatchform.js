@@ -63,8 +63,27 @@ class NewBatchform extends Component {
         }
 
         axios.post(backendde.backendUrl+'Batch/add/'+this.props.selProduct,obj)
-            .then(res=> {this.props.newProducts(res.data);}
-            );
+            .then(res=> {
+                this.props.newProducts(res.data.products);
+
+                var newobj = res.data.products.find(e=> e._id===this.props.selProduct);
+                var batchLength = newobj.batches.length;
+                
+                const movementObj={
+                    productID:this.props.selProduct,
+                    batchID:newobj.batches[batchLength-1]._id,
+                    movement:{
+                        recordDate: new Date(),
+                        moveType: 'Add New Product',
+                        moveID: 'Initial',
+                        preStock:0,
+                        quantity:0
+                    }
+                }
+                console.log(res.data.batch);
+                axios.post(backendde.backendUrl+'stockMove/newRecord',movementObj).then(res=>console.log(res));
+                
+            });
 
         this.setState({
             batchNo:'',

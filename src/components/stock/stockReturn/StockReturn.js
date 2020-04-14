@@ -183,6 +183,7 @@ class StockReturn extends Component {
     }
     onSubmitRTN(){
         var cart=[]; 
+        //update stock
         this.state.cartProducts.map(function(object,i){
             var a=this.state.products.find(e => e._id === object.productID).batches.find(e => e._id === object.batchID);
             object.preStock=a.currentStock;
@@ -195,12 +196,30 @@ class StockReturn extends Component {
             items:cart,
             remarks:this.state.remarks
         }
-        axios.post(backendde.backendUrl+'addRTN/submitRTN',RTNobj).then(res=>console.log(res.data));
-        axios.delete(backendde.backendUrl+'addRTN/deleteRTNcart')
-            .then(res=>{RTNtotal=0;
-                this.setState({cartProducts:res.data});
-                console.log(res.data)});
-        this.setState({remarks:''});
+        axios.post(backendde.backendUrl+'addRTN/submitRTN',RTNobj)
+            .then(res=>{
+                console.log(res.data);
+                //update stock movement
+                this.state.cartProducts.map(function(object,i){
+                    var a=this.state.products.find(e => e._id === object.productID).batches.find(e => e._id === object.batchID);
+                    const movement={
+                        recordDate: res.data.record.createdAt,
+                        moveType: 'Stock return',
+                        moveID: res.data.record._id,
+                        preStock:a.currentStock,
+                        quantity:object.quantity+object.FreeQuantity
+                    }
+                    console.log(movement);
+                    axios.post(backendde.backendUrl+'stockMove/addRecord/'+object.batchID,movement)
+                            .then(res=>{console.log(res)}).catch(err=>console.log(err));
+                }.bind(this));
+            }).then(e=>{
+                axios.delete(backendde.backendUrl+'addRTN/deleteRTNcart')
+                    .then(res=>{RTNtotal=0;
+                        this.setState({cartProducts:res.data});
+                        console.log(res.data)});
+                this.setState({remarks:''});
+            });
         // console.log(RTNobj);
     }
     render() {

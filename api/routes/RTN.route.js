@@ -57,7 +57,7 @@ RTNproductRoutes.route('/submitRTN').post(function(req,res){
     let addRTN = new RTNrecord(req.body);
     addRTN.save()
         .then(addRTN=>{
-            res.status(200).json({'product':'product added succes'});
+            res.status(200).json({'record':addRTN});
         })
         .catch(err=>{
             res.status(400).send("unable to save database");
