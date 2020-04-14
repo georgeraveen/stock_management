@@ -240,7 +240,7 @@ class AddGRN extends Component {
                         openOnFocus
                         autoComplete
                         options={this.state.batches}
-                        getOptionLabel={option => option.batchNo +spacePro + option.expDate}
+                        getOptionLabel={option => option.batchNo +spacePro + new Date(option.expDate).toLocaleDateString()}
                         style={{ width: 300 }}
                         value={this.state.batches.find(e=> e._id===this.state.selectedBatch)}
                         onChange={this.selectBatch}

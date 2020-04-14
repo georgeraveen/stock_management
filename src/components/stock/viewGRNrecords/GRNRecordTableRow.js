@@ -17,7 +17,7 @@ class GRNRecordTableRow extends Component {
             <tr>
                 <td>{this.props.products.productName}</td>
                 <td>{this.state.batchDetail.batchNo}</td>
-                <td>{this.onlyDateCreate}</td>
+                <td>{new Date(this.state.batchDetail.expDate).toLocaleDateString()}</td>
                 <td  align="right">Rs. {this.state.batchDetail.wholePrice}</td>
                 <td  align="right">{this.props.records.FreeQuantity}</td>
                 <td  align="right">{this.props.records.quantity}</td>

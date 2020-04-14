@@ -39,7 +39,7 @@ class ViewCustRTNTable extends Component {
                    {this.props.batch.batchDetails.batchNo}
                 </td>
                 <td>
-                    {this.props.batch.batchDetails.expDate}
+                    {new Date(this.props.batch.batchDetails.expDate).toLocaleDateString()}
                 </td>
                 <td align="right">
                     {this.props.batch.batchDetails.wholePrice}

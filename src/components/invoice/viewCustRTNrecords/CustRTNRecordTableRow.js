@@ -18,7 +18,7 @@ class CustRTNRecordTableRow extends Component {
             <tr>
                 <td>{this.props.products.productName}</td>
                 <td>{this.state.batchDetail.batchNo}</td>
-                <td>{this.onlyDateCreate}</td>
+                <td>{new Date(this.state.batchDetail.expDate).toLocaleDateString()}</td>
                 <td  align="right">Rs. {this.state.batchDetail.retailPrice}</td>
                 <td  align="right">{this.props.records.quantity}</td>
                 <td align="right">{this.state.batchDetail.retailPrice*this.props.records.quantity}</td>
