@@ -22,6 +22,7 @@ import AddcustRTN from './components/invoice/custReturn/addCustRTN';
 import ViewCustRTN from './components/invoice/viewCustRTNrecords/viewCustRTNrecords';
 import StockBalenceReport from './components/Reports/stockReport/stockReport';
 import StockExpireReport from './components/Reports/viewExpStock/viewExpStock';
+import StockMoveReport from './components/Reports/stockMove/stockMove';
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
             <NavDropdown title="Reports" id="collasible-nav-dropdown">
               <NavDropdown.Item href="/reports/stockBalence">Stock Balence Report</NavDropdown.Item>
               <NavDropdown.Item href="/reports/stockExpire">Stock Expiry Report</NavDropdown.Item>
+              <NavDropdown.Item href="/reports/stockMove">Stock Movement Report</NavDropdown.Item>
             </NavDropdown>
           </Nav>
           <Nav>
@@ -91,6 +93,7 @@ function App() {
          <Route exact path='/invoice/ViewCustRTN' component={ViewCustRTN}/>
          <Route exact path='/reports/stockBalence' component={StockBalenceReport}/>
          <Route exact path='/reports/stockExpire' component={StockExpireReport}/>
+         <Route exact path='/reports/stockMove' component={StockMoveReport}/>
         {/* <Route exact path='/edit/:id' component={Edit}/> */}
         {/* <Route exact path='/index' component={Index}/>  */}
         

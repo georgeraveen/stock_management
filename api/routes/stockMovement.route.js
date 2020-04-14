@@ -31,4 +31,17 @@ stockMovementRoute.route('/addRecord/:id').post(function(req,res){
         }
     )
 })
+//view movement
+stockMovementRoute.route('/viewMove/:id').get(function(req,res){
+    stockRecord.findOne(
+        {"batchID":req.params.id},
+        function(err,history){
+        if(err){
+            console.log(err);
+        }
+        else{
+            res.json(history);
+        }
+    });
+});
 module.exports=stockMovementRoute;
