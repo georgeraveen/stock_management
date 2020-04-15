@@ -95,4 +95,17 @@ INVCproductRoutes.route('/deleteINVCcart').delete(function(req,res){
         }
     }).sort('-_id');
 });
+//view INVC history range
+INVCproductRoutes.route('/viewINVCrange/:start/:end').get(function(req,res){
+    INVCrecord.find({'createdAt':{$gte:new Date(req.params.start),$lt:new Date(req.params.end)}},
+        function(err,records){
+        if(err){
+            console.log(err);
+        }
+        else{
+            console.log(records);
+            res.json(records);
+        }
+    }).sort('-_id');
+});
 module.exports=INVCproductRoutes;

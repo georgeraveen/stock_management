@@ -94,4 +94,17 @@ GRNproductRoutes.route('/deleteGRNcart').delete(function(req,res){
         }
     }).sort('-_id');
 });
+//view grn history range
+GRNproductRoutes.route('/viewGRNrange/:start/:end').get(function(req,res){
+    GRNrecord.find({'createdAt':{$gte:new Date(req.params.start),$lt:new Date(req.params.end)}},
+        function(err,records){
+        if(err){
+            console.log(err);
+        }
+        else{
+            console.log(records);
+            res.json(records);
+        }
+    }).sort('-_id');
+});
 module.exports=GRNproductRoutes;

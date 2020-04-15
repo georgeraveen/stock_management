@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import CustRTNhistoyRow from './CustRTNhistoyRow';
-import {Modal} from 'react-bootstrap';
+import {Modal, Form, Row, Button, Col} from 'react-bootstrap';
 import CustRTNRecordTableRow from './CustRTNRecordTableRow';
 
 const backendde= require('../../../backendde');
@@ -14,7 +14,10 @@ class viewCustRTNrecords extends Component {
         this.ViewCustRTNRecordTableRow=this.ViewCustRTNRecordTableRow.bind(this);
         this.callbackRowSum=this.callbackRowSum.bind(this);
         this.modalClose=this.modalClose.bind(this);
-
+        this.onChangeStartDate=this.onChangeStartDate.bind(this);
+        this.onChangeEndDate=this.onChangeEndDate.bind(this);
+        this.onSubmit=this.onSubmit.bind(this);
+        
         this.state={
             CustRTNhistory:[],
             products:[],
@@ -26,19 +29,21 @@ class viewCustRTNrecords extends Component {
                 items:[{
                     productID:'',
                 }]
-            },           
+            },        
+            startDate:'',
+            endDate:''   
         };
     }
     componentDidMount(){
-        axios.get(backendde.backendUrl+'viewCustRTN/viewCustRTN')
-            .then(response =>{
-                this.setState({CustRTNhistory:response.data});
-                console.log(this.state.CustRTNhistory);
-            })
-        .catch(function (error){
-            console.log('hi');
-            console.log(error);
-        });
+        // axios.get(backendde.backendUrl+'viewCustRTN/viewCustRTN')
+        //     .then(response =>{
+        //         this.setState({CustRTNhistory:response.data});
+        //         console.log(this.state.CustRTNhistory);
+        //     })
+        // .catch(function (error){
+        //     console.log('hi');
+        //     console.log(error);
+        // });
         axios.get(backendde.backendUrl+'viewProduct/view')
 
             .then(response =>{
@@ -74,10 +79,50 @@ class viewCustRTNrecords extends Component {
         this.setState({lgShow:false});
         CustRTNtotal=0;
     }
+    onChangeStartDate(e){
+        this.setState({startDate:e.target.value})
+    }
+    onChangeEndDate(e){
+        this.setState({endDate:e.target.value})
+    }
+    onSubmit(){
+        if(this.state.startDate<this.state.endDate){
+            // console.log(new Date(this.state.startDate));
+            // console.log(this.state.endDate);
+            axios.get(backendde.backendUrl+'viewCustRTN/viewCustRTNrange/'+this.state.startDate+'/'+this.state.endDate)
+            .then(response =>{
+                this.setState({CustRTNhistory:response.data});
+                console.log(this.state.CustRTNhistory);
+            })
+            .catch(function (error){
+                console.log('hi');
+                console.log(error);
+            });
+        }
+        else{
+            alert("Date range error");
+        }
+    }
+
     render() {
         return (
             <div className="container">
                 <h2>View Customer Return History</h2>
+                <Row>
+                    <Form.Group as={Col}>
+                        <Form.Label>Start date</Form.Label>
+                        <Form.Control type='date' required value={this.state.startDate} onChange={this.onChangeStartDate} />
+                    </Form.Group>
+                    <Form.Group as={Col}>
+                        <Form.Label>End date</Form.Label>
+                        <Form.Control type='date' required value={this.state.endDate} onChange={this.onChangeEndDate} />
+                    </Form.Group>
+                    <Form.Group as={Col}>
+                        <Button onClick={this.onSubmit} variant="primary" type="submit">
+                            View Range
+                        </Button>
+                    </Form.Group>
+                    </Row>
                 <table className="table table-striped" style={{marginTop:20}}>
                         <thead className="thead-dark">
                             <tr><th>
