@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 
 class BatchList extends Component {
-    
     render() {
         return (
             <tr>
-                <td>
-                    {this.props.obj.recordDate}
-                </td>
+                
+                
+                <td>{new Date(this.props.obj.recordDate).toLocaleDateString()+"  "+new Date(this.props.obj.recordDate).toLocaleTimeString()}</td>
                 <td>
                     {this.props.obj.moveType}
                 </td>

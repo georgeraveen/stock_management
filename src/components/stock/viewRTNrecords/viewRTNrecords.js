@@ -27,9 +27,7 @@ class viewRTNrecords extends Component {
                     productID:'',
                 }]
             },
-            onlyDateCreate:''
         };
-        this.createDate= '';
     }
     componentDidMount(){
         axios.get(backendde.backendUrl+'viewRTN/viewRTN')
@@ -60,13 +58,10 @@ class viewRTNrecords extends Component {
         
         this.setState({
             viewID:ViewMessage,
-            selectedRTNview:this.state.RTNhistory.find(e => e._id===ViewMessage)
-        },()=>{this.createDate= new Date(this.state.selectedRTNview.createdAt);
-            this.setState({
-                onlyDateCreate:this.createDate.getFullYear()+'-'+(this.createDate.getMonth()+1)+'-'+this.createDate.getDate()+'  '+this.createDate.getHours()+':'+this.createDate.getMinutes(),
-                lgShow:true});
-    })
+            selectedRTNview:this.state.RTNhistory.find(e => e._id===ViewMessage),
+            lgShow:true});
     }
+            
     ViewRTNRecordTableRow(){
         return this.state.selectedRTNview.items.map(function(object,i){
             return <RTNRecordTableRow key={i} records={object} products={this.state.products.find(e => e._id===object.productID)} callbackSum = {this.callbackRowSum} />;
@@ -112,7 +107,7 @@ class viewRTNrecords extends Component {
                     <Modal.Title id="example-modal-sizes-title-lg">
                         Return details  <br></br>
                         Return id:  {this.state.viewID}<br></br>
-                        Date:  {this.state.onlyDateCreate}
+                        Date:  {new Date(this.state.selectedRTNview.createdAt).toLocaleDateString()+'  '+new Date(this.state.selectedRTNview.createdAt).toLocaleTimeString()}
                     </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
