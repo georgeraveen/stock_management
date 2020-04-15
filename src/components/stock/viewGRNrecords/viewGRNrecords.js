@@ -27,9 +27,7 @@ class viewGRNrecords extends Component {
                     productID:'',
                 }]
             },
-            onlyDateCreate:''
         };
-        this.createDate= '';
     }
     componentDidMount(){
         axios.get(backendde.backendUrl+'viewGRN/viewGRN')
@@ -61,12 +59,7 @@ class viewGRNrecords extends Component {
         this.setState({
             viewID:ViewMessage,
             selectedGRNview:this.state.GRNhistory.find(e => e._id===ViewMessage),
-        },()=>{this.createDate= new Date(this.state.selectedGRNview.createdAt);
-                this.setState({
-                    onlyDateCreate:this.createDate.getFullYear()+'-'+(this.createDate.getMonth()+1)+'-'+this.createDate.getDate()+'  '+this.createDate.getHours()+':'+this.createDate.getMinutes(),
-                    lgShow:true});
-        })
-            
+            lgShow:true});
     }
     ViewGRNRecordTableRow(){
         return this.state.selectedGRNview.items.map(function(object,i){
@@ -113,7 +106,7 @@ class viewGRNrecords extends Component {
                     <Modal.Title id="example-modal-sizes-title-lg">
                         GRN details  <br></br>
                         GRN id:  {this.state.viewID}<br></br>
-                        Date:  {this.state.onlyDateCreate}
+                        Date:  {new Date(this.state.selectedGRNview.createdAt).toLocaleDateString()+'  '+new Date(this.state.selectedGRNview.createdAt).toLocaleTimeString()}
                     </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>

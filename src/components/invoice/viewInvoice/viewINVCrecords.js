@@ -29,9 +29,9 @@ class viewINVCrecords extends Component {
                     productID:'',
                 }]
             },
-            onlyDateCreate:''
+           
         };
-        this.createDate= '';
+        
     }
     componentDidMount(){
         axios.get(backendde.backendUrl+'viewINVC/viewINVC')
@@ -47,7 +47,6 @@ class viewINVCrecords extends Component {
 
             .then(response =>{
                 this.setState({products:response.data});
-                console.log(this.state.products);
             })
         .catch(function (error){
             console.log(error);
@@ -63,12 +62,8 @@ class viewINVCrecords extends Component {
         this.setState({
             viewID:ViewMessage,
             selectedINVCview:this.state.INVChistory.find(e => e._id===ViewMessage),
-        },()=>{this.createDate= new Date(this.state.selectedINVCview.createdAt);
-                this.setState({
-                    onlyDateCreate:this.createDate.getFullYear()+'-'+(this.createDate.getMonth()+1)+'-'+this.createDate.getDate()+'  '+this.createDate.getHours()+':'+this.createDate.getMinutes(),
-                    lgShow:true});
+            lgShow:true
         })
-        
     }
     ViewINVCRecordTableRow(){
         return this.state.selectedINVCview.items.map(function(object,i){
@@ -118,7 +113,7 @@ class viewINVCrecords extends Component {
                     <Modal.Title id="example-modal-sizes-title-lg">
                         Invoice details  <br></br>
                         Invoice id:  {this.state.viewID}<br></br>
-                        Date:  {this.state.onlyDateCreate}
+                        Date:  {new Date(this.state.selectedINVCview.createdAt).toLocaleDateString()+'  '+new Date(this.state.selectedINVCview.createdAt).toLocaleTimeString()}
                     </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>

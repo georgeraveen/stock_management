@@ -3,11 +3,7 @@ import React, { Component } from 'react';
 class INVChistoyRow extends Component {
     constructor(props){
         super(props);
-        this.state={
-           
-        };
-        this.createDate= new Date(this.props.obj.createdAt);
-        this.onlyDateCreate=this.createDate.getFullYear()+'-'+(this.createDate.getMonth()+1)+'-'+this.createDate.getDate()+'  '+this.createDate.getHours()+':'+this.createDate.getMinutes();
+        
         this.viewButton=this.viewButton.bind(this);
     }
     viewButton(){
@@ -20,7 +16,7 @@ class INVChistoyRow extends Component {
                     {this.props.obj._id}
                 </td>
                 <td>
-                    {this.onlyDateCreate}
+                    {new Date(this.props.obj.createdAt).toLocaleDateString() + '  ' + new Date(this.props.obj.createdAt).toLocaleTimeString()}
                 </td>
                 <td>
                 <button onClick={this.viewButton}  className="btn btn-success">View</button>
