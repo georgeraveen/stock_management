@@ -178,7 +178,7 @@ class addCustRTN extends Component {
                         moveType: 'Customer Return',
                         moveID: res.data.record._id,
                         preStock:a.currentStock,
-                        quantity:object.quantity+object.FreeQuantity
+                        quantity:object.quantity
                     }
                     console.log(movement);
                     axios.post(backendde.backendUrl+'stockMove/addRecord/'+object.batchID,movement)

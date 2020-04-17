@@ -46,13 +46,20 @@ class dailySales extends Component {
         
         return this.state.movement.map(function(object,i){
             
-            var historys=object.movement.filter(element=> ((element.moveType==="Invoice") && (element.recordDate > new Date(this.state.startDate).toISOString() && element.recordDate < new Date(this.state.endDate).toISOString())));
+            var historys=object.movement.filter(element=> ((element.moveType==="Invoice" || (element.moveType==="Customer Return")) && (element.recordDate > new Date(this.state.startDate).toISOString() && element.recordDate < new Date(this.state.endDate).toISOString())));
             if (historys.length>0){
                 // console.log(historys);
                 const productDetail=this.state.products.find(e=> e._id===object.productID);
                 const batchDetail=productDetail.batches.find(e=> e._id===object.batchID);
                 var qtySum=0;
-                historys.map(e=> qtySum+=e.quantity);
+                historys.map(function(obj,i){
+                    if(obj.moveType==="Customer Return"){
+                        qtySum-=obj.quantity;
+                    }
+                    else{
+                        qtySum+=obj.quantity;
+                    }
+                });
                 total+=(qtySum*batchDetail.retailPrice);
                 return <SalesList  key={i} products={productDetail} batch={batchDetail} sum={qtySum}/>;
             }
@@ -92,7 +99,7 @@ class dailySales extends Component {
                   
                       
                 <div>
-                    <table className="table table-striped" style={{marginTop:20}}>
+                    <table className="table table-striped table-bordered" style={{marginTop:20}}>
                         <thead className="thead-dark">
                             <tr>
                                 
