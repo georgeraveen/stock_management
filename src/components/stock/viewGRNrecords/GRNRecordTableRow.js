@@ -17,10 +17,10 @@ class GRNRecordTableRow extends Component {
                 <td>{this.props.products.productName}</td>
                 <td>{this.state.batchDetail.batchNo}</td>
                 <td>{new Date(this.state.batchDetail.expDate).toLocaleDateString()}</td>
-                <td  align="right">Rs. {this.state.batchDetail.wholePrice}</td>
+                <td  align="right">Rs. {this.state.batchDetail.wholePrice.toFixed(2)}</td>
                 <td  align="right">{this.props.records.FreeQuantity}</td>
                 <td  align="right">{this.props.records.quantity}</td>
-                <td align="right">{this.state.batchDetail.wholePrice*this.props.records.quantity}</td>
+                <td align="right">Rs. {(this.state.batchDetail.wholePrice*this.props.records.quantity).toFixed(2)}</td>
                 
             </tr>
         );

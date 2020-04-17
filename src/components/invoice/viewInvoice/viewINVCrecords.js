@@ -179,7 +179,7 @@ class viewINVCrecords extends Component {
                             {this.ViewINVCRecordTableRow()}
                             <tr>
                                 <td colSpan='5'><b>Total</b></td>
-                                <td align="right"><b>Rs. {INVCtotal}</b></td>
+                                <td align="right"><b>Rs. {INVCtotal.toFixed(2)}</b></td>
                             </tr>
                             <tr>
                                 <td colSpan='5'><b>Discount</b></td>
@@ -187,7 +187,7 @@ class viewINVCrecords extends Component {
                             </tr>
                             <tr>
                                 <td colSpan='5'><b>Grand Total</b></td>
-                                <td align="right"><b>Rs. {NetTotal}</b></td>
+                                <td align="right"><b>Rs. {NetTotal.toFixed(2)}</b></td>
                             </tr>
                         </tbody>
                     </table>

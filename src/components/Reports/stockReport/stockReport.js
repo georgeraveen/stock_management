@@ -83,7 +83,7 @@ class stockReport extends Component {
                             {this.viewProductTableRow()}
                             <tr className="table-success">
                                 <td colSpan='6'>Grand Total</td>
-                                <td align="right">Rs. {this.grandtotal}</td>
+                                <td align="right">Rs. {this.grandtotal.toFixed(2)}</td>
                             </tr>
                         </tbody>
                     </table>

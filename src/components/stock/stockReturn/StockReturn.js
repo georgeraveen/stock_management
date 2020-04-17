@@ -338,7 +338,7 @@ class StockReturn extends Component {
                             {this.ViewRTNCartTableRow()}
                             <tr>
                                 <td colSpan='7'><b>Total</b></td>
-                                <td align="right"><b>Rs. {RTNtotal}</b></td>
+                                <td align="right"><b>Rs. {RTNtotal.toFixed(2)}</b></td>
                             </tr>
                         </tbody>
                     </table>

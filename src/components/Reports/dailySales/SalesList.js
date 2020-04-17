@@ -16,10 +16,10 @@ class SalesList extends Component {
                     {this.props.sum}
                 </td>
                 <td  align="right">
-                    {this.props.batch.retailPrice}
+                    {this.props.batch.retailPrice.toFixed(2)}
                 </td>
                 <td  align="right">
-                    Rs. {this.props.batch.retailPrice*this.props.sum}
+                    Rs. {(this.props.batch.retailPrice*this.props.sum).toFixed(2)}
                 </td>
             </tr>
         );

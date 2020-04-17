@@ -293,7 +293,7 @@ class addCustRTN extends Component {
                             {this.ViewCustRTNCartTableRow()}
                             <tr>
                                 <td colSpan='6'><b>Total</b></td>
-                                <td align="right"><b>Rs. {CustRTNtotal}</b></td>
+                                <td align="right"><b>Rs. {CustRTNtotal.toFixed(2)}</b></td>
                             </tr>
                         </tbody>
                     </table>

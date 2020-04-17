@@ -45,7 +45,7 @@ class ViewTable extends Component {
                   {this.stockTotal}
                 </td>
                 <td align="right">
-                  Rs. {this.productTotal}
+                  Rs. {this.productTotal.toFixed(2)}
                 </td>
             </tr>
             

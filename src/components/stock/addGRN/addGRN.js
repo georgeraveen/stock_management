@@ -317,7 +317,7 @@ class AddGRN extends Component {
                             {this.ViewGRNCartTableRow()}
                             <tr>
                                 <td colSpan='7'><b>Total</b></td>
-                                <td align="right"><b>Rs. {GRNtotal}</b></td>
+                                <td align="right"><b>Rs. {GRNtotal.toFixed(2)}</b></td>
                             </tr>
                         </tbody>
                     </table>

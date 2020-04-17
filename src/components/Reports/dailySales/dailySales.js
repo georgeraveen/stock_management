@@ -126,7 +126,7 @@ class dailySales extends Component {
                         <tfoot>
                             <tr>
                                 <th colSpan="4">Total</th>
-                                <th  align="right">Rs. {total}</th>
+                                <th  align="right">Rs. {total.toFixed(2)}</th>
                             </tr>
                             
                         </tfoot>
