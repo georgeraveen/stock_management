@@ -94,4 +94,17 @@ CustRTNproductRoutes.route('/deleteCustRTNcart').delete(function(req,res){
         }
     }).sort('-_id');
 });
+//view CustRTN history range
+CustRTNproductRoutes.route('/viewCustRTNrange/:start/:end').get(function(req,res){
+    CustRTNrecord.find({'createdAt':{$gte:new Date(req.params.start),$lt:new Date(req.params.end)}},
+        function(err,records){
+        if(err){
+            console.log(err);
+        }
+        else{
+            console.log(records);
+            res.json(records);
+        }
+    }).sort('-_id');
+});
 module.exports=CustRTNproductRoutes;

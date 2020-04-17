@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import RTNhistoyRow from './RTNhistoyRow';
-import {Modal} from 'react-bootstrap';
+import {Modal, Form, Row, Button, Col} from 'react-bootstrap';
 import RTNRecordTableRow from './RTNRecordTableRow';
 
 const backendde= require('../../../backendde');
@@ -14,7 +14,10 @@ class viewRTNrecords extends Component {
         this.ViewRTNRecordTableRow=this.ViewRTNRecordTableRow.bind(this);
         this.callbackRowSum=this.callbackRowSum.bind(this);
         this.modalClose=this.modalClose.bind(this);
-
+        this.onChangeStartDate=this.onChangeStartDate.bind(this);
+        this.onChangeEndDate=this.onChangeEndDate.bind(this);
+        this.onSubmit=this.onSubmit.bind(this);
+        
         this.state={
             RTNhistory:[],
             products:[],
@@ -27,18 +30,20 @@ class viewRTNrecords extends Component {
                     productID:'',
                 }]
             },
+            startDate:'',
+            endDate:''
         };
     }
     componentDidMount(){
-        axios.get(backendde.backendUrl+'viewRTN/viewRTN')
-            .then(response =>{
-                this.setState({RTNhistory:response.data});
-                console.log(this.state.RTNhistory);
-            })
-        .catch(function (error){
-            console.log('hi');
-            console.log(error);
-        });
+        // axios.get(backendde.backendUrl+'viewRTN/viewRTN')
+        //     .then(response =>{
+        //         this.setState({RTNhistory:response.data});
+        //         console.log(this.state.RTNhistory);
+        //     })
+        // .catch(function (error){
+        //     console.log('hi');
+        //     console.log(error);
+        // });
         axios.get(backendde.backendUrl+'viewProduct/view')
 
             .then(response =>{
@@ -75,10 +80,50 @@ class viewRTNrecords extends Component {
         this.setState({lgShow:false});
         RTNtotal=0;
     }
+    onChangeStartDate(e){
+        this.setState({startDate:e.target.value})
+    }
+    onChangeEndDate(e){
+        this.setState({endDate:e.target.value})
+    }
+    onSubmit(){
+        if(this.state.startDate<this.state.endDate){
+            // console.log(new Date(this.state.startDate));
+            // console.log(this.state.endDate);
+            axios.get(backendde.backendUrl+'viewRTN/viewRTNrange/'+this.state.startDate+'/'+this.state.endDate)
+            .then(response =>{
+                this.setState({RTNhistory:response.data});
+                console.log(this.state.RTNhistory);
+            })
+            .catch(function (error){
+                console.log('hi');
+                console.log(error);
+            });
+        }
+        else{
+            alert("Date range error");
+        }
+    }
+
     render() {
         return (
             <div className="container">
                 <h2>View Return History</h2>
+                <Row>
+                    <Form.Group as={Col}>
+                        <Form.Label>Start date</Form.Label>
+                        <Form.Control type='date' required value={this.state.startDate} onChange={this.onChangeStartDate} />
+                    </Form.Group>
+                    <Form.Group as={Col}>
+                        <Form.Label>End date</Form.Label>
+                        <Form.Control type='date' required value={this.state.endDate} onChange={this.onChangeEndDate} />
+                    </Form.Group>
+                    <Form.Group as={Col}>
+                        <Button onClick={this.onSubmit} variant="primary" type="submit">
+                            View Range
+                        </Button>
+                    </Form.Group>
+                    </Row>
                 <table className="table table-striped" style={{marginTop:20}}>
                         <thead className="thead-dark">
                             <tr><th>

@@ -77,15 +77,23 @@ batchRoutes.route('/editBatch/:id/:bid').post(function(req,res){
 });
 //get by id--------------no need
 // batchRoutes.route('/viewID/:id/:bid').get(function(req,res){
-//     Product.findOne({"_id":req.params.id,"batches._id":req.params.bid},function(err,prs){
+//     Product.findOne({"_id":req.params.id},function(err,prs){
 //         if(err){
 //             console.log('bye');
 //             console.log(err);
 //         }
 //         else{
 //             // console.log(batches);
-
-//             res.json(prs);
+//             // res.json({'p':prs});
+//             prs.batches.findOne({"_id":req.params.bid},function(err2,bth){
+//                 if(err2){
+//                     res.json(err2)
+//                 }
+//                 else{
+//                     res.json({'b':bth});
+//                 }
+//             });
+            
 //         }
 //     });
 // });

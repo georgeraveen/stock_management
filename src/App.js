@@ -23,6 +23,7 @@ import ViewCustRTN from './components/invoice/viewCustRTNrecords/viewCustRTNreco
 import StockBalenceReport from './components/Reports/stockReport/stockReport';
 import StockExpireReport from './components/Reports/viewExpStock/viewExpStock';
 import StockMoveReport from './components/Reports/stockMove/stockMove';
+import DailySalesReport from './components/Reports/dailySales/dailySales';
 
 function App() {
   return (
@@ -63,6 +64,7 @@ function App() {
               <NavDropdown.Item href="/reports/stockBalence">Stock Balence Report</NavDropdown.Item>
               <NavDropdown.Item href="/reports/stockExpire">Stock Expiry Report</NavDropdown.Item>
               <NavDropdown.Item href="/reports/stockMove">Stock Movement Report</NavDropdown.Item>
+              <NavDropdown.Item href="/reports/dailySales">Daily Sales Report</NavDropdown.Item>
             </NavDropdown>
           </Nav>
           <Nav>
@@ -94,6 +96,7 @@ function App() {
          <Route exact path='/reports/stockBalence' component={StockBalenceReport}/>
          <Route exact path='/reports/stockExpire' component={StockExpireReport}/>
          <Route exact path='/reports/stockMove' component={StockMoveReport}/>
+         <Route exact path='/reports/dailySales' component={DailySalesReport}/>
         {/* <Route exact path='/edit/:id' component={Edit}/> */}
         {/* <Route exact path='/index' component={Index}/>  */}
         

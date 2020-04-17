@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import GRNhistoyRow from './GRNhistoyRow';
-import {Modal} from 'react-bootstrap';
+import {Modal, Form, Row, Button, Col} from 'react-bootstrap';
 import GRNRecordTableRow from './GRNRecordTableRow';
 
 const backendde= require('../../../backendde');
@@ -14,7 +14,9 @@ class viewGRNrecords extends Component {
         this.ViewGRNRecordTableRow=this.ViewGRNRecordTableRow.bind(this);
         this.callbackRowSum=this.callbackRowSum.bind(this);
         this.modalClose=this.modalClose.bind(this);
-
+        this.onChangeStartDate=this.onChangeStartDate.bind(this);
+        this.onChangeEndDate=this.onChangeEndDate.bind(this);
+        this.onSubmit=this.onSubmit.bind(this);
         this.state={
             GRNhistory:[],
             products:[],
@@ -27,18 +29,20 @@ class viewGRNrecords extends Component {
                     productID:'',
                 }]
             },
+            startDate:'',
+            endDate:''
         };
     }
     componentDidMount(){
-        axios.get(backendde.backendUrl+'viewGRN/viewGRN')
-            .then(response =>{
-                this.setState({GRNhistory:response.data});
-                console.log(this.state.GRNhistory);
-            })
-        .catch(function (error){
-            console.log('hi');
-            console.log(error);
-        });
+        // axios.get(backendde.backendUrl+'viewGRN/viewGRN')
+        //     .then(response =>{
+        //         this.setState({GRNhistory:response.data});
+        //         console.log(this.state.GRNhistory);
+        //     })
+        // .catch(function (error){
+        //     console.log('hi');
+        //     console.log(error);
+        // });
         axios.get(backendde.backendUrl+'viewProduct/view')
 
             .then(response =>{
@@ -74,10 +78,54 @@ class viewGRNrecords extends Component {
         this.setState({lgShow:false});
         GRNtotal=0;
     }
+    onChangeStartDate(e){
+        this.setState({startDate:e.target.value})
+    }
+    onChangeEndDate(e){
+        this.setState({endDate:e.target.value})
+    }
+    onSubmit(){
+        if(this.state.startDate<this.state.endDate){
+            // console.log(new Date(this.state.startDate));
+            // console.log(this.state.endDate);
+            axios.get(backendde.backendUrl+'viewGRN/viewGRNrange/'+this.state.startDate+'/'+this.state.endDate)
+            .then(response =>{
+                this.setState({GRNhistory:response.data});
+                console.log(this.state.GRNhistory);
+            })
+            .catch(function (error){
+                console.log('hi');
+                console.log(error);
+            });
+        }
+        else{
+            alert("Date range error");
+        }
+    }
     render() {
         return (
             <div className="container">
                 <h2>View GRN History</h2>
+                {/* <Button onClick={this.onSubmit} variant="primary" type="submit">
+                            View
+                        </Button> */}
+                {/* <Form > */}
+                    <Row>
+                    <Form.Group as={Col}>
+                        <Form.Label>Start date</Form.Label>
+                        <Form.Control type='date' required value={this.state.startDate} onChange={this.onChangeStartDate} />
+                    </Form.Group>
+                    <Form.Group as={Col}>
+                        <Form.Label>End date</Form.Label>
+                        <Form.Control type='date' required value={this.state.endDate} onChange={this.onChangeEndDate} />
+                    </Form.Group>
+                    <Form.Group as={Col}>
+                        <Button onClick={this.onSubmit} variant="primary" type="submit">
+                            View Range
+                        </Button>
+                    </Form.Group>
+                    </Row>
+                {/* </Form> */}
                 <table className="table table-striped" style={{marginTop:20}}>
                         <thead className="thead-dark">
                             <tr><th>
