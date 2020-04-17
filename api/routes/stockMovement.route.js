@@ -44,4 +44,28 @@ stockMovementRoute.route('/viewMove/:id').get(function(req,res){
         }
     });
 });
+//view movement all
+stockMovementRoute.route('/viewMoveAll').get(function(req,res){
+    stockRecord.find(function(err,history){
+        if(err){
+            console.log(err);
+        }
+        else{
+            res.json({'history':history});
+        }
+    });
+});
+// //view movement date filter //not using now (not working)
+// stockMovementRoute.route('/viewMove/:id/:start/:end').get(function(req,res){
+//     stockRecord.filter(
+//         {"batchID":req.params.id,'recordDate':{$gte:new Date(req.params.start).toISOString(),$lt:new Date(req.params.end).toISOString()}},
+//         function(err,history){
+//         if(err){
+//             console.log(err);
+//         }
+//         else{
+//             res.json(history);
+//         }
+//     });
+// });
 module.exports=stockMovementRoute;
