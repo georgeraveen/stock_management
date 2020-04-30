@@ -31,7 +31,7 @@ class BatchList extends Component {
                     {this.props.obj.batchNo}
                 </td>
                 <td>
-                    {this.props.obj.expDate}
+                    {new Date(this.props.obj.expDate).toLocaleDateString()}
                 </td>
                 <td>
                     Rs. {this.props.obj.wholePrice.toFixed(2)}
