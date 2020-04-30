@@ -1,7 +1,16 @@
 .printPre{
     width: 80mm;
 }
-.printPre h2,h3,th,p{
+.printPre h2{
+    text-align: center;
+}
+.printPre h3{
+    text-align: center;
+}
+.printPre th{
+    text-align: center;
+}
+.printPre p{
     text-align: center;
 }
 .printPre h2{
