@@ -12,6 +12,8 @@ import axios from 'axios';
 import ViewINVCTable from './ViewInvoiceTable'
 import { Container } from '@material-ui/core';
 
+import './print.css';
+
 const backendde= require('../../../backendde');
 const spacePro='   ';
 var INVCtotal=0;
@@ -33,6 +35,7 @@ class newInvoice extends Component {
         this.printClose=this.printClose.bind(this);
         this.printCartRow=this.printCartRow.bind(this);
         this.callbackPrint=this.callbackPrint.bind(this);
+        this.printBill=this.printBill.bind(this);
         
         this.state={
             products:[],
@@ -203,49 +206,50 @@ class newInvoice extends Component {
             alert('empty');
         }
         else{
+            var cart=[]; 
+            //update stock
+            this.state.cartProducts.map(function(object,i){
+                var a=this.state.products.find(e => e._id === object.productID).batches.find(e => e._id === object.batchID);
+                object.preStock=a.currentStock;
+                cart.push(object);
+                const qty={
+                    quantity: a.currentStock-object.quantity};
+                axios.post(backendde.backendUrl+'Batch/INVCstock/'+object.productID+'/'+object.batchID,qty).then(res=>console.log(res.data));
+            }.bind(this));
+            const INVCobj={
+                items:cart,
+                discount:this.state.discount,
+                remarks:this.state.remarks
+            }
+            axios.post(backendde.backendUrl+'addINVC/submitINVC',INVCobj)
+                .then(res=>{
+                    console.log(res.data)
+                    //update stock movement
+                    this.state.cartProducts.map(function(object,i){
+                        var a=this.state.products.find(e => e._id === object.productID).batches.find(e => e._id === object.batchID);
+                        const movement={
+                            recordDate: res.data.record.createdAt,
+                            moveType: 'Invoice',
+                            moveID: res.data.record._id,
+                            preStock:a.currentStock,
+                            quantity:object.quantity
+                        }
+                        console.log(movement);
+                        axios.post(backendde.backendUrl+'stockMove/addRecord/'+object.batchID,movement)
+                                .then(res=>{console.log(res)}).catch(err=>console.log(err));
+                    }.bind(this));
+                }).then(e=>{
+                    axios.delete(backendde.backendUrl+'addINVC/deleteINVCcart')
+                        .then(res=>{
+                                    // INVCtotal=0;NetTotal=0;
+                                    // this.setState({cartProducts:res.data});
+                                    console.log(res.data)});
+                                    // this.setState({discount:0,
+                                    //                 remarks:''});
+                });
             this.setState({
                 printModel:true
             })
-            // var cart=[]; 
-            // //update stock
-            // this.state.cartProducts.map(function(object,i){
-            //     var a=this.state.products.find(e => e._id === object.productID).batches.find(e => e._id === object.batchID);
-            //     object.preStock=a.currentStock;
-            //     cart.push(object);
-            //     const qty={
-            //         quantity: a.currentStock-object.quantity};
-            //     axios.post(backendde.backendUrl+'Batch/INVCstock/'+object.productID+'/'+object.batchID,qty).then(res=>console.log(res.data));
-            // }.bind(this));
-            // const INVCobj={
-            //     items:cart,
-            //     discount:this.state.discount,
-            //     remarks:this.state.remarks
-            // }
-            // axios.post(backendde.backendUrl+'addINVC/submitINVC',INVCobj)
-            //     .then(res=>{
-            //         console.log(res.data)
-            //         //update stock movement
-            //         this.state.cartProducts.map(function(object,i){
-            //             var a=this.state.products.find(e => e._id === object.productID).batches.find(e => e._id === object.batchID);
-            //             const movement={
-            //                 recordDate: res.data.record.createdAt,
-            //                 moveType: 'Invoice',
-            //                 moveID: res.data.record._id,
-            //                 preStock:a.currentStock,
-            //                 quantity:object.quantity
-            //             }
-            //             console.log(movement);
-            //             axios.post(backendde.backendUrl+'stockMove/addRecord/'+object.batchID,movement)
-            //                     .then(res=>{console.log(res)}).catch(err=>console.log(err));
-            //         }.bind(this));
-            //     }).then(e=>{
-            //         axios.delete(backendde.backendUrl+'addINVC/deleteINVCcart')
-            //             .then(res=>{INVCtotal=0;NetTotal=0;
-            //                         this.setState({cartProducts:res.data});
-            //                         console.log(res.data)});
-            //         this.setState({discount:0,
-            //                         remarks:''});
-            //     });
         }
         // console.log(INVCobj);
     }
@@ -261,9 +265,21 @@ class newInvoice extends Component {
         })
     }
     printClose(){
+        INVCtotal=0;NetTotal=0;
         this.setState({
-            printModel:false
+            cartProducts:[],
+            printModel:false,
+            discount:0,
+            remarks:''
         })
+    }
+    printBill(){
+        // const printableElements = document.getElementById('printPreID').innerHTML;
+        // const orderHtml = '<html><head><title></title></head><body>' + printableElements + '</body></html>'
+        // const oldPage = document.body.innerHTML;
+        // document.body.innerHTML = orderHtml;
+        window.print();
+        // document.body.innerHTML = oldPage
     }
     render() {
         
@@ -294,7 +310,7 @@ class newInvoice extends Component {
                 <Form.Group as={Col}>
                     <Form.Label>Select Batch Number</Form.Label>
                     <Autocomplete
-                        id="combo-box-demo"
+                        id="combo-box-demo1"
                         autoHighlight
                         openOnFocus
                         autoComplete
@@ -349,7 +365,7 @@ class newInvoice extends Component {
                     <InputGroup.Prepend>
                     <InputGroup.Text>Add some Remarks here</InputGroup.Text>
                     </InputGroup.Prepend>
-                    <FormControl as="textarea" onChange={this.onChangeRemarks} aria-label="With textarea" />
+                    <FormControl as="textarea" value={this.state.remarks} onChange={this.onChangeRemarks} aria-label="With textarea" />
                 </InputGroup>
                 </Col>
                 <Button  onClick={this.onSubmitINVC} variant="success">
@@ -402,24 +418,25 @@ class newInvoice extends Component {
                         </tbody>
                     </table>
                 
-                
                 <br></br>
                 <Modal show={this.state.printModel} onHide={this.printClose}>
                     <Modal.Header closeButton>
                     <Modal.Title>Print View</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <div class="printPre">
+                        <div class="printPre" id='printPreID'>
                             <h2>ABC Pharmacy</h2>
                             <h3>address</h3>
                             <br></br>
+                            <div class="printTable">
+                                ----------------------------------------------
                             <table>
                                 <thead>
                                     <tr>
-                                    <th>Product</th>
-                                    <th>U. Price</th>
-                                    <th>Qty</th>
-                                    <th>Total</th></tr>
+                                    <th class="pName">Product</th>
+                                    <th class="uPrice">Price</th>
+                                    <th class="qty">Qty</th>
+                                    <th class="total">Total</th></tr>
                                 </thead>
                                 <tbody>
                                     {this.printCartRow()}
@@ -437,12 +454,18 @@ class newInvoice extends Component {
                                     </tr>
                                 </tbody>
                             </table>
+                            ----------------------------------------------<br></br>
+                            <p>Thank you come again</p>
+                            </div>
+
                         </div>
+                        <Button onClick={this.printBill}>Print</Button>
                     </Modal.Body>
                     
                 </Modal>
+                
             </div>
-         
+            
          );
     }
     
