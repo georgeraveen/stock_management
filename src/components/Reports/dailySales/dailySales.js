@@ -59,6 +59,7 @@ class dailySales extends Component {
                     else{
                         qtySum+=obj.quantity;
                     }
+                    return null
                 });
                 total+=(qtySum*batchDetail.retailPrice);
                 return <SalesList  key={i} products={productDetail} batch={batchDetail} sum={qtySum}/>;
