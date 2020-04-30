@@ -202,8 +202,9 @@ class newInvoice extends Component {
     }
     
     onSubmitINVC(){
+        // eslint-disable-next-line
         if(this.state.cartProducts==''){
-            alert('empty');
+            alert('empty cart');
         }
         else{
             var cart=[]; 
