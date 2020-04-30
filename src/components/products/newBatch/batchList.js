@@ -34,10 +34,10 @@ class BatchList extends Component {
                     {this.props.obj.expDate}
                 </td>
                 <td>
-                    {this.props.obj.wholePrice}
+                    Rs. {this.props.obj.wholePrice.toFixed(2)}
                 </td>
                 <td>
-                    {this.props.obj.retailPrice}
+                    Rs. {this.props.obj.retailPrice.toFixed(2)}
                 </td>
                 <td>
                     <button onClick={this.deleteBatch} className="btn btn-danger">delete</button>

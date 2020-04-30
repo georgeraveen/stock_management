@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
-import {Form} from 'react-bootstrap';
+import {Form,Modal} from 'react-bootstrap';
 import {Button} from 'react-bootstrap';
 import {Row,Col,InputGroup,FormControl} from 'react-bootstrap';
 
@@ -11,6 +11,8 @@ import axios from 'axios';
 
 import ViewINVCTable from './ViewInvoiceTable'
 import { Container } from '@material-ui/core';
+
+import './print.css';
 
 const backendde= require('../../../backendde');
 const spacePro='   ';
@@ -30,7 +32,10 @@ class newInvoice extends Component {
         this.onDeleteCartItem=this.onDeleteCartItem.bind(this);
         this.onSubmitINVC=this.onSubmitINVC.bind(this);
         this.onChangeRemarks=this.onChangeRemarks.bind(this);
-        
+        this.printClose=this.printClose.bind(this);
+        this.printCartRow=this.printCartRow.bind(this);
+        this.callbackPrint=this.callbackPrint.bind(this);
+        this.printBill=this.printBill.bind(this);
         
         this.state={
             products:[],
@@ -47,7 +52,10 @@ class newInvoice extends Component {
             qtyBoxErrMsg:'',
 
             validated:false, 
-            setValidated:false
+            setValidated:false,
+
+            printCartProducts:[],
+            printModel:false
         };
         
     }
@@ -180,7 +188,8 @@ class newInvoice extends Component {
                 productName:this.state.products.find(e=> e._id===object.productID).productName,
                 batchDetails:this.state.products.find(e=> e._id===object.productID).batches.find(f=> f._id===object.batchID)
             }
-            return  <ViewINVCTable obj={object} batch={details} key={i} callbackSum = {this.callbackRowSum} deleteItem={this.onDeleteCartItem} />;
+            
+            return  <ViewINVCTable obj={object} batch={details} key={i} callbackSum = {this.callbackRowSum} deleteItem={this.onDeleteCartItem} callbackPrintRow={this.callbackPrint} />;
         }.bind(this));      
     }
     callbackRowSum = (rowsum) => {
@@ -191,48 +200,87 @@ class newInvoice extends Component {
     onDeleteCartItem(newCart){
         this.setState({cartProducts:newCart});
     }
+    
     onSubmitINVC(){
-        var cart=[]; 
-        //update stock
-        this.state.cartProducts.map(function(object,i){
-            var a=this.state.products.find(e => e._id === object.productID).batches.find(e => e._id === object.batchID);
-            object.preStock=a.currentStock;
-            cart.push(object);
-            const qty={
-                quantity: a.currentStock-object.quantity};
-            axios.post(backendde.backendUrl+'Batch/INVCstock/'+object.productID+'/'+object.batchID,qty).then(res=>console.log(res.data));
-        }.bind(this));
-        const INVCobj={
-            items:cart,
-            discount:this.state.discount,
-            remarks:this.state.remarks
+        // eslint-disable-next-line
+        if(this.state.cartProducts==''){
+            alert('empty cart');
         }
-        axios.post(backendde.backendUrl+'addINVC/submitINVC',INVCobj)
-            .then(res=>{
-                console.log(res.data)
-                //update stock movement
-                this.state.cartProducts.map(function(object,i){
-                    var a=this.state.products.find(e => e._id === object.productID).batches.find(e => e._id === object.batchID);
-                    const movement={
-                        recordDate: res.data.record.createdAt,
-                        moveType: 'Invoice',
-                        moveID: res.data.record._id,
-                        preStock:a.currentStock,
-                        quantity:object.quantity
-                    }
-                    console.log(movement);
-                    axios.post(backendde.backendUrl+'stockMove/addRecord/'+object.batchID,movement)
-                            .then(res=>{console.log(res)}).catch(err=>console.log(err));
-                }.bind(this));
-            }).then(e=>{
-                axios.delete(backendde.backendUrl+'addINVC/deleteINVCcart')
-                    .then(res=>{INVCtotal=0;NetTotal=0;
-                                this.setState({cartProducts:res.data});
-                                console.log(res.data)});
-                this.setState({discount:0,
-                                remarks:''});
-            });
+        else{
+            var cart=[]; 
+            //update stock
+            this.state.cartProducts.map(function(object,i){
+                var a=this.state.products.find(e => e._id === object.productID).batches.find(e => e._id === object.batchID);
+                object.preStock=a.currentStock;
+                cart.push(object);
+                const qty={
+                    quantity: a.currentStock-object.quantity};
+                axios.post(backendde.backendUrl+'Batch/INVCstock/'+object.productID+'/'+object.batchID,qty).then(res=>console.log(res.data));
+            }.bind(this));
+            const INVCobj={
+                items:cart,
+                discount:this.state.discount,
+                remarks:this.state.remarks
+            }
+            axios.post(backendde.backendUrl+'addINVC/submitINVC',INVCobj)
+                .then(res=>{
+                    console.log(res.data)
+                    //update stock movement
+                    this.state.cartProducts.map(function(object,i){
+                        var a=this.state.products.find(e => e._id === object.productID).batches.find(e => e._id === object.batchID);
+                        const movement={
+                            recordDate: res.data.record.createdAt,
+                            moveType: 'Invoice',
+                            moveID: res.data.record._id,
+                            preStock:a.currentStock,
+                            quantity:object.quantity
+                        }
+                        console.log(movement);
+                        axios.post(backendde.backendUrl+'stockMove/addRecord/'+object.batchID,movement)
+                                .then(res=>{console.log(res)}).catch(err=>console.log(err));
+                    }.bind(this));
+                }).then(e=>{
+                    axios.delete(backendde.backendUrl+'addINVC/deleteINVCcart')
+                        .then(res=>{
+                                    // INVCtotal=0;NetTotal=0;
+                                    // this.setState({cartProducts:res.data});
+                                    console.log(res.data)});
+                                    // this.setState({discount:0,
+                                    //                 remarks:''});
+                });
+            this.setState({
+                printModel:true
+            })
+        }
         // console.log(INVCobj);
+    }
+    callbackPrint(pRow){
+        var prelist=this.state.printCartProducts;
+        prelist.push(pRow);
+        this.setState({printCartProducts:prelist});
+        // console.log(this.state.printCartProducts);
+    }
+    printCartRow(){
+        return this.state.printCartProducts.map(function(object,i){
+            return <tr key={i}><td>{object.productName}</td><td align="right">{(+object.retailPrice).toFixed(2)}</td><td align="right">{object.quantity}</td><td align="right">{(object.retailPrice*object.quantity).toFixed(2)}</td></tr>
+        })
+    }
+    printClose(){
+        INVCtotal=0;NetTotal=0;
+        this.setState({
+            cartProducts:[],
+            printModel:false,
+            discount:0,
+            remarks:''
+        })
+    }
+    printBill(){
+        // const printableElements = document.getElementById('printPreID').innerHTML;
+        // const orderHtml = '<html><head><title></title></head><body>' + printableElements + '</body></html>'
+        // const oldPage = document.body.innerHTML;
+        // document.body.innerHTML = orderHtml;
+        window.print();
+        // document.body.innerHTML = oldPage
     }
     render() {
         
@@ -263,7 +311,7 @@ class newInvoice extends Component {
                 <Form.Group as={Col}>
                     <Form.Label>Select Batch Number</Form.Label>
                     <Autocomplete
-                        id="combo-box-demo"
+                        id="combo-box-demo1"
                         autoHighlight
                         openOnFocus
                         autoComplete
@@ -318,7 +366,7 @@ class newInvoice extends Component {
                     <InputGroup.Prepend>
                     <InputGroup.Text>Add some Remarks here</InputGroup.Text>
                     </InputGroup.Prepend>
-                    <FormControl as="textarea" onChange={this.onChangeRemarks} aria-label="With textarea" />
+                    <FormControl as="textarea" value={this.state.remarks} onChange={this.onChangeRemarks} aria-label="With textarea" />
                 </InputGroup>
                 </Col>
                 <Button  onClick={this.onSubmitINVC} variant="success">
@@ -358,7 +406,7 @@ class newInvoice extends Component {
 
                             <tr>
                                 <td colSpan='5'><b>Total</b></td>
-                                <td align="right"><b>Rs. {INVCtotal}</b></td>
+                                <td align="right"><b>Rs. {INVCtotal.toFixed(2)}</b></td>
                             </tr>
                             <tr>
                                 <td colSpan='5'><b>Discount</b></td>
@@ -366,15 +414,59 @@ class newInvoice extends Component {
                             </tr>
                             <tr>
                                 <td colSpan='5'><b>Grand Total</b></td>
-                                <td align="right"><b>Rs. {NetTotal}</b></td>
+                                <td align="right"><b>Rs. {NetTotal.toFixed(2)}</b></td>
                             </tr>
                         </tbody>
                     </table>
                 
-                
                 <br></br>
+                <Modal show={this.state.printModel} onHide={this.printClose}>
+                    <Modal.Header closeButton>
+                    <Modal.Title>Print View</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div class="printPre" id='printPreID'>
+                            <h2>ABC Pharmacy</h2>
+                            <h3>address</h3>
+                            <br></br>
+                            <div class="printTable">
+                                ----------------------------------------------
+                            <table>
+                                <thead>
+                                    <tr>
+                                    <th class="pName">Product</th>
+                                    <th class="uPrice">Price</th>
+                                    <th class="qty">Qty</th>
+                                    <th class="total">Total</th></tr>
+                                </thead>
+                                <tbody>
+                                    {this.printCartRow()}
+                                    <tr>
+                                        <td colSpan='3'><b>Total</b></td>
+                                        <td align="right"><b>Rs. {INVCtotal.toFixed(2)}</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td colSpan='3'><b>Discount</b></td>
+                                        <td align="right"><b>{this.state.discount} %</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td colSpan='3'><b>Grand Total</b></td>
+                                        <td align="right"><b>Rs. {NetTotal.toFixed(2)}</b></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            ----------------------------------------------<br></br>
+                            <p>Thank you come again</p>
+                            </div>
+
+                        </div>
+                        <Button onClick={this.printBill}>Print</Button>
+                    </Modal.Body>
+                    
+                </Modal>
+                
             </div>
-         
+            
          );
     }
     

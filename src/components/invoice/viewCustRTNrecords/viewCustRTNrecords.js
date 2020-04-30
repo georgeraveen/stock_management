@@ -173,7 +173,7 @@ class viewCustRTNrecords extends Component {
                             {this.ViewCustRTNRecordTableRow()}
                             <tr>
                                 <td colSpan='5'><b>Total</b></td>
-                                <td align="right"><b>Rs. {CustRTNtotal}</b></td>
+                                <td align="right"><b>Rs. {CustRTNtotal.toFixed(2)}</b></td>
                             </tr>
                         </tbody>
                     </table>

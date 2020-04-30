@@ -219,7 +219,7 @@ class addCustRTN extends Component {
                 <Form.Group as={Col}>
                     <Form.Label>Select Batch Number</Form.Label>
                     <Autocomplete
-                        id="combo-box-demo"
+                        id="combo-box-demo1"
                         autoHighlight
                         openOnFocus
                         autoComplete
@@ -293,7 +293,7 @@ class addCustRTN extends Component {
                             {this.ViewCustRTNCartTableRow()}
                             <tr>
                                 <td colSpan='6'><b>Total</b></td>
-                                <td align="right"><b>Rs. {CustRTNtotal}</b></td>
+                                <td align="right"><b>Rs. {CustRTNtotal.toFixed(2)}</b></td>
                             </tr>
                         </tbody>
                     </table>

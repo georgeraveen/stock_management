@@ -177,7 +177,7 @@ class viewGRNrecords extends Component {
                             {this.ViewGRNRecordTableRow()}
                             <tr>
                                 <td colSpan='6'><b>Total</b></td>
-                                <td align="right"><b>Rs. {GRNtotal}</b></td>
+                                <td align="right"><b>Rs. {GRNtotal.toFixed(2)}</b></td>
                             </tr>
                         </tbody>
                     </table>

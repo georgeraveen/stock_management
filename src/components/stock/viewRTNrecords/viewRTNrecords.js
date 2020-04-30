@@ -175,7 +175,7 @@ class viewRTNrecords extends Component {
                             {this.ViewRTNRecordTableRow()}
                             <tr>
                                 <td colSpan='6'><b>Total</b></td>
-                                <td align="right"><b>Rs. {RTNtotal}</b></td>
+                                <td align="right"><b>Rs. {RTNtotal.toFixed(2)}</b></td>
                             </tr>
                         </tbody>
                     </table>

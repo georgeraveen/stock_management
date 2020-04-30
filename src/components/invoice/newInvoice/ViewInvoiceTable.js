@@ -14,6 +14,13 @@ class ViewInvoiceTable extends Component {
             tot:0
         };
         this.props.callbackSum(this.props.batch.batchDetails.retailPrice * this.props.obj.quantity);
+        const printCartRow={
+            productName:this.props.batch.productName,
+            retailPrice:this.props.batch.batchDetails.retailPrice.toFixed(2),
+            quantity:this.props.obj.quantity,
+        };
+        this.props.callbackPrintRow(printCartRow);
+
         
     };
     onDeleteItem(){
@@ -43,13 +50,13 @@ class ViewInvoiceTable extends Component {
                     {new Date(this.props.batch.batchDetails.expDate).toLocaleDateString()}
                 </td>
                 <td align="right">
-                    {this.props.batch.batchDetails.retailPrice}
+                    {this.props.batch.batchDetails.retailPrice.toFixed(2)}
                 </td>
                 <td align="right">
                     {this.props.obj.quantity}
                 </td>
                 <td align="right"><b>Rs. 
-                    {this.props.batch.batchDetails.retailPrice * this.props.obj.quantity}
+                    {(this.props.batch.batchDetails.retailPrice * this.props.obj.quantity).toFixed(2)}
                     </b>
                 </td>
                 <td>
