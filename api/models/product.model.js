@@ -1,33 +1,36 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
-let Product= new Schema({
-    productName:{
-        type:String
+let Product = new Schema({
+    productName: {
+        type: String
     },
-    batches:[{    
-            batchNo:{
-                type:String
-            },
-            expDate:{
-                type:Date
-            },
-            wholePrice:{
-                type:Number
-            },
-            retailPrice:{
-                type:Number
-            },
-            currentStock:{
-                type:Number
-            }
+    stockMaintain: {
+        type: Number
+    },
+    batches: [{
+        batchNo: {
+            type: String
+        },
+        expDate: {
+            type: Date
+        },
+        wholePrice: {
+            type: Number
+        },
+        retailPrice: {
+            type: Number
+        },
+        currentStock: {
+            type: Number
+        }
     }]
 },
-{
-    collection:'products'
-}
+    {
+        collection: 'products'
+    }
 )
 
 
 
-module.exports=mongoose.model('Product',Product);
+module.exports = mongoose.model('Product', Product);
