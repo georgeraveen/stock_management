@@ -66,3 +66,13 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+my build
+1.build
+2.zip api folder
+3.install node and mongo(mongo as service)
+4.goto server folder npm install
+5.node server
+6.in build folder
+npm install -g serve
+serve -s .
