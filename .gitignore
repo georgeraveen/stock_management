@@ -24,3 +24,4 @@ yarn-debug.log*
 yarn-error.log*
 api/server_stock.zip
 build.zip
+api/server.zip
